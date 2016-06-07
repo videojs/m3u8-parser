@@ -2,10 +2,13 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* fix the build pipeline
-* removed video.js css/js inclusion during tests
+_(none)_
 
 --------------------
+
+## 1.0.2 (2016-06-07)
+* fix the build pipeline
+* removed video.js css/js inclusion during tests
 
 ## 1.0.1 (2016-06-07)
 * remove dependance on video.js
