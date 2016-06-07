@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* remove dependance on video.js
+* added contributors to package.json
 
 --------------------
 
