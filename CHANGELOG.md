@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* fix the build pipeline
+* removed video.js css/js inclusion during tests
 
 --------------------
 

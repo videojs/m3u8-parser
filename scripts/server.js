@@ -32,8 +32,7 @@ const bundlers = {
     standalone: nameify('%s'),
     transform: [
       'babelify',
-      'browserify-shim',
-      'browserify-versionify'
+      ['browserify-shim', {global: true}]
     ]
   }),
 
@@ -42,8 +41,7 @@ const bundlers = {
     entries: srces.tests,
     transform: [
       'babelify',
-      'browserify-shim',
-      'browserify-versionify'
+      ['browserify-shim', {global: true}]
     ]
   })
 };
