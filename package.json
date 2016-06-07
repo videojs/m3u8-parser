@@ -1,22 +1,26 @@
 {
   "name": "m3u8-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "m3u8 parser",
   "main": "es5/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:videojs/m3u8-parser.git"
   },
-  "contributors":[{
-    "name": "gkatsev",
-    "github": "https://github.com/gkatsev"
-  }, {
-    "name": "imbcmdth",
-    "github": "https://github.com/imbcmdth"
-  }, {
-    "name": "dmlap",
-    "github": "https://github.com/dmlap"
-  }],
+  "contributors": [
+    {
+      "name": "gkatsev",
+      "github": "https://github.com/gkatsev"
+    },
+    {
+      "name": "imbcmdth",
+      "github": "https://github.com/imbcmdth"
+    },
+    {
+      "name": "dmlap",
+      "github": "https://github.com/dmlap"
+    }
+  ],
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm-run-all -p build:*",
