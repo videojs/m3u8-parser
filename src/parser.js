@@ -4,7 +4,7 @@
 import Stream from './stream' ;
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
-import {mergeOptions} from 'video.js';
+import merge from 'lodash-compat/object/merge';
 
 /**
  * A parser for M3U8 files. The current interpretation of the input is
@@ -198,7 +198,7 @@ export default class Parser extends Stream {
               if (!currentUri.attributes) {
                 currentUri.attributes = {};
               }
-              currentUri.attributes = mergeOptions(currentUri.attributes,
+              currentUri.attributes = merge(currentUri.attributes,
                                                    entry.attributes);
             },
             media() {

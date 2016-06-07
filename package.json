@@ -80,7 +80,7 @@
     "test/"
   ],
   "dependencies": {
-    "video.js": "^5.6.0"
+    "lodash-compat": "^3.10.2"
   },
   "devDependencies": {
     "babel": "^5.8.35",
