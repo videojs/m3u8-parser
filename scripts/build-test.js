@@ -10,6 +10,7 @@ glob('test/**/*.test.js', (err, files) => {
   }
   browserify(files)
     .transform('babelify')
+    .transform('browserify-shim', {global: true})
     .bundle()
     .pipe(fs.createWriteStream('test/dist/bundle.js'));
 });
