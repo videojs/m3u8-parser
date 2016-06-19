@@ -237,6 +237,35 @@ export default class ParseStream extends Stream {
       this.trigger('data', event);
       return;
     }
+    match = (/^#EXT-X-MAP:?(.*)$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'map'
+      };
+
+      if (match[1]) {
+        let attributes = parseAttributes(match[1]);
+
+        if (attributes.URI) {
+          event.uri = attributes.URI;
+        }
+        if (attributes.BYTERANGE) {
+          let [length, offset] = attributes.BYTERANGE.split('@');
+
+          event.byterange = {};
+          if (length) {
+            event.byterange.length = parseInt(length, 10);
+          }
+          if (offset) {
+            event.byterange.offset = parseInt(offset, 10);
+          }
+        }
+      }
+
+      this.trigger('data', event);
+      return;
+    }
     match = (/^#EXT-X-STREAM-INF:?(.*)$/).exec(line);
     if (match) {
       event = {
