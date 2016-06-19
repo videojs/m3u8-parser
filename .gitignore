@@ -33,3 +33,5 @@ dist/
 docs/api/
 es5/
 test/dist/
+test/test-expected.js
+test/test-manifests.js
