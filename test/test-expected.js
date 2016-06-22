@@ -539,6 +539,24 @@ export default {
   "discontinuityStarts": []
 }
 ,
+  "dateTime": {
+    "allowCache": false,
+    "mediaSequence": 0,
+    "playlistType": "VOD",
+    "segments": [
+      {
+        "duration": 10,
+        "timeline": 0,
+        "uri": "hls_450k_video.ts"
+      }
+    ],
+    "targetDuration": 10,
+    "endList": true,
+    "dateTime": "2016-06-22T09:20:16.166-04:00",
+    "discontinuitySequence": 0,
+    "discontinuityStarts": []
+  }
+,
   "disallowCache": {
   "allowCache": false,
   "mediaSequence": 0,

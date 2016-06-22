@@ -165,6 +165,16 @@ export default {
     '#EXT-X-BYTERANGE:44556@8353216\n' +
     'hls_450k_video.ts\n' +
     '#EXT-X-ENDLIST\n',
+  'dateTime': '#EXTM3U\n' +
+  '#EXT-X-PLAYLIST-TYPE:VOD\n' +
+  '#EXT-X-MEDIA-SEQUENCE:0\n' +
+  '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.166-04:00\n' +
+  '#EXT-X-ALLOW-CACHE:NO\n' +
+  '#EXT-X-TARGETDURATION:10\n' +
+  '#EXTINF:10\n' +
+  'hls_450k_video.ts\n' +
+  '#EXT-X-ENDLIST\n' +
+  '\n',
   'disallowCache': '#EXTM3U\n' +
     '#EXT-X-TARGETDURATION:10\n' +
     '#EXT-X-VERSION:4\n' +
