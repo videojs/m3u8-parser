@@ -1,6 +1,6 @@
 {
   "name": "m3u8-parser",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "description": "m3u8 parser",
   "main": "es5/index.js",
   "repository": {
