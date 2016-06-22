@@ -1,8 +1,10 @@
 import browserify from 'browserify';
 import fs from 'fs';
 import glob from 'glob';
+import exportM3u8s from './export-m3u8s';
 
-/* eslint no-console: 0 */
+// build modules for the test m3u8s
+exportM3u8s.build();
 
 glob('test/**/*.test.js', (err, files) => {
   if (err) {

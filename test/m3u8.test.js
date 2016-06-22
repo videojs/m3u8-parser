@@ -430,6 +430,57 @@ QUnit.test('parses valid #EXT-X-ALLOW-CACHE tags', function() {
   QUnit.strictEqual(element.tagType, 'allow-cache', 'the tag type is allow-cache');
   QUnit.ok(!element.allowed, 'allowed is parsed');
 });
+// #EXT-X-MAP
+QUnit.test('parses minimal #EXT-X-MAP tags', function() {
+  let manifest = '#EXT-X-MAP:URI="init.m4s"\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+
+  this.lineStream.push(manifest);
+  QUnit.ok(element, 'an event was triggered');
+  QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
+  QUnit.strictEqual(element.tagType, 'map', 'the tag type is map');
+  QUnit.strictEqual(element.uri, 'init.m4s', 'parsed the uri');
+});
+QUnit.test('parses #EXT-X-MAP tags with a byterange', function() {
+  let manifest = '#EXT-X-MAP:URI="0.m4s", BYTERANGE="1000@23"\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+
+  this.lineStream.push(manifest);
+  QUnit.ok(element, 'an event was triggered');
+  QUnit.strictEqual(element.uri, '0.m4s', 'parsed the uri');
+  QUnit.strictEqual(element.byterange.length,
+                    1000,
+                    'parsed the byterange length');
+  QUnit.strictEqual(element.byterange.offset,
+                    23,
+                    'parsed the byterange offset');
+});
+QUnit.test('parses #EXT-X-MAP tags with arbitrary attributes', function() {
+  let manifest = '#EXT-X-MAP:URI="init.mp4", SOMETHING=YES,BYTERANGE="720@0"\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+
+  this.lineStream.push(manifest);
+  QUnit.ok(element, 'an event was triggered');
+  QUnit.strictEqual(element.uri, 'init.mp4', 'parsed the uri');
+  QUnit.strictEqual(element.byterange.length,
+                    720,
+                    'parsed the byterange length');
+  QUnit.strictEqual(element.byterange.offset,
+                    0,
+                    'parsed the byterange offset');
+});
 // #EXT-X-STREAM-INF
 QUnit.test('parses minimal #EXT-X-STREAM-INF tags', function() {
   let manifest = '#EXT-X-STREAM-INF\n';

@@ -38,6 +38,9 @@ export default class Parser extends Stream {
     /* eslint-enable consistent-this */
     let uris = [];
     let currentUri = {};
+    // if specified, the active EXT-X-MAP definition
+    let currentMap;
+    // if specified, the active decryption key
     let key;
     let noop = function() {};
     let defaultMediaGroups = {
@@ -183,6 +186,15 @@ export default class Parser extends Stream {
               }
               this.manifest.playlistType = entry.playlistType;
             },
+            map() {
+              currentMap = {};
+              if (entry.uri) {
+                currentMap.uri = entry.uri;
+              }
+              if (entry.byterange) {
+                currentMap.byterange = entry.byterange;
+              }
+            },
             'stream-inf'() {
               this.manifest.playlists = uris;
               this.manifest.mediaGroups =
@@ -237,6 +249,9 @@ export default class Parser extends Stream {
               if (entry.attributes.URI) {
                 rendition.uri = entry.attributes.URI;
               }
+              if (entry.attributes['INSTREAM-ID']) {
+                rendition.instreamId = entry.attributes['INSTREAM-ID'];
+              }
 
               // insert the new rendition
               mediaGroup[entry.attributes.NAME] = rendition;
@@ -286,6 +301,10 @@ export default class Parser extends Stream {
             currentUri.key = key;
           }
           currentUri.timeline = currentTimeline;
+          // annotate with initialization segment information, if necessary
+          if (currentMap) {
+            currentUri.map = currentMap;
+          }
 
           // prepare for the next URI
           currentUri = {};
