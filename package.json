@@ -63,7 +63,8 @@
       "test/dist",
       "test/karma.conf.js",
       "test/test-expected.js",
-      "test/test-manifests.js"
+      "test/test-manifests.js",
+      "test/fixtures/m3u8/**/*.js"
     ]
   },
   "files": [

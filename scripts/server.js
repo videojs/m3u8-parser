@@ -15,7 +15,7 @@ const nameify = (str) =>
   str.replace(/%s/g, pkg.name.split('/').reverse()[0]);
 
 const srces = {
-  js: 'src/plugin.js',
+  js: 'src/index.js',
   tests: glob.sync('test/**/*.test.js')
 };
 
