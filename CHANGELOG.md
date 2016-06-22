@@ -5,6 +5,8 @@ CHANGELOG
 _(none)_
 
 --------------------
+## 1.0.3 (2016-06-22)
+* added ability to parse #EXT-X-PROGRAM-DATE-TIME tags
 
 ## 1.0.2 (2016-06-07)
 * fix the build pipeline
