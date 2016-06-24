@@ -509,9 +509,9 @@ QUnit.test('parses minimal EXT-X-PROGRAM-DATE-TIME tags', function() {
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
   QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
-  QUnit.ok(!('dateTime' in element), 'no dateTime is present');
+  QUnit.ok(!('dateTimeString' in element), 'no dateTime is present');
 });
-QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time', function() {
+QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats', function() {
   let manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.166-04:00\n';
   let element;
 
@@ -523,7 +523,17 @@ QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time', function(
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
   QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
-  QUnit.strictEqual(element.dateTime, '2016-06-22T09:20:16.166-04:00', 'dateTime is parsed');
+  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.166-04:00', 'dateTimeString is parsed');
+  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'), 'dateTimeObject is parsed');
+
+  manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.16389Z\n';
+  this.lineStream.push(manifest);
+
+  QUnit.ok(element, 'an event was triggered');
+  QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
+  QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
+  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.16389Z', 'dateTimeString is parsed');
+  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'), 'dateTimeObject is parsed');
 });
 QUnit.test('parses #EXT-X-STREAM-INF with common attributes', function() {
   let manifest = '#EXT-X-STREAM-INF:BANDWIDTH=14400\n';

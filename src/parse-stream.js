@@ -325,14 +325,15 @@ export default class ParseStream extends Stream {
       });
       return;
     }
-    match = (/^#EXT-X-PROGRAM-DATE-TIME:?((\d{4})-((0[1-9])|(1[0-2]))-((0[1-9])|(([1-2]\d)|(3[0-1])))T(([0-1]\d)|(2[0-3])):([0-5]\d):([0-5]\d)(\.(\d{1,3}))?((\+|-)((0\d)|(1[0-2])):([0-5]\d))?)?$/).exec(line);
+    match = (/^#EXT-X-PROGRAM-DATE-TIME:?(.*)$/).exec(line);
     if (match) {
       event = {
         type: 'tag',
         tagType: 'date-time'
       };
       if (match[1]) {
-        event.dateTime = match[1];
+        event.dateTimeString = match[1];
+        event.dateTimeObject = new Date(match[1]);
       }
       this.trigger('data', event);
       return;
