@@ -325,6 +325,19 @@ export default class ParseStream extends Stream {
       });
       return;
     }
+    match = (/^#EXT-X-PROGRAM-DATE-TIME:?(.*)$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'date-time'
+      };
+      if (match[1]) {
+        event.dateTimeString = match[1];
+        event.dateTimeObject = new Date(match[1]);
+      }
+      this.trigger('data', event);
+      return;
+    }
     match = (/^#EXT-X-KEY:?(.*)$/).exec(line);
     if (match) {
       event = {
