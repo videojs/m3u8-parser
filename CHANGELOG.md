@@ -3,6 +3,7 @@ CHANGELOG
 
 ## HEAD (Unreleased)
 * added ability to parse #EXT-X-PROGRAM-DATE-TIME tags
+* parse out #EXT-X-MAP tags
 
 --------------------
 ## 1.0.2 (2016-06-07)
