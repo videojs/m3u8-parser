@@ -511,7 +511,8 @@ QUnit.test('parses minimal EXT-X-PROGRAM-DATE-TIME tags', function() {
   QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
   QUnit.ok(!('dateTimeString' in element), 'no dateTime is present');
 });
-QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats', function() {
+QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats', 
+  function() {
   let manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.166-04:00\n';
   let element;
 
@@ -523,8 +524,10 @@ QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats', f
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
   QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
-  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.166-04:00', 'dateTimeString is parsed');
-  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'), 'dateTimeObject is parsed');
+  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.166-04:00',
+    'dateTimeString is parsed');
+  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'),
+    'dateTimeObject is parsed');
 
   manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.16389Z\n';
   this.lineStream.push(manifest);
@@ -532,8 +535,10 @@ QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats', f
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
   QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
-  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.16389Z', 'dateTimeString is parsed');
-  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'), 'dateTimeObject is parsed');
+  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.16389Z',
+    'dateTimeString is parsed');
+  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'),
+    'dateTimeObject is parsed');
 });
 QUnit.test('parses #EXT-X-STREAM-INF with common attributes', function() {
   let manifest = '#EXT-X-STREAM-INF:BANDWIDTH=14400\n';
@@ -752,22 +757,23 @@ QUnit.test('attaches all tags and comments to segments', function() {
   let parser = new Parser();
 
   let manifest = [
-                '#EXTM3U',
-                '#EXTINF:5,',
-                '#COMMENT',
-                'ex1.ts',
-                '#EXT-X-CUE-OUT:10',
-                '#EXTINF:5,',
-                'ex2.ts',
-                '#EXT-X-CUE-OUT-CONT:5/10',
-                '#EXT-UKNOWN-TAG',
-                '#EXTINF:5,',
-                'ex3.ts',
-                '#EXT-X-CUE-IN',
-                '#EXT-X-KEY:METHOD=NONE',
-                '#EXTINF:5,',
-                'ex3.ts',
-                '#EXT-X-ENDLIST'].join('\n');
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#COMMENT',
+    'ex1.ts',
+    '#EXT-X-CUE-OUT:10',
+    '#EXTINF:5,',
+    'ex2.ts',
+    '#EXT-X-CUE-OUT-CONT:5/10',
+    '#EXT-UKNOWN-TAG',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-CUE-IN',
+    '#EXT-X-KEY:METHOD=NONE',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
 
   let expected = [
     ['#EXTM3U', '#EXTINF:5,', '#COMMENT'],
@@ -779,6 +785,7 @@ QUnit.test('attaches all tags and comments to segments', function() {
   parser.push(manifest);
 
   let actual = [];
+  
   parser.manifest.segments.forEach(s => actual.push(s.tags));
 
   QUnit.deepEqual(actual, expected, 'parser attached all segment tags and comments');

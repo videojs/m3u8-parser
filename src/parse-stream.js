@@ -106,7 +106,7 @@ export default class ParseStream extends Stream {
       this.trigger('data', {
         type: 'comment',
         text: line.slice(1),
-        line: line
+        line
       });
       return;
     }
@@ -121,7 +121,7 @@ export default class ParseStream extends Stream {
       this.trigger('data', {
         type: 'tag',
         tagType: 'm3u',
-        line: line
+        line
       });
       return;
     }
@@ -130,7 +130,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'inf',
-        line: line
+        line
       };
       if (match[1]) {
         event.duration = parseFloat(match[1]);
@@ -146,7 +146,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'targetduration',
-        line: line
+        line
       };
       if (match[1]) {
         event.duration = parseInt(match[1], 10);
@@ -159,7 +159,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'totalduration',
-        line: line
+        line
       };
       if (match[1]) {
         event.duration = parseInt(match[1], 10);
@@ -172,7 +172,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'version',
-        line: line
+        line
       };
       if (match[1]) {
         event.version = parseInt(match[1], 10);
@@ -185,7 +185,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'media-sequence',
-        line: line
+        line
       };
       if (match[1]) {
         event.number = parseInt(match[1], 10);
@@ -198,7 +198,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'discontinuity-sequence',
-        line: line
+        line
       };
       if (match[1]) {
         event.number = parseInt(match[1], 10);
@@ -211,7 +211,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'playlist-type',
-        line: line
+        line
       };
       if (match[1]) {
         event.playlistType = match[1];
@@ -224,7 +224,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'byterange',
-        line: line
+        line
       };
       if (match[1]) {
         event.length = parseInt(match[1], 10);
@@ -240,7 +240,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'allow-cache',
-        line: line
+        line
       };
       if (match[1]) {
         event.allowed = !(/NO/).test(match[1]);
@@ -253,7 +253,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'map',
-        line: line
+        line
       };
 
       if (match[1]) {
@@ -283,7 +283,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'stream-inf',
-        line: line
+        line
       };
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
@@ -315,7 +315,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'media',
-        line: line
+        line
       };
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
@@ -328,7 +328,7 @@ export default class ParseStream extends Stream {
       this.trigger('data', {
         type: 'tag',
         tagType: 'endlist',
-        line: line
+        line
       });
       return;
     }
@@ -337,7 +337,7 @@ export default class ParseStream extends Stream {
       this.trigger('data', {
         type: 'tag',
         tagType: 'discontinuity',
-        line: line
+        line
       });
       return;
     }
@@ -346,7 +346,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'date-time',
-        line: line
+        line
       };
       if (match[1]) {
         event.dateTimeString = match[1];
@@ -360,7 +360,7 @@ export default class ParseStream extends Stream {
       event = {
         type: 'tag',
         tagType: 'key',
-        line: line
+        line
       };
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
@@ -387,7 +387,7 @@ export default class ParseStream extends Stream {
       type: 'tag',
       tagType: 'unknown',
       data: line.slice(4),
-      line: line
+      line
     });
   }
 }
