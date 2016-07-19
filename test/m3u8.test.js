@@ -745,6 +745,40 @@ QUnit.test('can be constructed', function() {
   QUnit.notStrictEqual(typeof new Parser(), 'undefined', 'parser is defined');
 });
 
+QUnit.test('attaches unknown tags to segments', function() {
+  let parser = new Parser();
+
+  let manifest = ['#EXTINF:5,',
+                'ex1.ts',
+                '#EXT-X-CUE-OUT:10',
+                '#EXTINF:5,',
+                'ex2.ts',
+                '#EXT-X-CUE-OUT-CONT:5/10',
+                '#EXT-UKNOWN-TAG',
+                '#EXTINF:5,',
+                'ex3.ts',
+                '#EXT-X-CUE-IN',
+                '#EXT-X-KEY:METHOD=NONE',
+                '#EXTINF:5,',
+                'ex3.ts',
+                '#EXT-X-ENDLIST'].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.equal(
+    parser.manifest.segments[1].unknownTags[0], '-X-CUE-OUT:10',
+    'segment 1 has an unknown tag');
+  QUnit.equal(
+    parser.manifest.segments[2].unknownTags[0], '-X-CUE-OUT-CONT:5/10',
+    'segment 2 has an unknown tag');
+  QUnit.equal(
+    parser.manifest.segments[2].unknownTags[1], '-UKNOWN-TAG',
+    'segment 2 has an unknown tag');
+  QUnit.equal(
+    parser.manifest.segments[3].unknownTags[0], '-X-CUE-IN',
+    'segment 3 has an unknown tag');
+});
+
 QUnit.module('m3u8s');
 
 QUnit.test('parses static manifests as expected', function() {
