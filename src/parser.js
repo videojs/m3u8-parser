@@ -282,6 +282,12 @@ export default class Parser extends Stream {
                 return;
               }
               this.manifest.totalDuration = entry.duration;
+            },
+            unknown() {
+              if (!currentUri.unknownTags) {
+                currentUri.unknownTags = [];
+              }
+              currentUri.unknownTags.push(entry.data);
             }
           })[entry.tagType] || noop).call(self);
         },

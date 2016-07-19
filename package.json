@@ -46,7 +46,11 @@
     "preversion": "npm test",
     "version": "babel-node scripts/version.js",
     "postversion": "babel-node scripts/postversion.js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "watch": "npm-run-all -p watch:*",
+    "watch:js": "npm-run-all -p watch:js:babel watch:js:browserify",
+    "watch:js:babel": "npm run build:js:babel -- --watch",
+    "watch:js:browserify": "watchify . -v -g browserify-shim -o dist/m3u8-parser.js"
   },
   "keywords": [],
   "author": "Brightcove, Inc",
@@ -107,6 +111,7 @@
     "rimraf": "^2.5.1",
     "sinon": "~1.14.0",
     "uglify-js": "^2.6.1",
-    "videojs-standard": "^4.0.0"
+    "videojs-standard": "^4.0.0",
+    "watchify": "^3.7.0"
   }
 }

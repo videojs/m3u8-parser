@@ -367,6 +367,7 @@ export default class ParseStream extends Stream {
     // unknown tag type
     this.trigger('data', {
       type: 'tag',
+      tagType: 'unknown',
       data: line.slice(4, line.length)
     });
   }
