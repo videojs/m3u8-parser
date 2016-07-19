@@ -624,6 +624,7 @@ QUnit.test('parses valid #EXT-X-KEY tags', function() {
   QUnit.deepEqual(element, {
     type: 'tag',
     tagType: 'key',
+    line: '#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\"',
     attributes: {
       METHOD: 'AES-128',
       URI: 'https://priv.example.com/key.php?r=52'
@@ -636,6 +637,7 @@ QUnit.test('parses valid #EXT-X-KEY tags', function() {
   QUnit.deepEqual(element, {
     type: 'tag',
     tagType: 'key',
+    line: '#EXT-X-KEY:URI=\"https://example.com/key#1\",METHOD=FutureType-1024',
     attributes: {
       METHOD: 'FutureType-1024',
       URI: 'https://example.com/key#1'
@@ -665,7 +667,8 @@ QUnit.test('parses minimal #EXT-X-KEY tags', function() {
   QUnit.ok(element, 'an event was triggered');
   QUnit.deepEqual(element, {
     type: 'tag',
-    tagType: 'key'
+    tagType: 'key',
+    line: '#EXT-X-KEY:'
   }, 'parsed a minimal key tag');
 });
 
@@ -745,10 +748,13 @@ QUnit.test('can be constructed', function() {
   QUnit.notStrictEqual(typeof new Parser(), 'undefined', 'parser is defined');
 });
 
-QUnit.test('attaches unknown tags to segments', function() {
+QUnit.test('attaches all tags and comments to segments', function() {
   let parser = new Parser();
 
-  let manifest = ['#EXTINF:5,',
+  let manifest = [
+                '#EXTM3U',
+                '#EXTINF:5,',
+                '#COMMENT',
                 'ex1.ts',
                 '#EXT-X-CUE-OUT:10',
                 '#EXTINF:5,',
@@ -763,20 +769,19 @@ QUnit.test('attaches unknown tags to segments', function() {
                 'ex3.ts',
                 '#EXT-X-ENDLIST'].join('\n');
 
+  let expected = [
+    ['#EXTM3U', '#EXTINF:5,', '#COMMENT'],
+    ['#EXT-X-CUE-OUT:10', '#EXTINF:5,'],
+    ['#EXT-X-CUE-OUT-CONT:5/10', '#EXT-UKNOWN-TAG', '#EXTINF:5,'],
+    ['#EXT-X-CUE-IN', '#EXT-X-KEY:METHOD=NONE', '#EXTINF:5,']
+  ];
+
   parser.push(manifest);
 
-  QUnit.equal(
-    parser.manifest.segments[1].unknownTags[0], '-X-CUE-OUT:10',
-    'segment 1 has an unknown tag');
-  QUnit.equal(
-    parser.manifest.segments[2].unknownTags[0], '-X-CUE-OUT-CONT:5/10',
-    'segment 2 has an unknown tag');
-  QUnit.equal(
-    parser.manifest.segments[2].unknownTags[1], '-UKNOWN-TAG',
-    'segment 2 has an unknown tag');
-  QUnit.equal(
-    parser.manifest.segments[3].unknownTags[0], '-X-CUE-IN',
-    'segment 3 has an unknown tag');
+  let actual = [];
+  parser.manifest.segments.forEach(s => actual.push(s.tags));
+
+  QUnit.deepEqual(actual, expected, 'parser attached all segment tags and comments');
 });
 
 QUnit.module('m3u8s');

@@ -282,14 +282,13 @@ export default class Parser extends Stream {
                 return;
               }
               this.manifest.totalDuration = entry.duration;
-            },
-            unknown() {
-              if (!currentUri.unknownTags) {
-                currentUri.unknownTags = [];
-              }
-              currentUri.unknownTags.push(entry.data);
             }
           })[entry.tagType] || noop).call(self);
+
+          if (!currentUri.tags) {
+            currentUri.tags = [];
+          }
+          currentUri.tags.push(entry.line);
         },
         uri() {
           currentUri.uri = entry.uri;
@@ -318,6 +317,10 @@ export default class Parser extends Stream {
         },
         comment() {
           // comments are not important for playback
+          if (!currentUri.tags) {
+            currentUri.tags = [];
+          }
+          currentUri.tags.push(entry.line);
         }
       })[entry.type].call(self);
     });
