@@ -4,31 +4,52 @@
   "segments": [
     {
       "duration": 10,
+      "tags": [
+        "#EXTM3U",
+        "#EXT-X-PLAYLIST-TYPE:",
+        "#EXT-X-TARGETDURATION:10",
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/test/ts-files/zencoder/haze/Haze_Mantel_President_encoded_1200-00001.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/test/ts-files/zencoder/haze/Haze_Mantel_President_encoded_1200-00002.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/test/ts-files/zencoder/haze/Haze_Mantel_President_encoded_1200-00003.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/test/ts-files/zencoder/haze/Haze_Mantel_President_encoded_1200-00004.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/test/ts-files/zencoder/haze/Haze_Mantel_President_encoded_1200-00005.ts"
     },
     {
       "duration": 8,
+      "tags": [
+        "#EXTINF:8,"
+      ],
       "timeline": 0,
       "uri": "/test/ts-files/zencoder/haze/Haze_Mantel_President_encoded_1200-00006.ts"
     }

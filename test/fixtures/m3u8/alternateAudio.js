@@ -40,6 +40,13 @@
       CODECS: "avc1.42e00a,mp4a.40.2",
       AUDIO: 'audio'
     },
+    "tags": [
+      "#EXTM3U",
+      "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",LANGUAGE=\"eng\",NAME=\"English\",AUTOSELECT=YES, DEFAULT=YES,URI=\"eng/prog_index.m3u8\"",
+      "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",LANGUAGE=\"fre\",NAME=\"Français\",AUTOSELECT=YES, DEFAULT=NO,URI=\"fre/prog_index.m3u8\"",
+      "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",LANGUAGE=\"sp\",NAME=\"Espanol\",AUTOSELECT=YES, DEFAULT=NO,URI=\"sp/prog_index.m3u8\"",
+      "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=195023,CODECS=\"avc1.42e00a,mp4a.40.2\",AUDIO=\"audio\""
+    ],
     timeline: 0,
     uri: "lo/prog_index.m3u8"
   }, {
@@ -49,6 +56,9 @@
       CODECS: "avc1.42e01e,mp4a.40.2",
       AUDIO: 'audio'
     },
+    "tags": [
+      "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=591680,CODECS=\"avc1.42e01e,mp4a.40.2\",AUDIO=\"audio\""
+    ],
     timeline: 0,
     uri: "hi/prog_index.m3u8"
   }]

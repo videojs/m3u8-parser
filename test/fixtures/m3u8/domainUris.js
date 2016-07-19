@@ -5,21 +5,36 @@
   "segments": [
     {
       "duration": 10,
+      "tags": [
+        "#EXTM3U",
+        "#EXT-X-PLAYLIST-TYPE:VOD",
+        "#EXT-X-TARGETDURATION:10",
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/00001.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/subdir/00002.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/00003.ts"
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "/00004.ts"
     }

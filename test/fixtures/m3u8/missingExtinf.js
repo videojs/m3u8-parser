@@ -5,6 +5,14 @@
   "segments": [
     {
       "duration": 10,
+      "tags": [
+        "#EXTM3U",
+        "#EXT-X-TARGETDURATION:10",
+        "#EXT-X-VERSION:3",
+        "#EXT-X-MEDIA-SEQUENCE:0",
+        "#EXT-X-PLAYLIST-TYPE:VOD",
+        "#EXTINF:10"
+      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -15,6 +23,9 @@
     },
     {
       "duration": 10,
+      "tags": [
+        "#EXTINF:10,"
+      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     }
