@@ -6,14 +6,6 @@
   "segments": [
     {
       "duration": 2.833,
-      "tags": [
-        "#EXTM3U",
-        "#EXT-X-VERSION:3",
-        "#EXT-X-MEDIA-SEQUENCE:7794",
-        "#EXT-X-TARGETDURATION:15",
-        "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\"",
-        "#EXTINF:2.833,"
-      ],
       "timeline": 0,
       "key": {
         "method": "AES-128",
@@ -23,9 +15,6 @@
     },
     {
       "duration": 15,
-      "tags": [
-        "#EXTINF:15.0,"
-      ],
       "timeline": 0,
       "key": {
         "method": "AES-128",
@@ -35,9 +24,6 @@
     },
     {
       "duration": 13.333,
-      "tags": [
-        "#EXTINF:13.333,"
-      ],
       "timeline": 0,
       "key": {
         "method": "AES-128",
@@ -47,10 +33,6 @@
     },
     {
       "duration": 15,
-      "tags": [
-        "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=53\"",
-        "#EXTINF:15.0,"
-      ],
       "timeline": 0,
       "key": {
         "method": "AES-128",
@@ -60,10 +42,6 @@
     },
     {
       "duration": 14,
-      "tags": [
-        "#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=54\",IV=0x00000000000000000000014BB69D61E4",
-        "#EXTINF:14.0,"
-      ],
       "timeline": 0,
       "key": {
         "method": "AES-128",
@@ -74,10 +52,6 @@
     },
     {
       "duration": 15,
-      "tags": [
-        "#EXT-X-KEY:METHOD=NONE",
-        "#EXTINF:15.0,"
-      ],
       "timeline": 0,
       "uri": "http://media.example.com/fileSequence53-B.ts"
     }

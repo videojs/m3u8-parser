@@ -9,16 +9,6 @@
         "offset": 0
       },
       "duration": 10,
-      "tags": [
-        "#EXTM3U",
-        "#EXT-X-TARGETDURATION:10",
-        "#EXT-X-VERSION:4",
-        "#EXT-X-ALLOW-CACHE:YES",
-        "#EXT-X-MEDIA-SEQUENCE:0",
-        "#EXT-X-PLAYLIST-TYPE:VOD",
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:522828@0"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -28,10 +18,6 @@
         "offset": 522828
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:587500@522828"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -41,10 +27,6 @@
         "offset": 1110328
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:713084@1110328"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -54,10 +36,6 @@
         "offset": 1823412
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:476580@1823412"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -67,10 +45,6 @@
         "offset": 2299992
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:535612@2299992"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -80,10 +54,6 @@
         "offset": 2835604
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:207176@2835604"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -93,10 +63,6 @@
         "offset": 3042780
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:455900@3042780"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -106,10 +72,6 @@
         "offset": 3498680
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:657248@3498680"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -119,10 +81,6 @@
         "offset": 4155928
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:571708@4155928"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -132,10 +90,6 @@
         "offset": 4727636
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:485040@4727636"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -145,10 +99,6 @@
         "offset": 5212676
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:709136@5212676"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -158,10 +108,6 @@
         "offset": 5921812
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:730004@5921812"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -171,10 +117,6 @@
         "offset": 6651816
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:456276@6651816"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -184,10 +126,6 @@
         "offset": 7108092
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:468684@7108092"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -197,10 +135,6 @@
         "offset": 7576776
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:444996@7576776"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -210,10 +144,6 @@
         "offset": 8021772
       },
       "duration": 10,
-      "tags": [
-        "#EXTINF:10,",
-        "#EXT-X-BYTERANGE:331444@8021772"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     },
@@ -223,10 +153,6 @@
         "offset": 8353216
       },
       "duration": 1.4167,
-      "tags": [
-        "#EXTINF:1.4167,",
-        "#EXT-X-BYTERANGE:44556@8353216"
-      ],
       "timeline": 0,
       "uri": "hls_450k_video.ts"
     }
