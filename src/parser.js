@@ -261,7 +261,7 @@ export default class Parser extends Stream {
               currentUri.discontinuity = true;
               this.manifest.discontinuityStarts.push(uris.length);
             },
-            'date-time'() {
+            'program-date-time'() {
               this.manifest.dateTimeString = entry.dateTimeString;
               this.manifest.dateTimeObject = entry.dateTimeObject;
             },

@@ -96,8 +96,8 @@ QUnit.test('parses comment lines', function() {
 
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'comment', 'the type is comment');
-  QUnit.strictEqual(element.text,
-                    manifest.slice(1, manifest.length - 1),
+  QUnit.strictEqual(element.line,
+                    manifest.slice(0, manifest.length - 1),
                     'the comment text is parsed');
 });
 QUnit.test('parses uri lines', function() {
@@ -508,7 +508,7 @@ QUnit.test('parses minimal EXT-X-PROGRAM-DATE-TIME tags', function() {
 
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
-  QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
+  QUnit.strictEqual(element.tagType, 'program-date-time', 'the tag type is date-time');
   QUnit.ok(!('dateTimeString' in element), 'no dateTime is present');
 });
 QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats',
@@ -523,7 +523,7 @@ QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats',
 
     QUnit.ok(element, 'an event was triggered');
     QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
-    QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
+    QUnit.strictEqual(element.tagType, 'program-date-time', 'the tag type is date-time');
     QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.166-04:00',
       'dateTimeString is parsed');
     QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'),
@@ -534,7 +534,7 @@ QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats',
 
     QUnit.ok(element, 'an event was triggered');
     QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
-    QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
+    QUnit.strictEqual(element.tagType, 'program-date-time', 'the tag type is date-time');
     QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.16389Z',
       'dateTimeString is parsed');
     QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'),
@@ -786,7 +786,7 @@ QUnit.test('attaches all tags and comments to segments', function() {
 
   let actual = [];
 
-  parser.manifest.segments.forEach(s => actual.push(s.tags));
+  parser.manifest.segments.forEach(segment => actual.push(segment.tags));
 
   QUnit.deepEqual(actual, expected, 'parser attached all segment tags and comments');
 });

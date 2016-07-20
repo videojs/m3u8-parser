@@ -105,7 +105,6 @@ export default class ParseStream extends Stream {
     if (line.indexOf('#EXT') !== 0) {
       this.trigger('data', {
         type: 'comment',
-        text: line.slice(1),
         line
       });
       return;
@@ -345,7 +344,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'date-time',
+        tagType: 'program-date-time',
         line
       };
       if (match[1]) {
