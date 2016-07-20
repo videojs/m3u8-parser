@@ -508,33 +508,38 @@ QUnit.test('parses minimal EXT-X-PROGRAM-DATE-TIME tags', function() {
 
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
-  QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
+  QUnit.strictEqual(element.tagType, 'program-date-time', 'the tag type is date-time');
   QUnit.ok(!('dateTimeString' in element), 'no dateTime is present');
 });
-QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats', function() {
-  let manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.166-04:00\n';
-  let element;
+QUnit.test('parses EXT-X-PROGRAM-DATE-TIME tags with valid date-time formats',
+  function() {
+    let manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.166-04:00\n';
+    let element;
 
-  this.parseStream.on('data', function(elem) {
-    element = elem;
+    this.parseStream.on('data', function(elem) {
+      element = elem;
+    });
+    this.lineStream.push(manifest);
+
+    QUnit.ok(element, 'an event was triggered');
+    QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
+    QUnit.strictEqual(element.tagType, 'program-date-time', 'the tag type is date-time');
+    QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.166-04:00',
+      'dateTimeString is parsed');
+    QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'),
+      'dateTimeObject is parsed');
+
+    manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.16389Z\n';
+    this.lineStream.push(manifest);
+
+    QUnit.ok(element, 'an event was triggered');
+    QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
+    QUnit.strictEqual(element.tagType, 'program-date-time', 'the tag type is date-time');
+    QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.16389Z',
+      'dateTimeString is parsed');
+    QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'),
+      'dateTimeObject is parsed');
   });
-  this.lineStream.push(manifest);
-
-  QUnit.ok(element, 'an event was triggered');
-  QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
-  QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
-  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.166-04:00', 'dateTimeString is parsed');
-  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'), 'dateTimeObject is parsed');
-
-  manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.16389Z\n';
-  this.lineStream.push(manifest);
-
-  QUnit.ok(element, 'an event was triggered');
-  QUnit.strictEqual(element.type, 'tag', 'the line type is tag');
-  QUnit.strictEqual(element.tagType, 'date-time', 'the tag type is date-time');
-  QUnit.strictEqual(element.dateTimeString, '2016-06-22T09:20:16.16389Z', 'dateTimeString is parsed');
-  QUnit.deepEqual(element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'), 'dateTimeObject is parsed');
-});
 QUnit.test('parses #EXT-X-STREAM-INF with common attributes', function() {
   let manifest = '#EXT-X-STREAM-INF:BANDWIDTH=14400\n';
   let element;
@@ -743,6 +748,93 @@ QUnit.module('m3u8 parser');
 
 QUnit.test('can be constructed', function() {
   QUnit.notStrictEqual(typeof new Parser(), 'undefined', 'parser is defined');
+});
+
+QUnit.test('attaches cue-out data to segment', function() {
+  let parser = new Parser();
+
+  let manifest = [
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#COMMENT',
+    'ex1.ts',
+    '#EXT-X-CUE-OUT:10',
+    '#EXTINF:5,',
+    'ex2.ts',
+    '#EXT-X-CUE-OUT15',
+    '#EXT-UKNOWN-TAG',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-CUE-OUT',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.equal(parser.manifest.segments[1].cueOut, '10', 'parser attached cue out tag');
+  QUnit.equal(parser.manifest.segments[2].cueOut, '15', 'cue out without : seperator');
+  QUnit.equal(parser.manifest.segments[3].cueOut, '', 'cue out without data');
+});
+
+QUnit.test('attaches cue-out-cont data to segment', function() {
+  let parser = new Parser();
+
+  let manifest = [
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#COMMENT',
+    'ex1.ts',
+    '#EXT-X-CUE-OUT-CONT:10/60',
+    '#EXTINF:5,',
+    'ex2.ts',
+    '#EXT-X-CUE-OUT-CONT15/30',
+    '#EXT-UKNOWN-TAG',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-CUE-OUT-CONT',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.equal(parser.manifest.segments[1].cueOutCont, '10/60',
+    'parser attached cue out cont tag');
+  QUnit.equal(parser.manifest.segments[2].cueOutCont, '15/30',
+    'cue out cont without : seperator');
+  QUnit.equal(parser.manifest.segments[3].cueOutCont, '', 'cue out cont without data');
+});
+
+QUnit.test('attaches cue-in data to segment', function() {
+  let parser = new Parser();
+
+  let manifest = [
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#COMMENT',
+    'ex1.ts',
+    '#EXT-X-CUE-IN',
+    '#EXTINF:5,',
+    'ex2.ts',
+    '#EXT-X-CUE-IN:15',
+    '#EXT-UKNOWN-TAG',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-CUE-IN=abc',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.equal(parser.manifest.segments[1].cueIn, '', 'parser attached cue in tag');
+  QUnit.equal(parser.manifest.segments[2].cueIn, '15', 'cue in with data');
+  QUnit.equal(parser.manifest.segments[3].cueIn, '=abc',
+    'cue in without colon seperator');
 });
 
 QUnit.module('m3u8s');

@@ -261,7 +261,7 @@ export default class Parser extends Stream {
               currentUri.discontinuity = true;
               this.manifest.discontinuityStarts.push(uris.length);
             },
-            'date-time'() {
+            'program-date-time'() {
               this.manifest.dateTimeString = entry.dateTimeString;
               this.manifest.dateTimeObject = entry.dateTimeObject;
             },
@@ -282,6 +282,15 @@ export default class Parser extends Stream {
                 return;
               }
               this.manifest.totalDuration = entry.duration;
+            },
+            'cue-out'() {
+              currentUri.cueOut = entry.data;
+            },
+            'cue-out-cont'() {
+              currentUri.cueOutCont = entry.data;
+            },
+            'cue-in'() {
+              currentUri.cueIn = entry.data;
             }
           })[entry.tagType] || noop).call(self);
         },

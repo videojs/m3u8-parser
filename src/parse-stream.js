@@ -329,7 +329,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'date-time'
+        tagType: 'program-date-time'
       };
       if (match[1]) {
         event.dateTimeString = match[1];
@@ -363,11 +363,53 @@ export default class ParseStream extends Stream {
       this.trigger('data', event);
       return;
     }
+    match = (/^#EXT-X-CUE-OUT-CONT:?(.*)?$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'cue-out-cont'
+      };
+      if (match[1]) {
+        event.data = match[1];
+      } else {
+        event.data = '';
+      }
+      this.trigger('data', event);
+      return;
+    }
+    match = (/^#EXT-X-CUE-OUT:?(.*)?$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'cue-out'
+      };
+      if (match[1]) {
+        event.data = match[1];
+      } else {
+        event.data = '';
+      }
+      this.trigger('data', event);
+      return;
+    }
+    match = (/^#EXT-X-CUE-IN:?(.*)?$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'cue-in'
+      };
+      if (match[1]) {
+        event.data = match[1];
+      } else {
+        event.data = '';
+      }
+      this.trigger('data', event);
+      return;
+    }
 
     // unknown tag type
     this.trigger('data', {
       type: 'tag',
-      data: line.slice(4, line.length)
+      data: line.slice(4)
     });
   }
 }
