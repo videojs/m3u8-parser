@@ -105,8 +105,7 @@ export default class ParseStream extends Stream {
     if (line.indexOf('#EXT') !== 0) {
       this.trigger('data', {
         type: 'comment',
-        text: line.slice(1),
-        line
+        text: line.slice(1)
       });
       return;
     }
@@ -120,8 +119,7 @@ export default class ParseStream extends Stream {
     if (match) {
       this.trigger('data', {
         type: 'tag',
-        tagType: 'm3u',
-        line
+        tagType: 'm3u'
       });
       return;
     }
@@ -129,8 +127,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'inf',
-        line
+        tagType: 'inf'
       };
       if (match[1]) {
         event.duration = parseFloat(match[1]);
@@ -145,8 +142,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'targetduration',
-        line
+        tagType: 'targetduration'
       };
       if (match[1]) {
         event.duration = parseInt(match[1], 10);
@@ -158,8 +154,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'totalduration',
-        line
+        tagType: 'totalduration'
       };
       if (match[1]) {
         event.duration = parseInt(match[1], 10);
@@ -171,8 +166,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'version',
-        line
+        tagType: 'version'
       };
       if (match[1]) {
         event.version = parseInt(match[1], 10);
@@ -184,8 +178,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'media-sequence',
-        line
+        tagType: 'media-sequence'
       };
       if (match[1]) {
         event.number = parseInt(match[1], 10);
@@ -197,8 +190,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'discontinuity-sequence',
-        line
+        tagType: 'discontinuity-sequence'
       };
       if (match[1]) {
         event.number = parseInt(match[1], 10);
@@ -210,8 +202,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'playlist-type',
-        line
+        tagType: 'playlist-type'
       };
       if (match[1]) {
         event.playlistType = match[1];
@@ -223,8 +214,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'byterange',
-        line
+        tagType: 'byterange'
       };
       if (match[1]) {
         event.length = parseInt(match[1], 10);
@@ -239,8 +229,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'allow-cache',
-        line
+        tagType: 'allow-cache'
       };
       if (match[1]) {
         event.allowed = !(/NO/).test(match[1]);
@@ -252,8 +241,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'map',
-        line
+        tagType: 'map'
       };
 
       if (match[1]) {
@@ -282,8 +270,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'stream-inf',
-        line
+        tagType: 'stream-inf'
       };
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
@@ -314,8 +301,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'media',
-        line
+        tagType: 'media'
       };
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
@@ -327,8 +313,7 @@ export default class ParseStream extends Stream {
     if (match) {
       this.trigger('data', {
         type: 'tag',
-        tagType: 'endlist',
-        line
+        tagType: 'endlist'
       });
       return;
     }
@@ -336,8 +321,7 @@ export default class ParseStream extends Stream {
     if (match) {
       this.trigger('data', {
         type: 'tag',
-        tagType: 'discontinuity',
-        line
+        tagType: 'discontinuity'
       });
       return;
     }
@@ -345,8 +329,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'date-time',
-        line
+        tagType: 'date-time'
       };
       if (match[1]) {
         event.dateTimeString = match[1];
@@ -359,8 +342,7 @@ export default class ParseStream extends Stream {
     if (match) {
       event = {
         type: 'tag',
-        tagType: 'key',
-        line
+        tagType: 'key'
       };
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
@@ -381,13 +363,53 @@ export default class ParseStream extends Stream {
       this.trigger('data', event);
       return;
     }
+    match = (/^#EXT-X-CUE-OUT-CONT:?(.*)?$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'cue-out-cont'
+      };
+      if (match[1]) {
+        event.data = match[1];
+      } else {
+        event.data = '';
+      }
+      this.trigger('data', event);
+      return;
+    }
+    match = (/^#EXT-X-CUE-OUT:?(.*)?$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'cue-out'
+      };
+      if (match[1]) {
+        event.data = match[1];
+      } else {
+        event.data = '';
+      }
+      this.trigger('data', event);
+      return;
+    }
+    match = (/^#EXT-X-CUE-IN:?(.*)?$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'cue-in'
+      };
+      if (match[1]) {
+        event.data = match[1];
+      } else {
+        event.data = '';
+      }
+      this.trigger('data', event);
+      return;
+    }
 
     // unknown tag type
     this.trigger('data', {
       type: 'tag',
-      tagType: 'unknown',
-      data: line.slice(4),
-      line
+      data: line.slice(4)
     });
   }
 }
