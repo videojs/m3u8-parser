@@ -282,13 +282,17 @@ export default class Parser extends Stream {
                 return;
               }
               this.manifest.totalDuration = entry.duration;
+            },
+            'cue-out'() {
+              currentUri.cueOut = entry.data;
+            },
+            'cue-out-cont'() {
+              currentUri.cueOutCont = entry.data;
+            },
+            'cue-in'() {
+              currentUri.cueIn = entry.data;
             }
           })[entry.tagType] || noop).call(self);
-
-          if (!currentUri.tags) {
-            currentUri.tags = [];
-          }
-          currentUri.tags.push(entry.line);
         },
         uri() {
           currentUri.uri = entry.uri;
@@ -317,10 +321,6 @@ export default class Parser extends Stream {
         },
         comment() {
           // comments are not important for playback
-          if (!currentUri.tags) {
-            currentUri.tags = [];
-          }
-          currentUri.tags.push(entry.line);
         }
       })[entry.type].call(self);
     });

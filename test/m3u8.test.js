@@ -96,8 +96,8 @@ QUnit.test('parses comment lines', function() {
 
   QUnit.ok(element, 'an event was triggered');
   QUnit.strictEqual(element.type, 'comment', 'the type is comment');
-  QUnit.strictEqual(element.line,
-                    manifest.slice(0, manifest.length - 1),
+  QUnit.strictEqual(element.text,
+                    manifest.slice(1, manifest.length - 1),
                     'the comment text is parsed');
 });
 QUnit.test('parses uri lines', function() {
@@ -629,7 +629,6 @@ QUnit.test('parses valid #EXT-X-KEY tags', function() {
   QUnit.deepEqual(element, {
     type: 'tag',
     tagType: 'key',
-    line: '#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\"',
     attributes: {
       METHOD: 'AES-128',
       URI: 'https://priv.example.com/key.php?r=52'
@@ -642,7 +641,6 @@ QUnit.test('parses valid #EXT-X-KEY tags', function() {
   QUnit.deepEqual(element, {
     type: 'tag',
     tagType: 'key',
-    line: '#EXT-X-KEY:URI=\"https://example.com/key#1\",METHOD=FutureType-1024',
     attributes: {
       METHOD: 'FutureType-1024',
       URI: 'https://example.com/key#1'
@@ -673,7 +671,6 @@ QUnit.test('parses minimal #EXT-X-KEY tags', function() {
   QUnit.deepEqual(element, {
     type: 'tag',
     tagType: 'key',
-    line: '#EXT-X-KEY:'
   }, 'parsed a minimal key tag');
 });
 
@@ -753,7 +750,7 @@ QUnit.test('can be constructed', function() {
   QUnit.notStrictEqual(typeof new Parser(), 'undefined', 'parser is defined');
 });
 
-QUnit.test('attaches all tags and comments to segments', function() {
+QUnit.test('attaches cue-out data to segment', function() {
   let parser = new Parser();
 
   let manifest = [
@@ -764,31 +761,80 @@ QUnit.test('attaches all tags and comments to segments', function() {
     '#EXT-X-CUE-OUT:10',
     '#EXTINF:5,',
     'ex2.ts',
-    '#EXT-X-CUE-OUT-CONT:5/10',
+    '#EXT-X-CUE-OUT15',
     '#EXT-UKNOWN-TAG',
     '#EXTINF:5,',
     'ex3.ts',
-    '#EXT-X-CUE-IN',
-    '#EXT-X-KEY:METHOD=NONE',
+    '#EXT-X-CUE-OUT',
     '#EXTINF:5,',
     'ex3.ts',
     '#EXT-X-ENDLIST'
   ].join('\n');
 
-  let expected = [
-    ['#EXTM3U', '#EXTINF:5,', '#COMMENT'],
-    ['#EXT-X-CUE-OUT:10', '#EXTINF:5,'],
-    ['#EXT-X-CUE-OUT-CONT:5/10', '#EXT-UKNOWN-TAG', '#EXTINF:5,'],
-    ['#EXT-X-CUE-IN', '#EXT-X-KEY:METHOD=NONE', '#EXTINF:5,']
-  ];
+  parser.push(manifest);
+
+  QUnit.equal(parser.manifest.segments[1].cueOut, '10', 'parser attached cue out tag');
+  QUnit.equal(parser.manifest.segments[2].cueOut, '15', 'cue out without : seperator');
+  QUnit.equal(parser.manifest.segments[3].cueOut, '', 'cue out without data');
+});
+
+QUnit.test('attaches cue-out-cont data to segment', function() {
+  let parser = new Parser();
+
+  let manifest = [
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#COMMENT',
+    'ex1.ts',
+    '#EXT-X-CUE-OUT-CONT:10/60',
+    '#EXTINF:5,',
+    'ex2.ts',
+    '#EXT-X-CUE-OUT-CONT15/30',
+    '#EXT-UKNOWN-TAG',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-CUE-OUT-CONT',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
 
   parser.push(manifest);
 
-  let actual = [];
+  QUnit.equal(parser.manifest.segments[1].cueOutCont, '10/60',
+    'parser attached cue out cont tag');
+  QUnit.equal(parser.manifest.segments[2].cueOutCont, '15/30',
+    'cue out cont without : seperator');
+  QUnit.equal(parser.manifest.segments[3].cueOutCont, '', 'cue out cont without data');
+});
 
-  parser.manifest.segments.forEach(segment => actual.push(segment.tags));
+QUnit.test('attaches cue-in data to segment', function() {
+  let parser = new Parser();
 
-  QUnit.deepEqual(actual, expected, 'parser attached all segment tags and comments');
+  let manifest = [
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#COMMENT',
+    'ex1.ts',
+    '#EXT-X-CUE-IN',
+    '#EXTINF:5,',
+    'ex2.ts',
+    '#EXT-X-CUE-IN:15',
+    '#EXT-UKNOWN-TAG',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-CUE-IN=abc',
+    '#EXTINF:5,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.equal(parser.manifest.segments[1].cueIn, '', 'parser attached cue in tag');
+  QUnit.equal(parser.manifest.segments[2].cueIn, '15', 'cue in with data');
+  QUnit.equal(parser.manifest.segments[3].cueIn, '=abc',
+    'cue in without colon seperator');
 });
 
 QUnit.module('m3u8s');
