@@ -670,7 +670,7 @@ QUnit.test('parses minimal #EXT-X-KEY tags', function() {
   QUnit.ok(element, 'an event was triggered');
   QUnit.deepEqual(element, {
     type: 'tag',
-    tagType: 'key',
+    tagType: 'key'
   }, 'parsed a minimal key tag');
 });
 
