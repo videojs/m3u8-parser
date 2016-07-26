@@ -12,7 +12,7 @@ import LineStream from './line-stream';
 import ParseStream from './parse-stream';
 import Parser from './parser';
 
-export default {
+module.exports = {
   LineStream,
   ParseStream,
   Parser

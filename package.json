@@ -2,6 +2,7 @@
   "name": "m3u8-parser",
   "version": "1.2.0",
   "description": "m3u8 parser",
+  "jsnext:main": "src/index.js",
   "main": "es5/index.js",
   "repository": {
     "type": "git",
@@ -83,12 +84,14 @@
     "src/",
     "test/"
   ],
-  "dependencies": {
-    "lodash-compat": "^3.10.2"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "babel": "^5.8.35",
-    "babelify": "^6.4.0",
+    "babel": "^6.5.2",
+    "babel-cli": "^6.11.4",
+    "babel-plugin-transform-object-assign": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-es2015-loose": "^7.0.0",
+    "babelify": "^7.3.0",
     "bannerize": "^1.0.2",
     "bluebird": "^3.2.2",
     "browserify": "^12.0.2",
