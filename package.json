@@ -2,6 +2,7 @@
   "name": "m3u8-parser",
   "version": "1.2.0",
   "description": "m3u8 parser",
+  "jsnext:main": "src/index.js",
   "main": "es5/index.js",
   "repository": {
     "type": "git",
