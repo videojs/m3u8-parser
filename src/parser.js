@@ -260,8 +260,11 @@ export default class Parser extends Stream {
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
-              this.manifest.dateTimeString = entry.dateTimeString;
-              this.manifest.dateTimeObject = entry.dateTimeObject;
+              // ensures that only the first appearance of PROGRAM-DATE-TIME will be stored
+              if (!this.manifest.dateTimeString && !this.manifest.dateTimeObject) {
+                this.manifest.dateTimeString = entry.dateTimeString;
+                this.manifest.dateTimeObject = entry.dateTimeObject;
+              }
             },
             targetduration() {
               if (!isFinite(entry.duration) || entry.duration < 0) {
