@@ -34,12 +34,12 @@ export default class Stream {
    * @return {Boolean} if we could turn it off or not
    */
   off(type, listener) {
-    let index;
-
     if (!this.listeners[type]) {
       return false;
     }
-    index = this.listeners[type].indexOf(listener);
+
+    const index = this.listeners[type].indexOf(listener);
+
     this.listeners[type].splice(index, 1);
     return index > -1;
   }
@@ -51,12 +51,11 @@ export default class Stream {
    * @param {String} type the event name
    */
   trigger(type) {
-    let callbacks;
+    const callbacks = this.listeners[type];
     let i;
     let length;
     let args;
 
-    callbacks = this.listeners[type];
     if (!callbacks) {
       return;
     }

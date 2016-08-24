@@ -11,9 +11,9 @@ import Stream from './stream';
  * value      -> '"' [^"]* '"' | [^,]*
  */
 const attributeSeparator = function() {
-  let key = '[^=]*';
-  let value = '"[^"]*"|[^,]*';
-  let keyvalue = '(?:' + key + ')=(?:' + value + ')';
+  const key = '[^=]*';
+  const value = '"[^"]*"|[^,]*';
+  const keyvalue = '(?:' + key + ')=(?:' + value + ')';
 
   return new RegExp('(?:^|,)(' + keyvalue + ')');
 };
@@ -25,9 +25,9 @@ const attributeSeparator = function() {
  */
 const parseAttributes = function(attributes) {
   // split the string using attributes as the separator
-  let attrs = attributes.split(attributeSeparator());
+  const attrs = attributes.split(attributeSeparator());
+  const result = {};
   let i = attrs.length;
-  let result = {};
   let attr;
 
   while (i--) {
@@ -245,13 +245,13 @@ export default class ParseStream extends Stream {
       };
 
       if (match[1]) {
-        let attributes = parseAttributes(match[1]);
+        const attributes = parseAttributes(match[1]);
 
         if (attributes.URI) {
           event.uri = attributes.URI;
         }
         if (attributes.BYTERANGE) {
-          let [length, offset] = attributes.BYTERANGE.split('@');
+          const [length, offset] = attributes.BYTERANGE.split('@');
 
           event.byterange = {};
           if (length) {
@@ -276,8 +276,8 @@ export default class ParseStream extends Stream {
         event.attributes = parseAttributes(match[1]);
 
         if (event.attributes.RESOLUTION) {
-          let split = event.attributes.RESOLUTION.split('x');
-          let resolution = {};
+          const split = event.attributes.RESOLUTION.split('x');
+          const resolution = {};
 
           if (split[0]) {
             resolution.width = parseInt(split[0], 10);

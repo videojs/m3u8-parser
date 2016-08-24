@@ -108,7 +108,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
     const keys = Object.keys(handlers);
 
     for (let i = 0; i < keys.length; i++) {
-      let regex = new RegExp(keys[i]);
+      const regex = new RegExp(keys[i]);
 
       if (regex.test(file)) {
         return handlers[keys[i]];

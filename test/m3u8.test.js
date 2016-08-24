@@ -18,7 +18,7 @@ QUnit.test('empty inputs produce no tokens', function() {
   QUnit.ok(!data, 'no tokens were produced');
 });
 QUnit.test('splits on newlines', function() {
-  let lines = [];
+  const lines = [];
 
   this.lineStream.on('data', function(line) {
     lines.push(line);
@@ -30,7 +30,7 @@ QUnit.test('splits on newlines', function() {
   QUnit.strictEqual('movie.ts', lines.shift(), 'the second line is the second token');
 });
 QUnit.test('empty lines become empty strings', function() {
-  let lines = [];
+  const lines = [];
 
   this.lineStream.on('data', function(line) {
     lines.push(line);
@@ -42,7 +42,7 @@ QUnit.test('empty lines become empty strings', function() {
   QUnit.strictEqual('', lines.shift(), 'the second line is empty');
 });
 QUnit.test('handles lines broken across appends', function() {
-  let lines = [];
+  const lines = [];
 
   this.lineStream.on('data', function(line) {
     lines.push(line);
@@ -56,12 +56,12 @@ QUnit.test('handles lines broken across appends', function() {
   QUnit.strictEqual('movie.ts', lines.shift(), 'the second line is the second token');
 });
 QUnit.test('stops sending events after deregistering', function() {
-  let temporaryLines = [];
-  let temporary = function(line) {
+  const temporaryLines = [];
+  const temporary = function(line) {
     temporaryLines.push(line);
   };
-  let permanentLines = [];
-  let permanent = function(line) {
+  const permanentLines = [];
+  const permanent = function(line) {
     permanentLines.push(line);
   };
 
@@ -86,7 +86,7 @@ QUnit.module('ParseStream', {
   }
 });
 QUnit.test('parses comment lines', function() {
-  let manifest = '# a line that starts with a hash mark without "EXT" is a comment\n';
+  const manifest = '# a line that starts with a hash mark without "EXT" is a comment\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -101,7 +101,7 @@ QUnit.test('parses comment lines', function() {
                     'the comment text is parsed');
 });
 QUnit.test('parses uri lines', function() {
-  let manifest = 'any non-blank line that does not start with a hash-mark is a URI\n';
+  const manifest = 'any non-blank line that does not start with a hash-mark is a URI\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -116,7 +116,7 @@ QUnit.test('parses uri lines', function() {
                     'the uri text is parsed');
 });
 QUnit.test('parses unknown tag types', function() {
-  let manifest = '#EXT-X-EXAMPLE-TAG:some,additional,stuff\n';
+  const manifest = '#EXT-X-EXAMPLE-TAG:some,additional,stuff\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -133,7 +133,7 @@ QUnit.test('parses unknown tag types', function() {
 
 // #EXTM3U
 QUnit.test('parses #EXTM3U tags', function() {
-  let manifest = '#EXTM3U\n';
+  const manifest = '#EXTM3U\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -148,7 +148,7 @@ QUnit.test('parses #EXTM3U tags', function() {
 
 // #EXTINF
 QUnit.test('parses minimal #EXTINF tags', function() {
-  let manifest = '#EXTINF\n';
+  const manifest = '#EXTINF\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -185,7 +185,7 @@ QUnit.test('parses #EXTINF tags with durations', function() {
   QUnit.ok(!('title' in element), 'no title is parsed');
 });
 QUnit.test('parses #EXTINF tags with a duration and title', function() {
-  let manifest = '#EXTINF:13,Does anyone really use the title attribute?\n';
+  const manifest = '#EXTINF:13,Does anyone really use the title attribute?\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -202,7 +202,7 @@ QUnit.test('parses #EXTINF tags with a duration and title', function() {
                     'the title is parsed');
 });
 QUnit.test('parses #EXTINF tags with carriage returns', function() {
-  let manifest = '#EXTINF:13,Does anyone really use the title attribute?\r\n';
+  const manifest = '#EXTINF:13,Does anyone really use the title attribute?\r\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -221,7 +221,7 @@ QUnit.test('parses #EXTINF tags with carriage returns', function() {
 
 // #EXT-X-TARGETDURATION
 QUnit.test('parses minimal #EXT-X-TARGETDURATION tags', function() {
-  let manifest = '#EXT-X-TARGETDURATION\n';
+  const manifest = '#EXT-X-TARGETDURATION\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -235,7 +235,7 @@ QUnit.test('parses minimal #EXT-X-TARGETDURATION tags', function() {
   QUnit.ok(!('duration' in element), 'no duration is parsed');
 });
 QUnit.test('parses #EXT-X-TARGETDURATION with duration', function() {
-  let manifest = '#EXT-X-TARGETDURATION:47\n';
+  const manifest = '#EXT-X-TARGETDURATION:47\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -251,7 +251,7 @@ QUnit.test('parses #EXT-X-TARGETDURATION with duration', function() {
 
 // #EXT-X-VERSION
 QUnit.test('parses minimal #EXT-X-VERSION tags', function() {
-  let manifest = '#EXT-X-VERSION:\n';
+  const manifest = '#EXT-X-VERSION:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -265,7 +265,7 @@ QUnit.test('parses minimal #EXT-X-VERSION tags', function() {
   QUnit.ok(!('version' in element), 'no version is present');
 });
 QUnit.test('parses #EXT-X-VERSION with a version', function() {
-  let manifest = '#EXT-X-VERSION:99\n';
+  const manifest = '#EXT-X-VERSION:99\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -281,7 +281,7 @@ QUnit.test('parses #EXT-X-VERSION with a version', function() {
 
 // #EXT-X-MEDIA-SEQUENCE
 QUnit.test('parses minimal #EXT-X-MEDIA-SEQUENCE tags', function() {
-  let manifest = '#EXT-X-MEDIA-SEQUENCE\n';
+  const manifest = '#EXT-X-MEDIA-SEQUENCE\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -295,7 +295,7 @@ QUnit.test('parses minimal #EXT-X-MEDIA-SEQUENCE tags', function() {
   QUnit.ok(!('number' in element), 'no number is present');
 });
 QUnit.test('parses #EXT-X-MEDIA-SEQUENCE with sequence numbers', function() {
-  let manifest = '#EXT-X-MEDIA-SEQUENCE:109\n';
+  const manifest = '#EXT-X-MEDIA-SEQUENCE:109\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -311,7 +311,7 @@ QUnit.test('parses #EXT-X-MEDIA-SEQUENCE with sequence numbers', function() {
 
 // #EXT-X-PLAYLIST-TYPE
 QUnit.test('parses minimal #EXT-X-PLAYLIST-TYPE tags', function() {
-  let manifest = '#EXT-X-PLAYLIST-TYPE:\n';
+  const manifest = '#EXT-X-PLAYLIST-TYPE:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -355,7 +355,7 @@ QUnit.test('parses #EXT-X-PLAYLIST-TYPE with mutability info', function() {
 
 // #EXT-X-BYTERANGE
 QUnit.test('parses minimal #EXT-X-BYTERANGE tags', function() {
-  let manifest = '#EXT-X-BYTERANGE\n';
+  const manifest = '#EXT-X-BYTERANGE\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -395,7 +395,7 @@ QUnit.test('parses #EXT-X-BYTERANGE with length and offset', function() {
 
 // #EXT-X-ALLOW-CACHE
 QUnit.test('parses minimal #EXT-X-ALLOW-CACHE tags', function() {
-  let manifest = '#EXT-X-ALLOW-CACHE:\n';
+  const manifest = '#EXT-X-ALLOW-CACHE:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -432,7 +432,7 @@ QUnit.test('parses valid #EXT-X-ALLOW-CACHE tags', function() {
 });
 // #EXT-X-MAP
 QUnit.test('parses minimal #EXT-X-MAP tags', function() {
-  let manifest = '#EXT-X-MAP:URI="init.m4s"\n';
+  const manifest = '#EXT-X-MAP:URI="init.m4s"\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -446,7 +446,7 @@ QUnit.test('parses minimal #EXT-X-MAP tags', function() {
   QUnit.strictEqual(element.uri, 'init.m4s', 'parsed the uri');
 });
 QUnit.test('parses #EXT-X-MAP tags with a byterange', function() {
-  let manifest = '#EXT-X-MAP:URI="0.m4s", BYTERANGE="1000@23"\n';
+  const manifest = '#EXT-X-MAP:URI="0.m4s", BYTERANGE="1000@23"\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -464,7 +464,7 @@ QUnit.test('parses #EXT-X-MAP tags with a byterange', function() {
                     'parsed the byterange offset');
 });
 QUnit.test('parses #EXT-X-MAP tags with arbitrary attributes', function() {
-  let manifest = '#EXT-X-MAP:URI="init.mp4", SOMETHING=YES,BYTERANGE="720@0"\n';
+  const manifest = '#EXT-X-MAP:URI="init.mp4", SOMETHING=YES,BYTERANGE="720@0"\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -483,7 +483,7 @@ QUnit.test('parses #EXT-X-MAP tags with arbitrary attributes', function() {
 });
 // #EXT-X-STREAM-INF
 QUnit.test('parses minimal #EXT-X-STREAM-INF tags', function() {
-  let manifest = '#EXT-X-STREAM-INF\n';
+  const manifest = '#EXT-X-STREAM-INF\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -498,7 +498,7 @@ QUnit.test('parses minimal #EXT-X-STREAM-INF tags', function() {
 });
 // #EXT-X-PROGRAM-DATE-TIME
 QUnit.test('parses minimal EXT-X-PROGRAM-DATE-TIME tags', function() {
-  let manifest = '#EXT-X-PROGRAM-DATE-TIME\n';
+  const manifest = '#EXT-X-PROGRAM-DATE-TIME\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -582,7 +582,7 @@ QUnit.test('parses #EXT-X-STREAM-INF with common attributes', function() {
                     'codecs are parsed');
 });
 QUnit.test('parses #EXT-X-STREAM-INF with arbitrary attributes', function() {
-  let manifest = '#EXT-X-STREAM-INF:NUMERIC=24,ALPHA=Value,MIXED=123abc\n';
+  const manifest = '#EXT-X-STREAM-INF:NUMERIC=24,ALPHA=Value,MIXED=123abc\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -601,7 +601,7 @@ QUnit.test('parses #EXT-X-STREAM-INF with arbitrary attributes', function() {
 });
 // #EXT-X-ENDLIST
 QUnit.test('parses #EXT-X-ENDLIST tags', function() {
-  let manifest = '#EXT-X-ENDLIST\n';
+  const manifest = '#EXT-X-ENDLIST\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -659,7 +659,7 @@ QUnit.test('parses valid #EXT-X-KEY tags', function() {
 });
 
 QUnit.test('parses minimal #EXT-X-KEY tags', function() {
-  let manifest = '#EXT-X-KEY:\n';
+  const manifest = '#EXT-X-KEY:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -733,7 +733,7 @@ QUnit.test('parses prefixed with 0x or 0X #EXT-X-KEY:IV tags', function() {
 });
 
 QUnit.test('ignores empty lines', function() {
-  let manifest = '\n';
+  const manifest = '\n';
   let event = false;
 
   this.parseStream.on('data', function() {
@@ -751,9 +751,9 @@ QUnit.test('can be constructed', function() {
 });
 
 QUnit.test('attaches cue-out data to segment', function() {
-  let parser = new Parser();
+  const parser = new Parser();
 
-  let manifest = [
+  const manifest = [
     '#EXTM3U',
     '#EXTINF:5,',
     '#COMMENT',
@@ -779,9 +779,9 @@ QUnit.test('attaches cue-out data to segment', function() {
 });
 
 QUnit.test('attaches cue-out-cont data to segment', function() {
-  let parser = new Parser();
+  const parser = new Parser();
 
-  let manifest = [
+  const manifest = [
     '#EXTM3U',
     '#EXTINF:5,',
     '#COMMENT',
@@ -809,9 +809,9 @@ QUnit.test('attaches cue-out-cont data to segment', function() {
 });
 
 QUnit.test('attaches cue-in data to segment', function() {
-  let parser = new Parser();
+  const parser = new Parser();
 
-  let manifest = [
+  const manifest = [
     '#EXTM3U',
     '#EXTINF:5,',
     '#COMMENT',
@@ -844,7 +844,7 @@ QUnit.test('parses static manifests as expected', function() {
 
   for (key in testDataManifests) {
     if (testDataExpected[key]) {
-      let parser = new Parser();
+      const parser = new Parser();
 
       parser.push(testDataManifests[key]);
       QUnit.deepEqual(parser.manifest,

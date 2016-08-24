@@ -33,16 +33,16 @@ export default class Parser extends Stream {
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
     /* eslint-disable consistent-this */
-    let self = this;
+    const self = this;
     /* eslint-enable consistent-this */
-    let uris = [];
+    const uris = [];
     let currentUri = {};
     // if specified, the active EXT-X-MAP definition
     let currentMap;
     // if specified, the active decryption key
     let key;
-    let noop = function() {};
-    let defaultMediaGroups = {
+    const noop = function() {};
+    const defaultMediaGroups = {
       'AUDIO': {},
       'VIDEO': {},
       'CLOSED-CAPTIONS': {},
@@ -76,7 +76,7 @@ export default class Parser extends Stream {
               }
             },
             byterange() {
-              let byterange = {};
+              const byterange = {};
 
               if ('length' in entry) {
                 currentUri.byterange = byterange;
@@ -226,7 +226,7 @@ export default class Parser extends Stream {
               }
 
               // find the media group, creating defaults as necessary
-              let mediaGroupType = this.manifest.mediaGroups[entry.attributes.TYPE];
+              const mediaGroupType = this.manifest.mediaGroups[entry.attributes.TYPE];
 
               mediaGroupType[entry.attributes['GROUP-ID']] =
                 mediaGroupType[entry.attributes['GROUP-ID']] || {};
@@ -260,7 +260,8 @@ export default class Parser extends Stream {
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
-              // ensures that only the first appearance of PROGRAM-DATE-TIME will be stored
+              // ensures that only the first appearance of PROGRAM-DATE-TIME
+              // will be stored
               if (!this.manifest.dateTimeString && !this.manifest.dateTimeObject) {
                 this.manifest.dateTimeString = entry.dateTimeString;
                 this.manifest.dateTimeObject = entry.dateTimeObject;
