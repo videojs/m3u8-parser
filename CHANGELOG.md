@@ -2,8 +2,6 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* updated #PROGRAM-DATE-TIME parsing to only accept the first instance
-of the tag in the file
 * moved to latest videojs-standard version, brought code into 
 compliance with the latest eslint rules.
 
