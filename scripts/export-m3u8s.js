@@ -1,23 +1,23 @@
 /* eslint no-console: 0 */
 
-let fs = require('fs');
-let path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-let basePath = path.resolve(__dirname, '..');
-let testDataDir = path.join(basePath, 'test');
-let manifestDir = path.join(basePath, 'test', 'fixtures', 'm3u8');
-let manifestFilepath = path.join(testDataDir, 'test-manifests.js');
-let expectedFilepath = path.join(testDataDir, 'test-expected.js');
+const basePath = path.resolve(__dirname, '..');
+const testDataDir = path.join(basePath, 'test');
+const manifestDir = path.join(basePath, 'test', 'fixtures', 'm3u8');
+const manifestFilepath = path.join(testDataDir, 'test-manifests.js');
+const expectedFilepath = path.join(testDataDir, 'test-expected.js');
 
-let build = function() {
+const build = function() {
   let manifests = 'export default {\n';
   let expected = 'export default {\n';
 
-  let files = fs.readdirSync(manifestDir);
+  const files = fs.readdirSync(manifestDir);
 
   while (files.length > 0) {
-    let file = path.resolve(manifestDir, files.shift());
-    let extname = path.extname(file);
+    const file = path.resolve(manifestDir, files.shift());
+    const extname = path.extname(file);
 
     if (extname === '.m3u8') {
       // translate this manifest
@@ -54,7 +54,7 @@ let build = function() {
   console.log('Wrote test data file ' + expectedFilepath);
 };
 
-let watch = function() {
+const watch = function() {
   build();
   fs.watch(manifestDir, function(event, filename) {
     console.log('files in manifest dir were changed rebuilding manifest data');
@@ -62,7 +62,7 @@ let watch = function() {
   });
 };
 
-let clean = function() {
+const clean = function() {
   try {
     fs.unlinkSync(manifestFilepath);
   } catch (e) {

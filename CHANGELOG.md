@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* moved to latest videojs-standard version, brought code into 
+compliance with the latest eslint rules.
 
 --------------------
 ## 1.0.2 (2016-06-07)
