@@ -102,7 +102,7 @@ export default class ParseStream extends Stream {
     }
 
     // Comments
-    if (line.indexOf('#EXT') !== 0) {
+    if ((line.indexOf('#EXT') !== 0) && (line.indexOf('#ZEN') !== 0)){
       this.trigger('data', {
         type: 'comment',
         text: line.slice(1)
