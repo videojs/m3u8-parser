@@ -19,5 +19,6 @@
     "AUDIO": {},
     "CLOSED-CAPTIONS": {},
     "SUBTITLES": {}
-  }
+  },
+  "segments": []
 }

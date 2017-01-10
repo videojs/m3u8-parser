@@ -51,5 +51,6 @@
     },
     timeline: 0,
     uri: "hi/prog_index.m3u8"
-  }]
+  }],
+  segments: []
 }

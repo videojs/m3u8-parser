@@ -66,7 +66,7 @@
     },
     timeline: 0,
     uri: "v4/prog_index.m3u8"
-  }, 
+  },
 
   {
     "attributes": {
@@ -458,5 +458,6 @@
       },
       "timeline": 0,
       "uri": "v1/prog_index.m3u8"
-    }]
+    }],
+    segments: []
 }

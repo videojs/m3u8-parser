@@ -84,5 +84,6 @@
     },
     timeline: 0,
     uri: "hi2/prog_index.m3u8"
-  }]
+  }],
+  segments: []
 }
