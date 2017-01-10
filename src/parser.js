@@ -54,7 +54,8 @@ export default class Parser extends Stream {
     // the manifest is empty until the parse stream begins delivering data
     this.manifest = {
       allowCache: true,
-      discontinuityStarts: []
+      discontinuityStarts: [],
+      segments: []
     };
 
     // update the manifest with the m3u8 entry from the parse stream

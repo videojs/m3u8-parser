@@ -69,5 +69,6 @@
     },
     timeline: 0,
     uri: "Angle1/500kbs/prog_index.m3u8"
-  }]
+  }],
+  segments: []
 }
