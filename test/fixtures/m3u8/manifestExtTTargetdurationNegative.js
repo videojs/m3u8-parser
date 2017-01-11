@@ -10,5 +10,6 @@
   ],
   "endList": true,
   "discontinuitySequence": 0,
-  "discontinuityStarts": []
+  "discontinuityStarts": [],
+  "totalDuration": 50,
 }
