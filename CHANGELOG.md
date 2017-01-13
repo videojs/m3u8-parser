@@ -2,11 +2,14 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
+_(none)_
+
+--------------------
+
+## 2.0.0 (2017-01-13)
 * Manifest object is now initialized with an empty segments arrays
 * moved to latest videojs-standard version, brought code into 
 compliance with the latest eslint rules.
-
---------------------
 
 ## 1.0.2 (2016-06-07)
 * fix the build pipeline
