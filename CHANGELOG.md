@@ -2,9 +2,12 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* Fix: Include the babel ES3 tranform to support IE8 [#13](https://github.com/videojs/m3u8-parser/pull/13)
+_(none)_
 
 --------------------
+
+## 2.0.1 (2017-01-20)
+* Fix: Include the babel ES3 tranform to support IE8 [#13](https://github.com/videojs/m3u8-parser/pull/13)
 
 ## 2.0.0 (2017-01-13)
 * Manifest object is now initialized with an empty segments arrays
