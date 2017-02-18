@@ -251,8 +251,8 @@ export default class Parser extends Stream {
               if (entry.attributes['INSTREAM-ID']) {
                 rendition.instreamId = entry.attributes['INSTREAM-ID'];
               }
-              if (entry.attributes['CHARACTERISTICS']) {
-                rendition.characteristics = entry.attributes['CHARACTERISTICS'];
+              if (entry.attributes.CHARACTERISTICS) {
+                rendition.characteristics = entry.attributes.CHARACTERISTICS;
               }
 
               // insert the new rendition
