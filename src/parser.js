@@ -254,6 +254,9 @@ export default class Parser extends Stream {
               if (entry.attributes.CHARACTERISTICS) {
                 rendition.characteristics = entry.attributes.CHARACTERISTICS;
               }
+              if (entry.attributes.FORCED) {
+                rendition.forced = (/yes/i).test(entry.attributes.FORCED);
+              }
 
               // insert the new rendition
               mediaGroup[entry.attributes.NAME] = rendition;

@@ -854,6 +854,22 @@ QUnit.test('parses characteristics attribute', function() {
               'parsed CHARACTERISTICS attribute');
 });
 
+QUnit.test('parses FORCED attribute', function() {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",CHARACTERISTICS="char",NAME="test",FORCED=YES',
+    '#EXT-X-STREAM-INF:BANDWIDTH=1,CODECS="mp4a.40.2, avc1.4d400d",SUBTITLES="subs"',
+    'index.m3u8'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.ok(parser.manifest.mediaGroups.SUBTITLES.subs.test.forced,
+           'parsed FORCED attribute');
+});
+
 QUnit.module('m3u8s');
 
 QUnit.test('parses static manifests as expected', function() {
