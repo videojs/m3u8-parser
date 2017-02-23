@@ -2,7 +2,8 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* parse FORCED attribute of media-groups [#15](https://github.com/videojs/m3u8-parser/pull/15)
+* Pass any CHARACTERISTICS value of a track with the track object [#14](https://github.com/videojs/m3u8-parser/pull/14)
 
 --------------------
 
@@ -11,7 +12,7 @@ _(none)_
 
 ## 2.0.0 (2017-01-13)
 * Manifest object is now initialized with an empty segments arrays
-* moved to latest videojs-standard version, brought code into 
+* moved to latest videojs-standard version, brought code into
 compliance with the latest eslint rules.
 
 ## 1.0.2 (2016-06-07)
