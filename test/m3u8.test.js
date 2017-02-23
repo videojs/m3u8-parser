@@ -842,7 +842,7 @@ QUnit.test('parses characteristics attribute', function() {
 
   const manifest = [
     '#EXTM3U',
-    '#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=subs,CHARACTERISTICS=char,NAME=test',
+    '#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",CHARACTERISTICS="char",NAME="test"',
     '#EXT-X-STREAM-INF:BANDWIDTH=1,CODECS="mp4a.40.2, avc1.4d400d",SUBTITLES="subs"',
     'index.m3u8'
   ].join('\n');
