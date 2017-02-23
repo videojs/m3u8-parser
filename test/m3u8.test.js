@@ -837,6 +837,23 @@ QUnit.test('attaches cue-in data to segment', function() {
     'cue in without colon seperator');
 });
 
+QUnit.test('parses characteristics attribute', function() {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID=subs,CHARACTERISTICS=char,NAME=test',
+    '#EXT-X-STREAM-INF:BANDWIDTH=1,CODECS="mp4a.40.2, avc1.4d400d",SUBTITLES="subs"',
+    'index.m3u8'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  QUnit.equal(parser.manifest.mediaGroups.SUBTITLES.subs.test.characteristics,
+              'char',
+              'parsed CHARACTERISTICS attribute');
+});
+
 QUnit.module('m3u8s');
 
 QUnit.test('parses static manifests as expected', function() {
