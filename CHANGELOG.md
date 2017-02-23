@@ -2,10 +2,13 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* parse FORCED attribute of media-groups [#15](https://github.com/videojs/m3u8-parser/pull/15)
-* Pass any CHARACTERISTICS value of a track with the track object [#14](https://github.com/videojs/m3u8-parser/pull/14)
+_(none)_
 
 --------------------
+
+## 2.1.0 (2017-02-23)
+* parse FORCED attribute of media-groups [#15](https://github.com/videojs/m3u8-parser/pull/15)
+* Pass any CHARACTERISTICS value of a track with the track object [#14](https://github.com/videojs/m3u8-parser/pull/14)
 
 ## 2.0.1 (2017-01-20)
 * Fix: Include the babel ES3 tranform to support IE8 [#13](https://github.com/videojs/m3u8-parser/pull/13)
