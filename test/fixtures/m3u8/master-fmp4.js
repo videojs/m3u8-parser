@@ -45,7 +45,8 @@
           autoselect: true,
           default: true,
           language: "eng",
-          uri: 's1/eng/prog_index.m3u8'
+          uri: 's1/eng/prog_index.m3u8',
+          forced: false
         }
       }
     }
