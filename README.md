@@ -7,6 +7,7 @@ m3u8 parser
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Installation](#installation)
 - [Usage](#usage)
   - [Parsed Output](#parsed-output)
@@ -15,7 +16,7 @@ m3u8 parser
   - [Media Segment Tags](#media-segment-tags)
   - [Media Playlist Tags](#media-playlist-tags)
   - [Master Playlist Tags](#master-playlist-tags)
-  - [Expiremental Tags](#expiremental-tags)
+  - [Experimental Tags](#experimental-tags)
     - [EXT-X-CUE-OUT](#ext-x-cue-out)
     - [EXT-X-CUE-OUT-CONT](#ext-x-cue-out-cont)
     - [EXT-X-CUE-IN](#ext-x-cue-in)
@@ -57,7 +58,7 @@ var manifest = [
   '#EXT-X-ENDLIST'
 ].join('\n');
 
-var parser = new meu8Parser.Parser();
+var parser = new m3u8Parser.Parser();
 
 parser.push(manifest);
 parser.end();
@@ -163,7 +164,7 @@ Manifest {
 * [EXT-X-MEDIA](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.1)
 * [EXT-X-STREAM-INF](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.2)
 
-### Expiremental Tags
+### Experimental Tags
 
 m3u8-parser supports 3 additional **Media Segment Tags** not present in the HLS specification.
 
