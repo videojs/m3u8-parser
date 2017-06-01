@@ -92,7 +92,6 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "babel": "^6.5.2",
     "babel-cli": "^6.11.4",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-object-assign": "^6.8.0",
