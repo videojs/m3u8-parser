@@ -20,9 +20,9 @@ export default {
     'sinon'
   ],
   globals: {
-    'qunit': 'QUnit',
-    'qunitjs': 'QUnit',
-    'sinon': 'sinon'
+    qunit: 'QUnit',
+    qunitjs: 'QUnit',
+    sinon: 'sinon'
   },
   legacy: true,
   plugins: [

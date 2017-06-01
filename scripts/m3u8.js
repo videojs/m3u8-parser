@@ -1,14 +1,15 @@
-var m3u8 = require('./export-m3u8s.js');
+'use strict';
+const m3u8 = require('./export-m3u8s.js');
 
-var args = require('minimist')(process.argv.slice(2), {
+const args = require('minimist')(process.argv.slice(2), {
   boolean: ['watch', 'clean', 'build'],
   default: {
-    'build': true
+    build: true
   },
   alias: {
-    'b': 'build',
-    'c': 'clean',
-    'w': 'watch'
+    b: 'build',
+    c: 'clean',
+    w: 'watch'
   }
 });
 
