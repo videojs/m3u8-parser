@@ -1,48 +1,34 @@
 module.exports = function(config) {
-  var browsers = config.browsers;
-  var frameworks = ['qunit'];
-  var plugins = ['karma-qunit'];
-
-  var addBrowserLauncher = function(browser) {
-    plugins.push('karma-' + browser.toLowerCase() + '-launcher');
+  var detectBrowsers = {
+    enabled: false,
+    usePhantomJS: false
   };
 
-  // On Travis CI, we can only run in Firefox.
+  // On Travis CI, we can only run in Firefox and Chrome; so, enforce that.
   if (process.env.TRAVIS) {
-    browsers = ['Firefox'];
-    browsers.forEach(addBrowserLauncher);
+    config.browsers = ['Firefox', 'travisChrome'];
+  }
 
-  // If specific browsers are requested on the command line, load their
-  // launchers.
-  } else if (browsers.length) {
-    browsers.forEach(addBrowserLauncher);
-
-  // If no browsers are specified, we will do a `karma-detect-browsers` run,
-  // which means we need to set up that plugin and all the browser plugins
-  // we are supporting.
-  } else {
-    frameworks.push('detectBrowsers');
-    plugins.push('karma-detect-browsers');
-    ['chrome', 'firefox', 'ie', 'safari'].forEach(addBrowserLauncher);
+  // If no browsers are specified, we enable `karma-detect-browsers`
+  // this will detect all browsers that are available for testing
+  if (!config.browsers.length) {
+    detectBrowsers.enabled = true;
   }
 
   config.set({
     basePath: '..',
-    frameworks: frameworks,
-
+    frameworks: ['qunit', 'detectBrowsers'],
     files: [
       'node_modules/sinon/pkg/sinon.js',
-      'node_modules/sinon/pkg/sinon-ie.js',
       'test/dist/bundle.js'
     ],
-
-    browsers: browsers,
-    plugins: plugins,
-
-    detectBrowsers: {
-      usePhantomJS: false
+    customLaunchers: {
+      travisChrome: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
     },
-
+    detectBrowsers: detectBrowsers,
     reporters: ['dots'],
     port: 9876,
     colors: true,
