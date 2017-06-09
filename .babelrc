@@ -1,4 +1,4 @@
 {
-	"presets": [ "es3", ["es2015"] ],
+	"presets": [ "es3", ["es2015", {"loose": true}] ],
 	"plugins": ["transform-object-assign"]
 }
