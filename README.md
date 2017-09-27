@@ -86,13 +86,15 @@ Manifest {
   mediaGroups: {
     AUDIO: {
       'GROUP-ID': {
-        default: boolean,
-        autoselect: boolean,
-        language: string,
-        uri: string,
-        instreamId: string,
-        characteristics: string,
-        forced: boolean
+        NAME: {
+          default: boolean,
+          autoselect: boolean,
+          language: string,
+          uri: string,
+          instreamId: string,
+          characteristics: string,
+          forced: boolean
+        }
       }
     },
     VIDEO: {},
