@@ -300,7 +300,7 @@ export default class Parser extends Stream {
             'cue-in'() {
               currentUri.cueIn = entry.data;
             }
-          }[entry.tagType] || noop).call(self));
+          })[entry.tagType] || noop).call(self);
         },
         uri() {
           currentUri.uri = entry.uri;

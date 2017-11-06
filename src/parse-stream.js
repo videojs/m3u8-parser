@@ -296,7 +296,7 @@ export default class ParseStream extends Stream {
           event.attributes.BANDWIDTH = parseInt(event.attributes.BANDWIDTH, 10);
         }
         if (event.attributes['PROGRAM-ID']) {
-          event.attributes['PROGRAM-ID'] = parseInt( event.attributes['PROGRAM-ID'], 10);
+          event.attributes['PROGRAM-ID'] = parseInt(event.attributes['PROGRAM-ID'], 10);
         }
       }
       this.trigger('data', event);
