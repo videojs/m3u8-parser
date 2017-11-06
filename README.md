@@ -241,7 +241,7 @@ Example media playlist using `EXT-X-CUE-` tags.
 
 To add a parser for a non-standard tag the parser allows for the specification of custom tags using regular expressions. If a custom parser is specified, a `custom` object is appended to the manifest object.
 
-```
+```js
 var manifest = [
   "#EXTM3U",
   "#EXT-X-VERSION:3",
@@ -258,7 +258,7 @@ parser.manifest.custom.framerate // "#VOD-FRAMERATE:29.97"
 
 Custom parsers may additionally be provided a data parsing function that take a line and return a value.
 
-```
+```js
 var manifest = [
   "#EXTM3U",
   "#EXT-X-VERSION:3",
