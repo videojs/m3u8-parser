@@ -237,6 +237,43 @@ Example media playlist using `EXT-X-CUE-` tags.
 * [EXT-X-INDEPENDENT-SEGMENTS](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.5.1)
 * [EXT-X-START](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.5.2)
 
+### Custom Parsers
+
+To add a parser for a non-standard tag the parser allows for the specification of custom tags using regular expressions. If a custom parser is specified, a `custom` object is appended to the manifest object.
+
+```
+var manifest = [
+  "#EXTM3U",
+  "#EXT-X-VERSION:3",
+  "#VOD-FRAMERATE:29.97",
+  ""
+].join('\n');
+var parser = new m3u8Parser.Parser();
+parser.addParser(/^#VOD-FRAMERATE/, 'framerate');
+
+parser.push(manifest);
+parser.end();
+parser.manifest.custom.framerate // "#VOD-FRAMERATE:29.97"
+```
+
+Custom parsers may additionally be provided a data parsing function that take a line and return a value.
+
+```
+var manifest = [
+  "#EXTM3U",
+  "#EXT-X-VERSION:3",
+  "#VOD-FRAMERATE:29.97",
+  ""
+].join('\n');
+var parser = new m3u8Parser.Parser();
+parser.addParser(/^#VOD-FRAMERATE:/, 'framerate', function (line) {
+  return parseFloat(line.split(':')[1]);
+});
+
+parser.push(manifest);
+parser.end();
+parser.manifest.custom.framerate // 29.97
+```
 ## Including the Parser
 
 To include m3u8-parser on your website or web application, use any of the following methods.
