@@ -45,10 +45,10 @@ export default class Parser extends Stream {
     let key;
     const noop = function() {};
     const defaultMediaGroups = {
-      AUDIO: {},
-      VIDEO: {},
+      'AUDIO': {},
+      'VIDEO': {},
       'CLOSED-CAPTIONS': {},
-      SUBTITLES: {}
+      'SUBTITLES': {}
     };
     // group segments into numbered timelines delineated by discontinuities
     let currentTimeline = 0;
@@ -172,8 +172,7 @@ export default class Parser extends Stream {
             'discontinuity-sequence'() {
               if (!isFinite(entry.number)) {
                 this.trigger('warn', {
-                  message: 'ignoring invalid discontinuity sequence: ' +
-                    entry.number
+                  message: 'ignoring invalid discontinuity sequence: ' + entry.number
                 });
                 return;
               }
@@ -181,7 +180,7 @@ export default class Parser extends Stream {
               currentTimeline = entry.number;
             },
             'playlist-type'() {
-              if (!/VOD|EVENT/.test(entry.playlistType)) {
+              if (!(/VOD|EVENT/).test(entry.playlistType)) {
                 this.trigger('warn', {
                   message: 'ignoring unknown playlist type: ' + entry.playlist
                 });
@@ -219,8 +218,7 @@ export default class Parser extends Stream {
               this.manifest.mediaGroups =
                 this.manifest.mediaGroups || defaultMediaGroups;
 
-              if (
-                !(entry.attributes &&
+              if (!(entry.attributes &&
                   entry.attributes.TYPE &&
                   entry.attributes['GROUP-ID'] &&
                   entry.attributes.NAME)
@@ -232,23 +230,20 @@ export default class Parser extends Stream {
               }
 
               // find the media group, creating defaults as necessary
-              const mediaGroupType = this.manifest.mediaGroups[
-                entry.attributes.TYPE
-              ];
+              const mediaGroupType = this.manifest.mediaGroups[entry.attributes.TYPE];
 
-              mediaGroupType[entry.attributes['GROUP-ID']] = mediaGroupType[
-                entry.attributes['GROUP-ID']
-              ] || {};
+              mediaGroupType[entry.attributes['GROUP-ID']] =
+                mediaGroupType[entry.attributes['GROUP-ID']] || {};
               mediaGroup = mediaGroupType[entry.attributes['GROUP-ID']];
 
               // collect the rendition metadata
               rendition = {
-                default: /yes/i.test(entry.attributes.DEFAULT)
+                default: (/yes/i).test(entry.attributes.DEFAULT)
               };
               if (rendition.default) {
                 rendition.autoselect = true;
               } else {
-                rendition.autoselect = /yes/i.test(entry.attributes.AUTOSELECT);
+                rendition.autoselect = (/yes/i).test(entry.attributes.AUTOSELECT);
               }
               if (entry.attributes.LANGUAGE) {
                 rendition.language = entry.attributes.LANGUAGE;
@@ -263,7 +258,7 @@ export default class Parser extends Stream {
                 rendition.characteristics = entry.attributes.CHARACTERISTICS;
               }
               if (entry.attributes.FORCED) {
-                rendition.forced = /yes/i.test(entry.attributes.FORCED);
+                rendition.forced = (/yes/i).test(entry.attributes.FORCED);
               }
 
               // insert the new rendition
@@ -305,8 +300,7 @@ export default class Parser extends Stream {
             'cue-in'() {
               currentUri.cueIn = entry.data;
             }
-          }[entry.tagType] || noop)
-            .call(self));
+          }[entry.tagType] || noop).call(self));
         },
         uri() {
           currentUri.uri = entry.uri;
@@ -339,7 +333,7 @@ export default class Parser extends Stream {
           this.manifest.custom = this.manifest.custom || {};
           this.manifest.custom[entry.customType] = entry.data;
         }
-      }[entry.type].call(self));
+      })[entry.type].call(self);
     });
   }
 

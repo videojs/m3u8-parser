@@ -237,7 +237,7 @@ export default class ParseStream extends Stream {
         tagType: 'allow-cache'
       };
       if (match[1]) {
-        event.allowed = !/NO/.test(match[1]);
+        event.allowed = !(/NO/).test(match[1]);
       }
       this.trigger('data', event);
       return;
@@ -296,10 +296,7 @@ export default class ParseStream extends Stream {
           event.attributes.BANDWIDTH = parseInt(event.attributes.BANDWIDTH, 10);
         }
         if (event.attributes['PROGRAM-ID']) {
-          event.attributes['PROGRAM-ID'] = parseInt(
-            event.attributes['PROGRAM-ID'],
-            10
-          );
+          event.attributes['PROGRAM-ID'] = parseInt( event.attributes['PROGRAM-ID'], 10);
         }
       }
       this.trigger('data', event);
