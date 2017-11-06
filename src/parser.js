@@ -336,7 +336,8 @@ export default class Parser extends Stream {
           // comments are not important for playback
         },
         custom() {
-          debugger;
+          this.manifest.custom = this.manifest.custom || {};
+          this.manifest.custom[entry.customType] = entry.data;
         }
       }[entry.type].call(self));
     });
@@ -368,9 +369,6 @@ export default class Parser extends Stream {
    * @param {Function} dataParser function to parse the line into an object
    */
   addParser(expression, type, dataParser) {
-    this.customParsers[type] = data => {
-      this.manifest.custom[type] = dataParser(data);
-    };
-    this.parseStream.addParser(expression, type);
+    this.parseStream.addParser(expression, type, dataParser);
   }
 }

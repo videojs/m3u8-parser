@@ -421,14 +421,24 @@ export default class ParseStream extends Stream {
     });
   }
 
+  /**
+   * Add a parser for custom headers
+   *
+   * @param {RegExp}   expresion  a regular expression to match the custom header
+   * @param {String}   type       the custom type to register to the output
+   * @param {Function} dataParser function to parse the line into an object
+   */
   addParser(expression, customType, dataParser) {
+    if (typeof dataParser != 'function') {
+      dataParser = (line) => line;
+    }
     this.customParsers.push(line => {
       const match = expression.exec(line);
       if (match) {
         this.trigger('data', {
           type: 'custom',
           customType: customType,
-          data: line
+          data: dataParser(line)
         });
         return true;
       }
