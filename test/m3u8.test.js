@@ -91,7 +91,6 @@ QUnit.test('parses custom tags', function (assert) {
   this.parseStream.addParser(/^#VOD-STARTTIMESTAMP/, 'startTimestamp')
 
   this.parseStream.on('data', function (elem) {
-    console.log(elem);
     element = elem;
   });
 
