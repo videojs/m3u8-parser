@@ -731,6 +731,22 @@ QUnit.test('parses prefixed with 0x or 0X #EXT-X-KEY:IV tags', function(assert) 
     0x90abcdef
   ]), 'parsed an IV value with 0X');
 });
+// #EXT-X-START
+QUnit.test('parses EXT-X-START tags', function(assert) {
+  const manifest = '#EXT-X-START:TIME-OFFSET=1.1\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.strictEqual(element.type, 'tag', 'the line type is tag');
+  assert.strictEqual(element.tagType, 'start', 'the tag type is start');
+  assert.strictEqual(element.attributes['TIME-OFFSET'], 1.1, 'parses time offset');
+  assert.strictEqual(element.attributes.PRECISE, false, 'precise defaults to false');
+});
 
 QUnit.test('ignores empty lines', function(assert) {
   const manifest = '\n';

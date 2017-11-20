@@ -363,6 +363,21 @@ export default class ParseStream extends Stream {
       this.trigger('data', event);
       return;
     }
+    match = (/^#EXT-X-START:?(.*)$/).exec(line);
+    if (match) {
+      event = {
+        type: 'tag',
+        tagType: 'start'
+      };
+      if (match[1]) {
+        event.attributes = parseAttributes(match[1]);
+
+        event.attributes['TIME-OFFSET'] = parseFloat(event.attributes['TIME-OFFSET'], 10);
+        event.attributes.PRECISE = (/YES/).test(event.attributes.PRECISE);
+      }
+      this.trigger('data', event);
+      return;
+    }
     match = (/^#EXT-X-CUE-OUT-CONT:?(.*)?$/).exec(line);
     if (match) {
       event = {

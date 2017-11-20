@@ -288,6 +288,9 @@ export default class Parser extends Stream {
               }
               this.manifest.totalDuration = entry.duration;
             },
+            start() {
+              this.manifest.start = entry.start;
+            },
             'cue-out'() {
               currentUri.cueOut = entry.data;
             },
