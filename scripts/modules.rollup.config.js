@@ -9,7 +9,7 @@ import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
 
 export default {
-  name: 'm3u8_parser',
+  name: 'm3u8Parser',
   input: 'src/index.js',
   legacy: true,
   plugins: [

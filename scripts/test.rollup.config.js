@@ -10,7 +10,7 @@ import multiEntry from 'rollup-plugin-multi-entry';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  name: 'm3u8_parser_test',
+  name: 'm3u8ParserTest',
   input: 'test/**/*.test.js',
   output: {
     file: 'test/dist/bundle.js',
