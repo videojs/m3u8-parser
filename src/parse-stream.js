@@ -372,7 +372,7 @@ export default class ParseStream extends Stream {
       if (match[1]) {
         event.attributes = parseAttributes(match[1]);
 
-        event.attributes['TIME-OFFSET'] = parseFloat(event.attributes['TIME-OFFSET'], 10);
+        event.attributes['TIME-OFFSET'] = parseFloat(event.attributes['TIME-OFFSET']);
         event.attributes.PRECISE = (/YES/).test(event.attributes.PRECISE);
       }
       this.trigger('data', event);
