@@ -289,7 +289,10 @@ export default class Parser extends Stream {
               this.manifest.totalDuration = entry.duration;
             },
             start() {
-              this.manifest.start = entry.start;
+              this.manifest.start = {
+                offset: entry.attributes['TIME-OFFSET'],
+                precise: entry.attributes.PRECISE
+              };
             },
             'cue-out'() {
               currentUri.cueOut = entry.data;

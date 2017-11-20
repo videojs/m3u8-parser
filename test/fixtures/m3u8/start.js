@@ -29,7 +29,7 @@
   "discontinuitySequence": 0,
   "discontinuityStarts": [],
   "start": {
-    "TIME-OFFSET": 10.3,
-    "PRECISE": false
+    "offset": 10.3,
+    "precise": false
   }
 }
