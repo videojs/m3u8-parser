@@ -781,6 +781,7 @@ QUnit.test('flags missing EXT-X-START TIME-OFFSET attribute', function(assert) {
   parser.push(manifest);
 
   assert.ok(warning, 'a warning was triggered');
+  assert.ok((/ignoring start/).test(warning.message), 'message is about start tag');
   assert.strictEqual(typeof parser.manifest.start, 'undefined', 'does not parse start');
 });
 
