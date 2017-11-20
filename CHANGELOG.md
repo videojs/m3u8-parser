@@ -1,3 +1,7 @@
+## HEAD
+
+* added ability to parse EXT-X-START tags
+
 <a name="3.0.0"></a>
 # 3.0.0 (2017-06-09)
 
