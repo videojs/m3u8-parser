@@ -290,7 +290,7 @@ export default class Parser extends Stream {
             },
             start() {
               this.manifest.start = {
-                offset: entry.attributes['TIME-OFFSET'],
+                timeOffset: entry.attributes['TIME-OFFSET'],
                 precise: entry.attributes.PRECISE
               };
             },
