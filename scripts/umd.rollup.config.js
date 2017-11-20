@@ -10,10 +10,12 @@ import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  moduleName: 'm3u8-parser',
-  entry: 'src/index.js',
-  dest: 'dist/m3u8-parser.js',
-  format: 'umd',
+  name: 'm3u8_parser',
+  input: 'src/index.js',
+  output: {
+    file: 'dist/m3u8-parser.js',
+    format: 'umd'
+  },
   legacy: true,
   plugins: [
     resolve({

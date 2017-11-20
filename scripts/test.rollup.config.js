@@ -10,10 +10,12 @@ import multiEntry from 'rollup-plugin-multi-entry';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  moduleName: 'm3u8-parser-test',
-  entry: 'test/**/*.test.js',
-  dest: 'test/dist/bundle.js',
-  format: 'iife',
+  name: 'm3u8_parser_test',
+  input: 'test/**/*.test.js',
+  output: {
+    file: 'test/dist/bundle.js',
+    format: 'iife'
+  },
   external: [
     'qunit',
     'qunitjs',

@@ -9,8 +9,8 @@ import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
 
 export default {
-  moduleName: 'm3u8-parser',
-  entry: 'src/index.js',
+  name: 'm3u8_parser',
+  input: 'src/index.js',
   legacy: true,
   plugins: [
     json(),
@@ -30,8 +30,8 @@ export default {
       ]
     })
   ],
-  targets: [
-    {dest: 'dist/m3u8-parser.cjs.js', format: 'cjs'},
-    {dest: 'dist/m3u8-parser.es.js', format: 'es'}
+  output: [
+    {file: 'dist/m3u8-parser.cjs.js', format: 'cjs'},
+    {file: 'dist/m3u8-parser.es.js', format: 'es'}
   ]
 };
