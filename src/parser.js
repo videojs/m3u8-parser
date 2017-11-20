@@ -289,7 +289,7 @@ export default class Parser extends Stream {
               this.manifest.totalDuration = entry.duration;
             },
             start() {
-              if (!entry.attributes || !entry.attributes['TIME-OFFSET']) {
+              if (!entry.attributes || isNaN(entry.attributes['TIME-OFFSET'])) {
                 this.trigger('warn', {
                   message: 'ignoring start declaration without appropriate attribute list'
                 });
