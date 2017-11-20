@@ -747,6 +747,21 @@ QUnit.test('parses EXT-X-START tags', function(assert) {
   assert.strictEqual(element.attributes['TIME-OFFSET'], 1.1, 'parses time offset');
   assert.strictEqual(element.attributes.PRECISE, false, 'precise defaults to false');
 });
+QUnit.test('parses EXT-X-START PRECISE attribute', function(assert) {
+  const manifest = '#EXT-X-START:TIME-OFFSET=1.4,PRECISE=YES\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.strictEqual(element.type, 'tag', 'the line type is tag');
+  assert.strictEqual(element.tagType, 'start', 'the tag type is start');
+  assert.strictEqual(element.attributes['TIME-OFFSET'], 1.4, 'parses time offset');
+  assert.strictEqual(element.attributes.PRECISE, true, 'parses precise attribute');
+});
 
 QUnit.test('ignores empty lines', function(assert) {
   const manifest = '\n';
