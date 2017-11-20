@@ -762,6 +762,27 @@ QUnit.test('parses EXT-X-START PRECISE attribute', function(assert) {
   assert.strictEqual(element.attributes['TIME-OFFSET'], 1.4, 'parses time offset');
   assert.strictEqual(element.attributes.PRECISE, true, 'parses precise attribute');
 });
+QUnit.test('flags missing EXT-X-START TIME-OFFSET attribute', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXT-X-VERSION:3',
+    '#EXT-X-TARGETDURATION:10',
+    '#EXT-X-START:PRECISE=YES',
+    '#EXTINF:10,',
+    'media-00001.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+  let warning;
+
+  parser.on('warn', function(warn) {
+    warning = warn;
+  });
+  parser.push(manifest);
+
+  assert.ok(warning, 'a warning was triggered');
+  assert.strictEqual(typeof parser.manifest.start, 'undefined', 'does not parse start');
+});
 
 QUnit.test('ignores empty lines', function(assert) {
   const manifest = '\n';
