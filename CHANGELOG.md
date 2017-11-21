@@ -1,3 +1,6 @@
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/videojs/m3u8-parser/compare/v3.0.0...v4.0.0) (2017-11-21)
+
 ### Features
 
 * added ability to parse EXT-X-START tags [#31](https://github.com/videojs/m3u8-parser/pull/31)

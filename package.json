@@ -1,6 +1,6 @@
 {
   "name": "m3u8-parser",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "m3u8 parser",
   "main": "dist/m3u8-parser.cjs.js",
   "module": "dist/m3u8-parser.es.js",
