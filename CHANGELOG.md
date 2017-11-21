@@ -2,11 +2,11 @@
 
 ### Features
 
-* added ability to parse EXT-X-START tags
+* added ability to parse EXT-X-START tags [#31](https://github.com/videojs/m3u8-parser/pull/31)
 
 ### BREAKING CHANGES
 
-* camel case module name in rollup config to work with latest rollup
+* camel case module name in rollup config to work with latest rollup [#32](https://github.com/videojs/m3u8-parser/pull/32)
 
 <a name="3.0.0"></a>
 # 3.0.0 (2017-06-09)
