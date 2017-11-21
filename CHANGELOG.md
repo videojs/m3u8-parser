@@ -1,6 +1,12 @@
 ## HEAD
 
+### Features
+
 * added ability to parse EXT-X-START tags
+
+### BREAKING CHANGES
+
+* camel case module name in rollup config to work with latest rollup
 
 <a name="3.0.0"></a>
 # 3.0.0 (2017-06-09)
