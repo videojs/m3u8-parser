@@ -1,5 +1,3 @@
-## HEAD
-
 ### Features
 
 * added ability to parse EXT-X-START tags [#31](https://github.com/videojs/m3u8-parser/pull/31)
