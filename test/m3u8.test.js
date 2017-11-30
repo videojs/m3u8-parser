@@ -844,6 +844,35 @@ QUnit.test('can set custom parsers', function(assert) {
   assert.strictEqual(parser.manifest.custom.framerate,"29.97", 'sets framerate');
 });
 
+QUnit.test('segment level custom data', function (assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#VOD-TIMING:1511816599485',
+    '#COMMENT',
+    '#EXTINF:8.0,',
+    'ex1.ts',
+    '#VOD-TIMING',
+    '#EXTINF:8.0,',
+    'ex2.ts',
+    '#VOD-TIMING:1511816615485',
+    '#EXT-UNKNOWN',
+    '#EXTINF:8.0,',
+    'ex3.ts',
+    '#VOD-TIMING:1511816623485',
+    '#EXTINF:8.0,',
+    'ex3.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.addParser(/^#VOD-TIMING/, 'vodTiming', true);
+
+  parser.push(manifest);
+  assert.equal(parser.manifest.segments[0].custom.vodTiming, '#VOD-TIMING:1511816599485', 'parser attached segment level custom data')
+  assert.equal(parser.manifest.segments[1].custom.vodTiming, '#VOD-TIMING', 'parser got segment level custom data without :')
+})
+
 QUnit.test('attaches cue-out data to segment', function(assert) {
   const parser = new Parser();
 

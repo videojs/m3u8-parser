@@ -32,7 +32,6 @@ export default class Parser extends Stream {
     this.lineStream = new LineStream();
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
-    this.customParsers = {};
 
     /* eslint-disable consistent-this */
     const self = this;
@@ -342,8 +341,15 @@ export default class Parser extends Stream {
           // comments are not important for playback
         },
         custom() {
-          this.manifest.custom = this.manifest.custom || {};
-          this.manifest.custom[entry.customType] = entry.data;
+          // if this is segment-level data attach the output to the segment
+          if (entry.segment) {
+            currentUri.custom = currentUri.custom || {};
+            currentUri.custom[entry.customType] = entry.data
+          // if this is manifest-level data attach to the top level manifest object
+          } else {
+            this.manifest.custom = this.manifest.custom || {};
+            this.manifest.custom[entry.customType] = entry.data;
+          }
         }
       })[entry.type].call(self);
     });
@@ -368,13 +374,14 @@ export default class Parser extends Stream {
     this.lineStream.push('\n');
   }
   /**
-   * Add an additional parser for custom headers
+   * Add an additional parser for non-standard tags
    *
-   * @param {RegExp}   expresion  a regular expression to match the custom header
-   * @param {String}   type       the type to register to the output
-   * @param {Function} dataParser function to parse the line into an object
+   * @param {RegExp}   expression  a regular expression to match the custom header
+   * @param {String}   type        the type to register to the output
+   * @param {Function} dataParser  function to parse the line into an object
+   * @param {Boolean}  segment     should the tag be put into the segment data
    */
-  addParser(expression, type, dataParser) {
-    this.parseStream.addParser(expression, type, dataParser);
+  addParser(expression, type, dataParser, segment) {
+    this.parseStream.addParser(expression, type, dataParser, segment);
   }
 }
