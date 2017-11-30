@@ -102,8 +102,10 @@ export default class ParseStream extends Stream {
       return;
     }
 
-    for (var i = 0; i < this.customParsers.length; i++) {
-      if (this.customParsers[i].call(this, line)) return;
+    for (let i = 0; i < this.customParsers.length; i++) {
+      if (this.customParsers[i].call(this, line)) {
+        return;
+      }
     }
 
     // Comments
@@ -437,14 +439,14 @@ export default class ParseStream extends Stream {
    * Add a parser for custom headers
    *
    * @param {RegExp}   expression  a regular expression to match the custom header
-   * @param {String}   customType  the custom type to register to the output
+   * @param {string}   customType  the custom type to register to the output
    * @param {Function} dataParser  function to parse the line into an object
-   * @param {Boolean}  segment     should the tag be put into the segment data
+   * @param {boolean}  segment     should the tag be put into the segment data
    */
   addParser(expression, customType, dataParser, segment) {
     if (typeof dataParser !== 'function') {
       if (typeof dataParser === 'boolean') {
-        segment = dataParser
+        segment = dataParser;
       }
       dataParser = (line) => line;
     }
@@ -455,6 +457,7 @@ export default class ParseStream extends Stream {
 
     this.customParsers.push(line => {
       const match = expression.exec(line);
+
       if (match) {
         this.trigger('data', {
           type: 'custom',

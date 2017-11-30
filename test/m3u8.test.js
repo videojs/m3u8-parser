@@ -85,19 +85,24 @@ QUnit.module('ParseStream', {
     this.lineStream.pipe(this.parseStream);
   }
 });
-QUnit.test('parses custom tags', function (assert) {
+QUnit.test('parses custom tags', function(assert) {
   const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
   let element;
-  this.parseStream.addParser(/^#VOD-STARTTIMESTAMP/, 'startTimestamp')
 
-  this.parseStream.on('data', function (elem) {
+  this.parseStream.addParser(/^#VOD-STARTTIMESTAMP/, 'startTimestamp');
+
+  this.parseStream.on('data', function(elem) {
     element = elem;
   });
 
   this.lineStream.push(manifest);
-  assert.ok(element, 'element')
+  assert.ok(element, 'element');
   assert.strictEqual(element.type, 'custom', 'the type of the data is custom');
-  assert.strictEqual(element.customType, 'startTimestamp', 'the customType is startTimestamp');
+  assert.strictEqual(
+    element.customType,
+    'startTimestamp',
+    'the customType is startTimestamp'
+  );
 });
 
 QUnit.test('parses comment lines', function(assert) {
@@ -821,15 +826,15 @@ QUnit.test('can be constructed', function(assert) {
 QUnit.test('can set custom parsers', function(assert) {
   const parser = new Parser();
   const manifest = [
-    "#EXTM3U",
-    "#EXT-X-VERSION:3",
-    "#EXT-X-TARGETDURATION:10",
-    "#EXT-X-MEDIA-SEQUENCE:0",
-    "#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00",
-    "#VOD-STARTTIMESTAMP:1501533337573",
-    "#VOD-TOTALDELETEDDURATION:0.0",
-    "#VOD-FRAMERATE:29.97",
-    ""
+    '#EXTM3U',
+    '#EXT-X-VERSION:3',
+    '#EXT-X-TARGETDURATION:10',
+    '#EXT-X-MEDIA-SEQUENCE:0',
+    '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+    '#VOD-STARTTIMESTAMP:1501533337573',
+    '#VOD-TOTALDELETEDDURATION:0.0',
+    '#VOD-FRAMERATE:29.97',
+    ''
   ].join('\n');
 
   parser.addParser(/^#VOD-STARTTIMESTAMP/, 'startTimestamp');
@@ -837,14 +842,22 @@ QUnit.test('can set custom parsers', function(assert) {
   parser.addParser(/^#VOD-FRAMERATE/, 'framerate', (line) => (line.split(':')[1]));
 
   parser.push(manifest);
-  assert.strictEqual(parser.manifest.custom.startTimestamp, "#VOD-STARTTIMESTAMP:1501533337573", 'sets custom timestamp line');
+  assert.strictEqual(
+    parser.manifest.custom.startTimestamp,
+    '#VOD-STARTTIMESTAMP:1501533337573',
+    'sets custom timestamp line'
+  );
 
-  assert.strictEqual(parser.manifest.custom.totalDeleteDuration,"#VOD-TOTALDELETEDDURATION:0.0", 'sets custom delete duration');
+  assert.strictEqual(
+    parser.manifest.custom.totalDeleteDuration,
+    '#VOD-TOTALDELETEDDURATION:0.0',
+    'sets custom delete duration'
+  );
 
-  assert.strictEqual(parser.manifest.custom.framerate,"29.97", 'sets framerate');
+  assert.strictEqual(parser.manifest.custom.framerate, '29.97', 'sets framerate');
 });
 
-QUnit.test('segment level custom data', function (assert) {
+QUnit.test('segment level custom data', function(assert) {
   const parser = new Parser();
 
   const manifest = [
@@ -869,9 +882,17 @@ QUnit.test('segment level custom data', function (assert) {
   parser.addParser(/^#VOD-TIMING/, 'vodTiming', true);
 
   parser.push(manifest);
-  assert.equal(parser.manifest.segments[0].custom.vodTiming, '#VOD-TIMING:1511816599485', 'parser attached segment level custom data')
-  assert.equal(parser.manifest.segments[1].custom.vodTiming, '#VOD-TIMING', 'parser got segment level custom data without :')
-})
+  assert.equal(
+    parser.manifest.segments[0].custom.vodTiming,
+    '#VOD-TIMING:1511816599485',
+    'parser attached segment level custom data'
+  );
+  assert.equal(
+    parser.manifest.segments[1].custom.vodTiming,
+    '#VOD-TIMING',
+    'parser got segment level custom data without :'
+  );
+});
 
 QUnit.test('attaches cue-out data to segment', function(assert) {
   const parser = new Parser();
