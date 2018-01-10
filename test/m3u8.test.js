@@ -90,7 +90,7 @@ QUnit.test('parses custom tags', function(assert) {
   let element;
 
   this.parseStream.addParser({
-    expression: /^#VOD-STARTTIMESTAMP/, 
+    expression: /^#VOD-STARTTIMESTAMP/,
     customType: 'startTimestamp'
   });
 
@@ -846,7 +846,7 @@ QUnit.test('can set custom parsers', function(assert) {
   });
   parser.addParser({
     expression: /^#VOD-TOTALDELETEDDURATION/,
-    customType: 'totalDeleteDuration' 
+    customType: 'totalDeleteDuration'
   });
   parser.addParser({
     expression: /^#VOD-FRAMERATE/,
@@ -911,7 +911,7 @@ QUnit.test('segment level custom data', function(assert) {
   );
 });
 
-QUnit.test('playlist level custom data', function (assert) {
+QUnit.test('playlist level custom data', function(assert) {
   const parser = new Parser();
 
   const manifest = [
@@ -933,7 +933,7 @@ QUnit.test('playlist level custom data', function (assert) {
     expression: /^#PLAYLIST-LABEL/,
     customType: 'playlistLabel',
     segment: true
-  })
+  });
 
   parser.push(manifest);
 
@@ -941,15 +941,15 @@ QUnit.test('playlist level custom data', function (assert) {
     parser.manifest.playlists[0].custom.playlistLabel,
     '#PLAYLIST-LABEL:MED',
     'parser attached custom data to the playlist object'
-  )
+  );
 
   assert.equal(
     parser.manifest.playlists[2].custom.playlistLabel,
     '#PLAYLIST-LABEL',
     'parser attached custom data to the playlist object without :'
-  )
+  );
 
-})
+});
 
 QUnit.test('attaches cue-out data to segment', function(assert) {
   const parser = new Parser();
