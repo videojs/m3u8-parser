@@ -438,13 +438,13 @@ export default class ParseStream extends Stream {
   /**
    * Add a parser for custom headers
    *
-   * @param {Object}   options               a map of options for the added parser
-   * @param {RegExp}   options.expression    a regular expression to match the custom header
-   * @param {string}   options.customType    the custom type to register to the output
-   * @param {Function} [options.dataParser]  function to parse the line into an object
-   * @param {boolean}  [options.segment]     should the tag be put into the segment data
+   * @param {Object}   options                   a map of options for the added parser
+   * @param {RegExp}   options.expression        a regular expression to match the custom header
+   * @param {string}   options.customType        the custom type to register to the output
+   * @param {Function} [options.dataParser]      function to parse the line into an object
+   * @param {boolean}  [options.isManifestLevel] should the tag be put into the segment data
    */
-  addParser({expression, customType, dataParser, segment}) {
+  addParser({expression, customType, dataParser, isManifestLevel}) {
     if (typeof dataParser !== 'function') {
       dataParser = (line) => line;
     }
@@ -456,7 +456,7 @@ export default class ParseStream extends Stream {
           type: 'custom',
           data: dataParser(line),
           customType,
-          segment
+          isManifestLevel
         });
         return true;
       }

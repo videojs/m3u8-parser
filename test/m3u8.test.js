@@ -91,7 +91,8 @@ QUnit.test('parses custom tags', function(assert) {
 
   this.parseStream.addParser({
     expression: /^#VOD-STARTTIMESTAMP/,
-    customType: 'startTimestamp'
+    customType: 'startTimestamp',
+    isManifestLevel: true
   });
 
   this.parseStream.on('data', function(elem) {
@@ -842,16 +843,19 @@ QUnit.test('can set custom parsers', function(assert) {
 
   parser.addParser({
     expression: /^#VOD-STARTTIMESTAMP/,
-    customType: 'startTimestamp'
+    customType: 'startTimestamp',
+    isManifestLevel: true
   });
   parser.addParser({
     expression: /^#VOD-TOTALDELETEDDURATION/,
-    customType: 'totalDeleteDuration'
+    customType: 'totalDeleteDuration',
+    isManifestLevel: true
   });
   parser.addParser({
     expression: /^#VOD-FRAMERATE/,
     customType: 'framerate',
-    dataParser: (line) => (line.split(':')[1])
+    dataParser: (line) => (line.split(':')[1]),
+    isManifestLevel: true
   });
 
   parser.push(manifest);
@@ -894,8 +898,7 @@ QUnit.test('segment level custom data', function(assert) {
 
   parser.addParser({
     expression: /^#VOD-TIMING/,
-    customType: 'vodTiming',
-    segment: true
+    customType: 'vodTiming'
   });
 
   parser.push(manifest);
@@ -931,8 +934,7 @@ QUnit.test('playlist level custom data', function(assert) {
 
   parser.addParser({
     expression: /^#PLAYLIST-LABEL/,
-    customType: 'playlistLabel',
-    segment: true
+    customType: 'playlistLabel'
   });
 
   parser.push(manifest);

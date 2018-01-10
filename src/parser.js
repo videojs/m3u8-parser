@@ -341,7 +341,7 @@ export default class Parser extends Stream {
         },
         custom() {
           // if this is segment-level data attach the output to the segment
-          if (entry.segment) {
+          if (!entry.isManifestLevel) {
             currentUri.custom = currentUri.custom || {};
             currentUri.custom[entry.customType] = entry.data;
           // if this is manifest-level data attach to the top level manifest object
@@ -375,11 +375,11 @@ export default class Parser extends Stream {
   /**
    * Add an additional parser for non-standard tags
    *
-   * @param {Object}   options               a map of options for the added parser
-   * @param {RegExp}   options.expression    a regular expression to match the custom header
-   * @param {string}   options.type          the type to register to the output
-   * @param {Function} [options.dataParser]  function to parse the line into an object
-   * @param {boolean}  [options.segment]     should the tag be put into the segment data
+   * @param {Object}   options                   a map of options for the added parser
+   * @param {RegExp}   options.expression        a regular expression to match the custom header
+   * @param {string}   options.type              the type to register to the output
+   * @param {Function} [options.dataParser]      function to parse the line into an object
+   * @param {boolean}  [options.isManifestLevel] should the tag be put into the segment data
    */
   addParser(options) {
     this.parseStream.addParser(options);
