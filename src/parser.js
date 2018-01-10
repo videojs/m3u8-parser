@@ -376,12 +376,13 @@ export default class Parser extends Stream {
   /**
    * Add an additional parser for non-standard tags
    *
-   * @param {RegExp}   expression  a regular expression to match the custom header
-   * @param {string}   type        the type to register to the output
-   * @param {Function} dataParser  function to parse the line into an object
-   * @param {boolean}  segment     should the tag be put into the segment data
+   * @param {Object}   options               a map of options for the added parser
+   * @param {RegExp}   options.expression    a regular expression to match the custom header
+   * @param {string}   options.type          the type to register to the output
+   * @param {Function} [options.dataParser]  function to parse the line into an object
+   * @param {boolean}  [options.segment]     should the tag be put into the segment data
    */
-  addParser(expression, type, dataParser, segment) {
-    this.parseStream.addParser(expression, type, dataParser, segment);
+  addParser(options) {
+    this.parseStream.addParser(options);
   }
 }

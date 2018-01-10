@@ -89,7 +89,10 @@ QUnit.test('parses custom tags', function(assert) {
   const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
   let element;
 
-  this.parseStream.addParser(/^#VOD-STARTTIMESTAMP/, 'startTimestamp');
+  this.parseStream.addParser({
+    expression: /^#VOD-STARTTIMESTAMP/, 
+    customType: 'startTimestamp'
+  });
 
   this.parseStream.on('data', function(elem) {
     element = elem;
@@ -837,9 +840,19 @@ QUnit.test('can set custom parsers', function(assert) {
     ''
   ].join('\n');
 
-  parser.addParser(/^#VOD-STARTTIMESTAMP/, 'startTimestamp');
-  parser.addParser(/^#VOD-TOTALDELETEDDURATION/, 'totalDeleteDuration');
-  parser.addParser(/^#VOD-FRAMERATE/, 'framerate', (line) => (line.split(':')[1]));
+  parser.addParser({
+    expression: /^#VOD-STARTTIMESTAMP/,
+    customType: 'startTimestamp'
+  });
+  parser.addParser({
+    expression: /^#VOD-TOTALDELETEDDURATION/,
+    customType: 'totalDeleteDuration' 
+  });
+  parser.addParser({
+    expression: /^#VOD-FRAMERATE/,
+    customType: 'framerate',
+    dataParser: (line) => (line.split(':')[1])
+  });
 
   parser.push(manifest);
   assert.strictEqual(
@@ -879,7 +892,11 @@ QUnit.test('segment level custom data', function(assert) {
     '#EXT-X-ENDLIST'
   ].join('\n');
 
-  parser.addParser(/^#VOD-TIMING/, 'vodTiming', true);
+  parser.addParser({
+    expression: /^#VOD-TIMING/,
+    customType: 'vodTiming',
+    segment: true
+  });
 
   parser.push(manifest);
   assert.equal(
@@ -893,6 +910,46 @@ QUnit.test('segment level custom data', function(assert) {
     'parser got segment level custom data without :'
   );
 });
+
+QUnit.test('playlist level custom data', function (assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-VERSION:6',
+    '#PLAYLIST-LABEL:MED',
+    '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2855600,CODECS="avc1.4d001f,mp4a.40.2",RESOLUTION=960x540',
+    'live/medium.m3u8',
+    '#PLAYLIST-LABEL:HD-720P',
+    '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=5605600,CODECS="avc1.640028,mp4a.40.2",RESOLUTION=1280x720',
+    'live/high.m3u8',
+    '#PLAYLIST-LABEL',
+    '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1755600,CODECS="avc1.42001f,mp4a.40.2",RESOLUTION=640x360',
+    'live/low.m3u8',
+    ''
+  ].join('\n');
+
+  parser.addParser({
+    expression: /^#PLAYLIST-LABEL/,
+    customType: 'playlistLabel',
+    segment: true
+  })
+
+  parser.push(manifest);
+
+  assert.equal(
+    parser.manifest.playlists[0].custom.playlistLabel,
+    '#PLAYLIST-LABEL:MED',
+    'parser attached custom data to the playlist object'
+  )
+
+  assert.equal(
+    parser.manifest.playlists[2].custom.playlistLabel,
+    '#PLAYLIST-LABEL',
+    'parser attached custom data to the playlist object without :'
+  )
+
+})
 
 QUnit.test('attaches cue-out data to segment', function(assert) {
   const parser = new Parser();
