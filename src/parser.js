@@ -220,8 +220,7 @@ export default class Parser extends Stream {
               if (!(entry.attributes &&
                     entry.attributes.TYPE &&
                     entry.attributes['GROUP-ID'] &&
-                    entry.attributes.NAME)
-              ) {
+                    entry.attributes.NAME)) {
                 this.trigger('warn', {
                   message: 'ignoring incomplete or missing media group'
                 });
