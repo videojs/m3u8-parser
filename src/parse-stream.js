@@ -442,7 +442,7 @@ export default class ParseStream extends Stream {
    * @param {RegExp}   options.expression        a regular expression to match the custom header
    * @param {string}   options.customType        the custom type to register to the output
    * @param {Function} [options.dataParser]      function to parse the line into an object
-   * @param {boolean}  [options.isManifestLevel] should the tag be put into the segment data
+   * @param {boolean}  [options.isManifestLevel] should the tag data be put on the top level object
    */
   addParser({expression, customType, dataParser, isManifestLevel}) {
     if (typeof dataParser !== 'function') {

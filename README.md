@@ -241,7 +241,7 @@ Example media playlist using `EXT-X-CUE-` tags.
 
 ### Custom Parsers
 
-To add a parser for a non-standard tag the parser allows for the specification of custom tags using regular expressions. If a custom parser is specified, a `custom` object is appended to the manifest object.
+To add a parser for a non-standard tag the parser object allows for the specification of custom tags using regular expressions. If a custom parser is specified, a `custom` object is appended to the manifest object.
 
 ```js
 const manifest = [
@@ -250,8 +250,13 @@ const manifest = [
   '#VOD-FRAMERATE:29.97',
   ''
 ].join('\n');
+
 const parser = new m3u8Parser.Parser();
-parser.addParser(/^#VOD-FRAMERATE/, 'framerate');
+parser.addParser({
+  expression: /^#VOD-FRAMERATE/,
+  customType: 'framerate',
+  isManifestLevel: true
+});
 
 parser.push(manifest);
 parser.end();
@@ -267,9 +272,15 @@ const manifest = [
   '#VOD-FRAMERATE:29.97',
   ''
 ].join('\n');
+
 const parser = new m3u8Parser.Parser();
-parser.addParser(/^#VOD-FRAMERATE:/, 'framerate', function (line) {
-  return parseFloat(line.split(':')[1]);
+parser.addParser({
+  expression: /^#VOD-FRAMERATE/
+  customType: 'framerate',
+  dataParser: function(line) {
+    return parseFloat(line.split(':')[1]);
+  },
+  isManifestLevel: true
 });
 
 parser.push(manifest);
@@ -277,7 +288,7 @@ parser.end();
 parser.manifest.custom.framerate // 29.97
 ```
 
-Custom parsers may be configured to pick up segment or playlist level tags by passing `true` as the last argument. Having a segment level custom parser will add a `custom` object to the segment data.
+Custom parsers are configured by default to pick up segment or playlist level tags. Having a segment level custom parser will add a `custom` object to the playlist or segment data.
 
 ```js
 const manifest = [
@@ -289,7 +300,11 @@ const manifest = [
   ].join('\n');
 
 const parser = new m3u8Parser.Parser();
-parser.addParser(/#VOD-TIMING/, 'vodTiming', true);
+parser.addParser({
+  expression: /#VOD-TIMING/, 
+  customType: 'vodTiming'
+});
+
 parser.push(manifest);
 parser.end();
 parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485 
