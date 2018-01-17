@@ -91,8 +91,7 @@ QUnit.test('parses custom tags', function(assert) {
 
   this.parseStream.addParser({
     expression: /^#VOD-STARTTIMESTAMP/,
-    customType: 'startTimestamp',
-    isManifestLevel: true
+    customType: 'startTimestamp'
   });
 
   this.parseStream.on('data', function(elem) {
@@ -843,19 +842,16 @@ QUnit.test('can set custom parsers', function(assert) {
 
   parser.addParser({
     expression: /^#VOD-STARTTIMESTAMP/,
-    customType: 'startTimestamp',
-    isManifestLevel: true
+    customType: 'startTimestamp'
   });
   parser.addParser({
     expression: /^#VOD-TOTALDELETEDDURATION/,
-    customType: 'totalDeleteDuration',
-    isManifestLevel: true
+    customType: 'totalDeleteDuration'
   });
   parser.addParser({
     expression: /^#VOD-FRAMERATE/,
     customType: 'framerate',
-    dataParser: (line) => (line.split(':')[1]),
-    isManifestLevel: true
+    dataParser: (line) => (line.split(':')[1])
   });
 
   parser.push(manifest);
@@ -898,7 +894,8 @@ QUnit.test('segment level custom data', function(assert) {
 
   parser.addParser({
     expression: /^#VOD-TIMING/,
-    customType: 'vodTiming'
+    customType: 'vodTiming',
+    segment: true
   });
 
   parser.push(manifest);
@@ -912,45 +909,6 @@ QUnit.test('segment level custom data', function(assert) {
     '#VOD-TIMING',
     'parser got segment level custom data without :'
   );
-});
-
-QUnit.test('playlist level custom data', function(assert) {
-  const parser = new Parser();
-
-  const manifest = [
-    '#EXTM3U',
-    '#EXT-X-VERSION:6',
-    '#PLAYLIST-LABEL:MED',
-    '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2855600,CODECS="avc1.4d001f,mp4a.40.2",RESOLUTION=960x540',
-    'live/medium.m3u8',
-    '#PLAYLIST-LABEL:HD-720P',
-    '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=5605600,CODECS="avc1.640028,mp4a.40.2",RESOLUTION=1280x720',
-    'live/high.m3u8',
-    '#PLAYLIST-LABEL',
-    '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1755600,CODECS="avc1.42001f,mp4a.40.2",RESOLUTION=640x360',
-    'live/low.m3u8',
-    ''
-  ].join('\n');
-
-  parser.addParser({
-    expression: /^#PLAYLIST-LABEL/,
-    customType: 'playlistLabel'
-  });
-
-  parser.push(manifest);
-
-  assert.equal(
-    parser.manifest.playlists[0].custom.playlistLabel,
-    '#PLAYLIST-LABEL:MED',
-    'parser attached custom data to the playlist object'
-  );
-
-  assert.equal(
-    parser.manifest.playlists[2].custom.playlistLabel,
-    '#PLAYLIST-LABEL',
-    'parser attached custom data to the playlist object without :'
-  );
-
 });
 
 QUnit.test('attaches cue-out data to segment', function(assert) {

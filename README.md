@@ -254,8 +254,7 @@ const manifest = [
 const parser = new m3u8Parser.Parser();
 parser.addParser({
   expression: /^#VOD-FRAMERATE/,
-  customType: 'framerate',
-  isManifestLevel: true
+  customType: 'framerate'
 });
 
 parser.push(manifest);
@@ -279,8 +278,7 @@ parser.addParser({
   customType: 'framerate',
   dataParser: function(line) {
     return parseFloat(line.split(':')[1]);
-  },
-  isManifestLevel: true
+  }
 });
 
 parser.push(manifest);
@@ -288,7 +286,7 @@ parser.end();
 parser.manifest.custom.framerate // 29.97
 ```
 
-Custom parsers are configured by default to pick up segment or playlist level tags. Having a segment level custom parser will add a `custom` object to the playlist or segment data.
+Custom parsers may also extract data at a segment level by passing `segment: true` to the options object. Having a segment level custom parser will add a `custom` object to the segment data.
 
 ```js
 const manifest = [
@@ -302,7 +300,8 @@ const manifest = [
 const parser = new m3u8Parser.Parser();
 parser.addParser({
   expression: /#VOD-TIMING/, 
-  customType: 'vodTiming'
+  customType: 'vodTiming',
+  segment: true
 });
 
 parser.push(manifest);
