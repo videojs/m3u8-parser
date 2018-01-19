@@ -1,7 +1,7 @@
 /**
  * @file m3u8/parser.js
  */
-import Stream from './stream' ;
+import Stream from './stream';
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
 
@@ -32,6 +32,7 @@ export default class Parser extends Stream {
     this.lineStream = new LineStream();
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
+
     /* eslint-disable consistent-this */
     const self = this;
     /* eslint-enable consistent-this */
@@ -316,8 +317,7 @@ export default class Parser extends Stream {
           uris.push(currentUri);
 
           // if no explicit duration was declared, use the target duration
-          if (this.manifest.targetDuration &&
-              !('duration' in currentUri)) {
+          if (this.manifest.targetDuration && !('duration' in currentUri)) {
             this.trigger('warn', {
               message: 'defaulting segment duration to the target duration'
             });
@@ -338,10 +338,20 @@ export default class Parser extends Stream {
         },
         comment() {
           // comments are not important for playback
+        },
+        custom() {
+          // if this is segment-level data attach the output to the segment
+          if (entry.segment) {
+            currentUri.custom = currentUri.custom || {};
+            currentUri.custom[entry.customType] = entry.data;
+          // if this is manifest-level data attach to the top level manifest object
+          } else {
+            this.manifest.custom = this.manifest.custom || {};
+            this.manifest.custom[entry.customType] = entry.data;
+          }
         }
       })[entry.type].call(self);
     });
-
   }
 
   /**
@@ -362,5 +372,16 @@ export default class Parser extends Stream {
     // flush any buffered input
     this.lineStream.push('\n');
   }
-
+  /**
+   * Add an additional parser for non-standard tags
+   *
+   * @param {Object}   options              a map of options for the added parser
+   * @param {RegExp}   options.expression   a regular expression to match the custom header
+   * @param {string}   options.type         the type to register to the output
+   * @param {Function} [options.dataParser] function to parse the line into an object
+   * @param {boolean}  [options.segment]    should tag data be attached to the segment object
+   */
+  addParser(options) {
+    this.parseStream.addParser(options);
+  }
 }

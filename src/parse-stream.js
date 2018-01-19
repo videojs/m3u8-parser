@@ -74,6 +74,7 @@ const parseAttributes = function(attributes) {
 export default class ParseStream extends Stream {
   constructor() {
     super();
+    this.customParsers = [];
   }
 
   /**
@@ -99,6 +100,12 @@ export default class ParseStream extends Stream {
         uri: line
       });
       return;
+    }
+
+    for (let i = 0; i < this.customParsers.length; i++) {
+      if (this.customParsers[i].call(this, line)) {
+        return;
+      }
     }
 
     // Comments
@@ -425,6 +432,34 @@ export default class ParseStream extends Stream {
     this.trigger('data', {
       type: 'tag',
       data: line.slice(4)
+    });
+  }
+
+  /**
+   * Add a parser for custom headers
+   *
+   * @param {Object}   options              a map of options for the added parser
+   * @param {RegExp}   options.expression   a regular expression to match the custom header
+   * @param {string}   options.customType   the custom type to register to the output
+   * @param {Function} [options.dataParser] function to parse the line into an object
+   * @param {boolean}  [options.segment]    should tag data be attached to the segment object
+   */
+  addParser({expression, customType, dataParser, segment}) {
+    if (typeof dataParser !== 'function') {
+      dataParser = (line) => line;
+    }
+    this.customParsers.push(line => {
+      const match = expression.exec(line);
+
+      if (match) {
+        this.trigger('data', {
+          type: 'custom',
+          data: dataParser(line),
+          customType,
+          segment
+        });
+        return true;
+      }
     });
   }
 }

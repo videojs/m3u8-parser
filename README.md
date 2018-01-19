@@ -77,6 +77,7 @@ Manifest {
   mediaSequence: number,
   discontinuitySequence: number,
   playlistType: string,
+  custom: {},
   playlists: [
     {
       attributes: {},
@@ -131,7 +132,8 @@ Manifest {
       },
       'cue-out': string,
       'cue-out-cont': string,
-      'cue-in': string
+      'cue-in': string,
+      custom: {}
     }
   ]
 }
@@ -237,6 +239,75 @@ Example media playlist using `EXT-X-CUE-` tags.
 * [EXT-X-SESSION-KEY](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.5)
 * [EXT-X-INDEPENDENT-SEGMENTS](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.5.1)
 
+### Custom Parsers
+
+To add a parser for a non-standard tag the parser object allows for the specification of custom tags using regular expressions. If a custom parser is specified, a `custom` object is appended to the manifest object.
+
+```js
+const manifest = [
+  '#EXTM3U',
+  '#EXT-X-VERSION:3',
+  '#VOD-FRAMERATE:29.97',
+  ''
+].join('\n');
+
+const parser = new m3u8Parser.Parser();
+parser.addParser({
+  expression: /^#VOD-FRAMERATE/,
+  customType: 'framerate'
+});
+
+parser.push(manifest);
+parser.end();
+parser.manifest.custom.framerate // "#VOD-FRAMERATE:29.97"
+```
+
+Custom parsers may additionally be provided a data parsing function that take a line and return a value.
+
+```js
+const manifest = [
+  '#EXTM3U',
+  '#EXT-X-VERSION:3',
+  '#VOD-FRAMERATE:29.97',
+  ''
+].join('\n');
+
+const parser = new m3u8Parser.Parser();
+parser.addParser({
+  expression: /^#VOD-FRAMERATE/,
+  customType: 'framerate',
+  dataParser: function(line) {
+    return parseFloat(line.split(':')[1]);
+  }
+});
+
+parser.push(manifest);
+parser.end();
+parser.manifest.custom.framerate // 29.97
+```
+
+Custom parsers may also extract data at a segment level by passing `segment: true` to the options object. Having a segment level custom parser will add a `custom` object to the segment data.
+
+```js
+const manifest = [
+    '#EXTM3U',
+    '#VOD-TIMING:1511816599485',
+    '#EXTINF:8.0,',
+    'ex1.ts',
+    ''
+  ].join('\n');
+
+const parser = new m3u8Parser.Parser();
+parser.addParser({
+  expression: /#VOD-TIMING/, 
+  customType: 'vodTiming',
+  segment: true
+});
+
+parser.push(manifest);
+parser.end();
+parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485 
+```
 ## Including the Parser
 
 To include m3u8-parser on your website or web application, use any of the following methods.
