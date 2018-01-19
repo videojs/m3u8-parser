@@ -274,7 +274,7 @@ const manifest = [
 
 const parser = new m3u8Parser.Parser();
 parser.addParser({
-  expression: /^#VOD-FRAMERATE/
+  expression: /^#VOD-FRAMERATE/,
   customType: 'framerate',
   dataParser: function(line) {
     return parseFloat(line.split(':')[1]);
