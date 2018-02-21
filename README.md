@@ -1,5 +1,7 @@
 # m3u8-parser
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/videojs/m3u8-parser.svg)](https://greenkeeper.io/)
+
 m3u8 parser
 
 ## Table of Contents
