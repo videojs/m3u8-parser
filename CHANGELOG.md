@@ -1,3 +1,10 @@
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/videojs/m3u8-parser/compare/v4.1.0...v4.2.0) (2018-02-23)
+
+### Features
+
+* add program-date-time tag info to parsed segments ([#27](https://github.com/videojs/m3u8-parser/issues/27)) ([44fc6f8](https://github.com/videojs/m3u8-parser/commit/44fc6f8))
+
 <a name="4.1.0"></a>
 # [4.1.0](https://github.com/videojs/m3u8-parser/compare/v4.0.0...v4.1.0) (2018-01-24)
 
