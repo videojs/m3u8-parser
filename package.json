@@ -100,7 +100,7 @@
     "babelify": "^7.3.0",
     "bannerize": "^1.0.2",
     "bluebird": "^3.2.2",
-    "browserify": "^12.0.2",
+    "browserify": "^16.1.1",
     "browserify-shim": "^3.8.12",
     "budo": "^8.0.4",
     "chg": "^0.3.2",
