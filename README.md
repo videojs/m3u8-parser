@@ -301,14 +301,14 @@ const manifest = [
 
 const parser = new m3u8Parser.Parser();
 parser.addParser({
-  expression: /#VOD-TIMING/, 
+  expression: /#VOD-TIMING/,
   customType: 'vodTiming',
   segment: true
 });
 
 parser.push(manifest);
 parser.end();
-parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485 
+parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485
 ```
 ## Including the Parser
 
@@ -333,6 +333,13 @@ When using with Browserify, install m3u8-parser via npm and `require` the parser
 var m3u8Parser = require('m3u8-parser');
 
 var parser = new m3u8Parser.Parser();
+```
+
+With ES6:
+```js
+import { Parser } from 'm3u8-parser';
+
+const parser = new Parser();
 ```
 
 ### RequireJS/AMD
