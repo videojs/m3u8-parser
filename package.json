@@ -110,7 +110,7 @@
     "glob": "^6.0.3",
     "global": "^4.3.0",
     "jsdoc": "^3.4.0",
-    "karma": "^1.7.0",
+    "karma": "^2.0.2",
     "karma-chrome-launcher": "^2.1.1",
     "karma-detect-browsers": "^2.2.5",
     "karma-firefox-launcher": "^1.0.1",
