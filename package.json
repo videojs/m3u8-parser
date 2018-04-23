@@ -124,7 +124,7 @@
     "qunitjs": "^2.3.2",
     "rimraf": "^2.6.1",
     "rollup": "^0.51.8",
-    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-json": "^2.1.1",
     "rollup-plugin-multi-entry": "^2.0.2",
