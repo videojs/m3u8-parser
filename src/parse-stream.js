@@ -24,9 +24,14 @@ const attributeSeparator = function() {
  * @param {String} attributes the attibute line to parse
  */
 const parseAttributes = function(attributes) {
+  const result = {};
+
+  if (!attributes) {
+    return result;
+  }
+
   // split the string using attributes as the separator
   const attrs = attributes.split(attributeSeparator());
-  const result = {};
   let i = attrs.length;
   let attr;
 
