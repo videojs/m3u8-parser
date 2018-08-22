@@ -133,7 +133,7 @@
     "semver": "^5.3.0",
     "sinon": "^2.2.0",
     "uglify-js": "^3.0.7",
-    "videojs-standard": "^6.0.0",
+    "videojs-standard": "^7.0.0",
     "watchify": "^3.7.0"
   },
   "generator-videojs-plugin": {
