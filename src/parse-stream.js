@@ -19,9 +19,9 @@ const attributeSeparator = function() {
 };
 
 /**
- * Parse attributes from a line given the seperator
+ * Parse attributes from a line given the separator
  *
- * @param {String} attributes the attibute line to parse
+ * @param {String} attributes the attribute line to parse
  */
 const parseAttributes = function(attributes) {
   // split the string using attributes as the separator

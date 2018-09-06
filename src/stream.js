@@ -2,7 +2,7 @@
  * @file stream.js
  */
 /**
- * A lightweight readable stream implemention that handles event dispatching.
+ * A lightweight readable stream implementation that handles event dispatching.
  *
  * @class Stream
  */
