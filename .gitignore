@@ -25,12 +25,9 @@ npm-debug.log*
 bower_components/
 node_modules/
 
-# Yeoman meta-data
-.yo-rc.json
-
 # Build-related directories
 dist/
 docs/api/
 test/dist/
-test/test-expected.js
-test/test-manifests.js
+.eslintcache
+.yo-rc.json

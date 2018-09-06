@@ -1,7 +1,7 @@
 import {ParseStream, LineStream, Parser} from '../src';
 import QUnit from 'qunit';
-import testDataExpected from './test-expected.js';
-import testDataManifests from './test-manifests.js';
+import testDataExpected from './dist/test-expected.js';
+import testDataManifests from './dist/test-manifests.js';
 
 QUnit.module('LineStream', {
   beforeEach() {
@@ -69,8 +69,8 @@ QUnit.test('stops sending events after deregistering', function(assert) {
   this.lineStream.on('data', permanent);
   this.lineStream.push('line one\n');
   assert.strictEqual(temporaryLines.length,
-                     permanentLines.length,
-                     'both callbacks receive the event');
+    permanentLines.length,
+    'both callbacks receive the event');
 
   assert.ok(this.lineStream.off('data', temporary), 'a listener was removed');
   this.lineStream.push('line two\n');
@@ -120,8 +120,8 @@ QUnit.test('parses comment lines', function(assert) {
   assert.ok(element, 'an event was triggered');
   assert.strictEqual(element.type, 'comment', 'the type is comment');
   assert.strictEqual(element.text,
-                     manifest.slice(1, manifest.length - 1),
-                     'the comment text is parsed');
+    manifest.slice(1, manifest.length - 1),
+    'the comment text is parsed');
 });
 QUnit.test('parses uri lines', function(assert) {
   const manifest = 'any non-blank line that does not start with a hash-mark is a URI\n';
@@ -135,8 +135,8 @@ QUnit.test('parses uri lines', function(assert) {
   assert.ok(element, 'an event was triggered');
   assert.strictEqual(element.type, 'uri', 'the type is uri');
   assert.strictEqual(element.uri,
-                     manifest.substring(0, manifest.length - 1),
-                     'the uri text is parsed');
+    manifest.substring(0, manifest.length - 1),
+    'the uri text is parsed');
 });
 QUnit.test('parses unknown tag types', function(assert) {
   const manifest = '#EXT-X-EXAMPLE-TAG:some,additional,stuff\n';
@@ -150,8 +150,8 @@ QUnit.test('parses unknown tag types', function(assert) {
   assert.ok(element, 'an event was triggered');
   assert.strictEqual(element.type, 'tag', 'the type is tag');
   assert.strictEqual(element.data,
-                     manifest.slice(4, manifest.length - 1),
-                     'unknown tag data is preserved');
+    manifest.slice(4, manifest.length - 1),
+    'unknown tag data is preserved');
 });
 
 // #EXTM3U
@@ -221,8 +221,8 @@ QUnit.test('parses #EXTINF tags with a duration and title', function(assert) {
   assert.strictEqual(element.tagType, 'inf', 'the tag type is inf');
   assert.strictEqual(element.duration, 13, 'the duration is parsed');
   assert.strictEqual(element.title,
-                     manifest.substring(manifest.indexOf(',') + 1, manifest.length - 1),
-                     'the title is parsed');
+    manifest.substring(manifest.indexOf(',') + 1, manifest.length - 1),
+    'the title is parsed');
 });
 QUnit.test('parses #EXTINF tags with carriage returns', function(assert) {
   const manifest = '#EXTINF:13,Does anyone really use the title attribute?\r\n';
@@ -238,8 +238,8 @@ QUnit.test('parses #EXTINF tags with carriage returns', function(assert) {
   assert.strictEqual(element.tagType, 'inf', 'the tag type is inf');
   assert.strictEqual(element.duration, 13, 'the duration is parsed');
   assert.strictEqual(element.title,
-                     manifest.substring(manifest.indexOf(',') + 1, manifest.length - 2),
-                     'the title is parsed');
+    manifest.substring(manifest.indexOf(',') + 1, manifest.length - 2),
+    'the title is parsed');
 });
 
 // #EXT-X-TARGETDURATION
@@ -480,11 +480,11 @@ QUnit.test('parses #EXT-X-MAP tags with a byterange', function(assert) {
   assert.ok(element, 'an event was triggered');
   assert.strictEqual(element.uri, '0.m4s', 'parsed the uri');
   assert.strictEqual(element.byterange.length,
-                     1000,
-                     'parsed the byterange length');
+    1000,
+    'parsed the byterange length');
   assert.strictEqual(element.byterange.offset,
-                     23,
-                     'parsed the byterange offset');
+    23,
+    'parsed the byterange offset');
 });
 QUnit.test('parses #EXT-X-MAP tags with arbitrary attributes', function(assert) {
   const manifest = '#EXT-X-MAP:URI="init.mp4", SOMETHING=YES,BYTERANGE="720@0"\n';
@@ -498,11 +498,11 @@ QUnit.test('parses #EXT-X-MAP tags with arbitrary attributes', function(assert) 
   assert.ok(element, 'an event was triggered');
   assert.strictEqual(element.uri, 'init.mp4', 'parsed the uri');
   assert.strictEqual(element.byterange.length,
-                     720,
-                     'parsed the byterange length');
+    720,
+    'parsed the byterange length');
   assert.strictEqual(element.byterange.offset,
-                     0,
-                     'parsed the byterange offset');
+    0,
+    'parsed the byterange offset');
 });
 // #EXT-X-STREAM-INF
 QUnit.test('parses minimal #EXT-X-STREAM-INF tags', function(assert) {
@@ -601,8 +601,8 @@ QUnit.test('parses #EXT-X-STREAM-INF with common attributes', function(assert) {
   assert.strictEqual(element.type, 'tag', 'the line type is tag');
   assert.strictEqual(element.tagType, 'stream-inf', 'the tag type is stream-inf');
   assert.strictEqual(element.attributes.CODECS,
-                     'avc1.4d400d, mp4a.40.2',
-                     'codecs are parsed');
+    'avc1.4d400d, mp4a.40.2',
+    'codecs are parsed');
 });
 QUnit.test('parses #EXT-X-STREAM-INF with arbitrary attributes', function(assert) {
   const manifest = '#EXT-X-STREAM-INF:NUMERIC=24,ALPHA=Value,MIXED=123abc\n';
@@ -618,8 +618,8 @@ QUnit.test('parses #EXT-X-STREAM-INF with arbitrary attributes', function(assert
   assert.strictEqual(element.tagType, 'stream-inf', 'the tag type is stream-inf');
   assert.strictEqual(element.attributes.NUMERIC, '24', 'numeric attributes are parsed');
   assert.strictEqual(element.attributes.ALPHA,
-                     'Value',
-                     'alphabetic attributes are parsed');
+    'Value',
+    'alphabetic attributes are parsed');
   assert.strictEqual(element.attributes.MIXED, '123abc', 'mixed attributes are parsed');
 });
 // #EXT-X-ENDLIST
@@ -707,23 +707,23 @@ QUnit.test('parses lightly-broken #EXT-X-KEY tags', function(assert) {
   this.lineStream.push(manifest);
 
   assert.strictEqual(element.attributes.URI,
-                     'https://example.com/single-quote',
-                     'parsed a single-quoted uri');
+    'https://example.com/single-quote',
+    'parsed a single-quoted uri');
 
   element = null;
   manifest = '#EXT-X-KEYURI="https://example.com/key",METHOD=AES-128\n';
   this.lineStream.push(manifest);
   assert.strictEqual(element.tagType, 'key', 'parsed the tag type');
   assert.strictEqual(element.attributes.URI,
-                     'https://example.com/key',
-                     'inferred a colon after the tag type');
+    'https://example.com/key',
+    'inferred a colon after the tag type');
 
   element = null;
   manifest = '#EXT-X-KEY:  URI =  "https://example.com/key",METHOD=AES-128\n';
   this.lineStream.push(manifest);
   assert.strictEqual(element.attributes.URI,
-                     'https://example.com/key',
-                     'trims and removes quotes around the URI');
+    'https://example.com/key',
+    'trims and removes quotes around the URI');
 });
 
 QUnit.test('parses prefixed with 0x or 0X #EXT-X-KEY:IV tags', function(assert) {
@@ -1011,8 +1011,8 @@ QUnit.test('parses characteristics attribute', function(assert) {
   parser.push(manifest);
 
   assert.equal(parser.manifest.mediaGroups.SUBTITLES.subs.test.characteristics,
-               'char',
-               'parsed CHARACTERISTICS attribute');
+    'char',
+    'parsed CHARACTERISTICS attribute');
 });
 
 QUnit.test('parses FORCED attribute', function(assert) {
@@ -1028,7 +1028,7 @@ QUnit.test('parses FORCED attribute', function(assert) {
   parser.push(manifest);
 
   assert.ok(parser.manifest.mediaGroups.SUBTITLES.subs.test.forced,
-            'parsed FORCED attribute');
+    'parsed FORCED attribute');
 });
 
 QUnit.module('m3u8s');
@@ -1042,8 +1042,8 @@ QUnit.test('parses static manifests as expected', function(assert) {
 
       parser.push(testDataManifests[key]);
       assert.deepEqual(parser.manifest,
-                       testDataExpected[key],
-                       key + '.m3u8 was parsed correctly'
+        testDataExpected[key],
+        key + '.m3u8 was parsed correctly'
       );
     }
   }

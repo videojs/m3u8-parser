@@ -21,7 +21,7 @@ const attributeSeparator = function() {
 /**
  * Parse attributes from a line given the separator
  *
- * @param {String} attributes the attribute line to parse
+ * @param {string} attributes the attribute line to parse
  */
 const parseAttributes = function(attributes) {
   // split the string using attributes as the separator
@@ -80,14 +80,15 @@ export default class ParseStream extends Stream {
   /**
    * Parses an additional line of input.
    *
-   * @param {String} line a single line of an M3U8 file to parse
+   * @param {string} line a single line of an M3U8 file to parse
    */
   push(line) {
     let match;
     let event;
 
     // strip whitespace
-    line = line.replace(/^[\u0000\s]+|[\u0000\s]+$/g, '');
+    line = line.trim();
+
     if (line.length === 0) {
       // ignore empty lines
       return;

@@ -1,10 +1,11 @@
 # m3u8-parser
-
+[![Build Status](https://travis-ci.org/videojs/m3u8-parser.svg?branch=master)](https://travis-ci.org/videojs/m3u8-parser)
 [![Greenkeeper badge](https://badges.greenkeeper.io/videojs/m3u8-parser.svg)](https://greenkeeper.io/)
+[![Slack Status](http://slack.videojs.com/badge.svg)](http://slack.videojs.com)
+
+[![NPM](https://nodei.co/npm/m3u8-parser.png?downloads=true&downloadRank=true)](https://nodei.co/npm/m3u8-parser/)
 
 m3u8 parser
-
-## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -23,6 +24,7 @@ m3u8 parser
     - [EXT-X-CUE-OUT-CONT](#ext-x-cue-out-cont)
     - [EXT-X-CUE-IN](#ext-x-cue-in)
   - [Not Yet Supported](#not-yet-supported)
+  - [Custom Parsers](#custom-parsers)
 - [Including the Parser](#including-the-parser)
   - [`<script>` Tag](#script-tag)
   - [Browserify](#browserify)

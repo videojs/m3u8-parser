@@ -19,7 +19,7 @@ export default class LineStream extends Stream {
   /**
    * Add new data to be parsed.
    *
-   * @param {String} data the text to process
+   * @param {string} data the text to process
    */
   push(data) {
     let nextNewline;
