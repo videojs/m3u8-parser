@@ -366,7 +366,7 @@ export default class Parser extends Stream {
   /**
    * Parse the input string and update the manifest object.
    *
-   * @param {String} chunk a potentially incomplete portion of the manifest
+   * @param {string} chunk a potentially incomplete portion of the manifest
    */
   push(chunk) {
     this.lineStream.push(chunk);

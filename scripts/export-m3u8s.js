@@ -7,8 +7,8 @@ const path = require('path');
 const basePath = path.resolve(__dirname, '..');
 const testDataDir = path.join(basePath, 'test');
 const manifestDir = path.join(basePath, 'test', 'fixtures', 'm3u8');
-const manifestFilepath = path.join(testDataDir, 'test-manifests.js');
-const expectedFilepath = path.join(testDataDir, 'test-expected.js');
+const manifestFilepath = path.join(testDataDir, 'dist', 'test-manifests.js');
+const expectedFilepath = path.join(testDataDir, 'dist', 'test-expected.js');
 
 const build = function() {
   let manifests = 'export default {\n';
@@ -32,9 +32,9 @@ const build = function() {
         // strip leading spaces and the trailing '+'
         .slice(4, -3);
       manifests += ',\n';
-    } else if (extname === '.js') {
+    } else if (extname === '.json') {
       // append the expected parse
-      expected += '  "' + path.basename(file, '.js') + '": ';
+      expected += '  "' + path.basename(file, '.json') + '": ';
       expected += fs.readFileSync(file, 'utf8');
       expected += ',\n';
     } else {

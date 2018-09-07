@@ -14,7 +14,7 @@ export default class Stream {
   /**
    * Add a listener for a specified event type.
    *
-   * @param {String} type the event name
+   * @param {string} type the event name
    * @param {Function} listener the callback to be invoked when an event of
    * the specified type occurs
    */
@@ -28,10 +28,10 @@ export default class Stream {
   /**
    * Remove a listener for a specified event type.
    *
-   * @param {String} type the event name
+   * @param {string} type the event name
    * @param {Function} listener  a function previously registered for this
    * type of event through `on`
-   * @return {Boolean} if we could turn it off or not
+   * @return {boolean} if we could turn it off or not
    */
   off(type, listener) {
     if (!this.listeners[type]) {
@@ -48,7 +48,7 @@ export default class Stream {
    * Trigger an event of the specified type on this stream. Any additional
    * arguments to this function are passed as parameters to event listeners.
    *
-   * @param {String} type the event name
+   * @param {string} type the event name
    */
   trigger(type) {
     const callbacks = this.listeners[type];
