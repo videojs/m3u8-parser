@@ -80,15 +80,15 @@
     "lint-staged": "^7.2.2",
     "not-prerelease": "^1.0.1",
     "npm-merge-driver-install": "^1.0.0",
-    "npm-run-all": "^4.1.3",
+    "npm-run-all": "^4.1.5",
     "pkg-ok": "^2.2.0",
     "rollup": "^0.66.0",
     "shx": "^0.3.2",
     "sinon": "^6.1.5",
-    "videojs-generate-karma-config": "~4.0.0",
+    "videojs-generate-karma-config": "^4.0.2",
     "videojs-generate-rollup-config": "~2.3.0",
-    "videojs-standard": "~7.1.0",
-    "videojs-generator-verify": "~1.0.4"
+    "videojs-generator-verify": "~1.0.4",
+    "videojs-standard": "~7.1.0"
   },
   "generator-videojs-plugin": {
     "version": "7.3.2"
