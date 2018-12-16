@@ -82,7 +82,7 @@
     "npm-merge-driver-install": "^1.0.0",
     "npm-run-all": "^4.1.5",
     "pkg-ok": "^2.2.0",
-    "rollup": "^0.66.0",
+    "rollup": "^0.68.0",
     "shx": "^0.3.2",
     "sinon": "^6.1.5",
     "videojs-generate-karma-config": "^4.0.2",
