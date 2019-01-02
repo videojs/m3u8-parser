@@ -313,11 +313,11 @@ parser.end();
 parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485
 ```
 
-Custom parsers may also map data an existing tag type.
+Custom parsers may also map a tag to another tag. Note that the first matching expression will convert the tag, other mappers and parsers expecting the old tag will not be executed.
 ```js
 const manifest = [
     '#EXTM3U',
-    '#VOD-TIMING:wallclock=1511816599485',
+    '#EXAMPLE',
     '#EXTINF:8.0,',
     'ex1.ts',
     ''
@@ -325,23 +325,20 @@ const manifest = [
 
 const parser = new m3u8Parser.Parser();
 parser.addTagMapper({
-  expression: /#VOD-TIMING/,
+  expression: /#EXAMPLE/,
   map(line) {
-    const regex = /#VOD-TIMING:(?:wallclock=([^,\n]+))/g;
-    const match = regex.exec(line);
-
-    if (match) {
-      const ISOdate = new Date(Number(match[1])).toISOString();
-      return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
-    }
-
-    return line;
+    return `#NEW-TAG:123`;
   }
+});
+parser.addParser({
+  expression: /#NEW-TAG/,
+  customType: 'mappingExample',
+  segment: true
 });
 
 parser.push(manifest);
 parser.end();
-parser.manifest.segments[0].dateTimeObject // #VOD-TIMING:1511816599485
+parser.manifest.segments[0].custom.mappingExample // #NEW-TAG:123
 ```
 
 ## Including the Parser

@@ -1,5 +1,6 @@
 import {ParseStream, LineStream, Parser} from '../src';
 import QUnit from 'qunit';
+import sinon from 'sinon';
 import testDataExpected from './dist/test-expected.js';
 import testDataManifests from './dist/test-manifests.js';
 
@@ -111,30 +112,27 @@ QUnit.test('parses custom tags', function(assert) {
 
 QUnit.test('maps custom tags', function(assert) {
   const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
+  const startTimeMapper = sinon.spy((line) => {
+    const match = /#VOD-STARTTIMESTAMP:(\d+)/g.exec(line);
+
+    return `#INTERMEDIATE:${match[1]}`;
+  });
+  const intermediateMapper = sinon.spy((line) => {
+    const match = /#INTERMEDIATE:(.*)/g.exec(line)[1];
+    const ISOdate = new Date(Number(match)).toISOString();
+
+    return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
+  });
   let element;
-  let calls = 0;
 
   this.parseStream.addTagMapper({
     expression: /^#VOD-STARTTIMESTAMP/,
-    map(line) {
-      const match = /#VOD-STARTTIMESTAMP:(\d+)/g.exec(line);
-
-      calls++;
-
-      return `#INTERMEDIATE:${match[1]}`;
-    }
+    map: startTimeMapper
   });
 
   this.parseStream.addTagMapper({
     expression: /^#INTERMEDIATE/,
-    map(line) {
-      const match = /#INTERMEDIATE:(.*)/g.exec(line)[1];
-      const ISOdate = new Date(Number(match)).toISOString();
-
-      calls++;
-
-      return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
-    }
+    map: intermediateMapper
   });
 
   this.parseStream.on('data', function(elem) {
@@ -143,10 +141,31 @@ QUnit.test('maps custom tags', function(assert) {
 
   this.lineStream.push(manifest);
   assert.ok(element, 'element');
-  assert.strictEqual(calls, 2);
+  assert.ok(startTimeMapper.called);
+  assert.ok(intermediateMapper.called);
   assert.strictEqual(element.type, 'tag');
   assert.strictEqual(element.dateTimeString,
     '2017-07-31T20:35:37.573Z');
+});
+
+QUnit.test('executes first matching mapper', function(assert) {
+  const manifest = '#TEST\n';
+  const fooMapper = sinon.spy(line => '#FOO');
+  const barMapper = sinon.spy(line => '#BAR');
+
+  this.parseStream.addTagMapper({
+    expression: /^#TEST/,
+    map: fooMapper
+  });
+
+  this.parseStream.addTagMapper({
+    expression: /^#TEST/,
+    map: barMapper
+  });
+
+  this.lineStream.push(manifest);
+  assert.ok(fooMapper.called, 'first mapper called');
+  assert.notOk(barMapper.called, 'second mapper not called');
 });
 
 QUnit.test('mapper ignores tags', function(assert) {
@@ -165,6 +184,7 @@ QUnit.test('mapper ignores tags', function(assert) {
   });
 
   this.lineStream.push(manifest);
+  assert.strictEqual(element.type, 'comment', 'the type is comment');
   assert.strictEqual(element.text, 'VOD-STARTTIMESTAMP:1501533337573');
 });
 
