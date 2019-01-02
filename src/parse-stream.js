@@ -75,6 +75,7 @@ export default class ParseStream extends Stream {
   constructor() {
     super();
     this.customParsers = [];
+    this.tagMappers = [];
   }
 
   /**
@@ -101,6 +102,11 @@ export default class ParseStream extends Stream {
         uri: line
       });
       return;
+    }
+
+    // map tag
+    for (let i = 0; i < this.tagMappers.length; i++) {
+      line = this.tagMappers[i].call(this, line);
     }
 
     for (let i = 0; i < this.customParsers.length; i++) {
@@ -462,5 +468,24 @@ export default class ParseStream extends Stream {
         return true;
       }
     });
+  }
+
+  /**
+   * Add a custom header mapper
+   *
+   * @param {Object}   options
+   * @param {RegExp}   options.expression   a regular expression to match the custom header
+   * @param {Function} options.map          function to translate tag into a different tag
+   */
+  addTagMapper({expression, map}) {
+    const mapFn = line => {
+      if (expression.test(line)) {
+        return map(line);
+      }
+
+      return line;
+    };
+
+    this.tagMappers.push(mapFn);
   }
 }

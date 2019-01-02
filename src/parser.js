@@ -393,4 +393,14 @@ export default class Parser extends Stream {
   addParser(options) {
     this.parseStream.addParser(options);
   }
+  /**
+   * Add a custom header mapper
+   *
+   * @param {Object}   options
+   * @param {RegExp}   options.expression   a regular expression to match the custom header
+   * @param {Function} options.map          function to translate tag into a different tag
+   */
+  addTagMapper(options) {
+    this.parseStream.addTagMapper(options);
+  }
 }

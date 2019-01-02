@@ -85,6 +85,7 @@ QUnit.module('ParseStream', {
     this.lineStream.pipe(this.parseStream);
   }
 });
+
 QUnit.test('parses custom tags', function(assert) {
   const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
   let element;
@@ -106,6 +107,65 @@ QUnit.test('parses custom tags', function(assert) {
     'startTimestamp',
     'the customType is startTimestamp'
   );
+});
+
+QUnit.test('maps custom tags', function(assert) {
+  const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
+  let element;
+  let calls = 0;
+
+  this.parseStream.addTagMapper({
+    expression: /^#VOD-STARTTIMESTAMP/,
+    map(line) {
+      const match = /#VOD-STARTTIMESTAMP:(\d+)/g.exec(line);
+
+      calls++;
+
+      return `#INTERMEDIATE:${match[1]}`;
+    }
+  });
+
+  this.parseStream.addTagMapper({
+    expression: /^#INTERMEDIATE/,
+    map(line) {
+      const match = /#INTERMEDIATE:(.*)/g.exec(line)[1];
+      const ISOdate = new Date(Number(match)).toISOString();
+
+      calls++;
+
+      return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
+    }
+  });
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+
+  this.lineStream.push(manifest);
+  assert.ok(element, 'element');
+  assert.strictEqual(calls, 2);
+  assert.strictEqual(element.type, 'tag');
+  assert.strictEqual(element.dateTimeString,
+    '2017-07-31T20:35:37.573Z');
+});
+
+QUnit.test('mapper ignores tags', function(assert) {
+  const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
+  let element;
+
+  this.parseStream.addTagMapper({
+    expression: /^#NO-MATCH/,
+    map(line) {
+      return '#MAPPED';
+    }
+  });
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+
+  this.lineStream.push(manifest);
+  assert.strictEqual(element.text, 'VOD-STARTTIMESTAMP:1501533337573');
 });
 
 QUnit.test('parses comment lines', function(assert) {

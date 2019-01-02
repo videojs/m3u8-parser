@@ -312,6 +312,38 @@ parser.push(manifest);
 parser.end();
 parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485
 ```
+
+Custom parsers may also map data an existing tag type.
+```js
+const manifest = [
+    '#EXTM3U',
+    '#VOD-TIMING:wallclock=1511816599485',
+    '#EXTINF:8.0,',
+    'ex1.ts',
+    ''
+  ].join('\n');
+
+const parser = new m3u8Parser.Parser();
+parser.addTagMapper({
+  expression: /#VOD-TIMING/,
+  map(line) {
+    const regex = /#VOD-TIMING:(?:wallclock=([^,\n]+))/g;
+    const match = regex.exec(line);
+
+    if (match) {
+      const ISOdate = new Date(Number(match[1])).toISOString();
+      return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
+    }
+
+    return line;
+  }
+});
+
+parser.push(manifest);
+parser.end();
+parser.manifest.segments[0].dateTimeObject // #VOD-TIMING:1511816599485
+```
+
 ## Including the Parser
 
 To include m3u8-parser on your website or web application, use any of the following methods.
