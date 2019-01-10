@@ -105,8 +105,16 @@ export default class ParseStream extends Stream {
     }
 
     // map tags
-    const newLines = this.tagMappers.reduce((acc, mapper) =>
-      acc.concat([mapper(line)]), [line]);
+    const newLines = this.tagMappers.reduce((acc, mapper) => {
+      const mappedLine = mapper(line);
+
+      // skip if unchanged
+      if (mappedLine === line) {
+        return acc;
+      }
+
+      return acc.concat([mappedLine]);
+    }, [line]);
 
     newLines.forEach(newLine => {
       for (let i = 0; i < this.customParsers.length; i++) {

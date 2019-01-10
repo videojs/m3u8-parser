@@ -230,8 +230,8 @@ QUnit.test('maps multiple custom tags', function(assert) {
 });
 
 QUnit.test('mapper ignores tags', function(assert) {
-  const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
-  let element;
+  const manifest = '#TAG\n';
+  const dataCallback = sinon.spy();
 
   this.parseStream.addTagMapper({
     expression: /^#NO-MATCH/,
@@ -240,13 +240,14 @@ QUnit.test('mapper ignores tags', function(assert) {
     }
   });
 
-  this.parseStream.on('data', function(elem) {
-    element = elem;
-  });
-
+  this.parseStream.on('data', dataCallback);
   this.lineStream.push(manifest);
-  assert.strictEqual(element.type, 'comment', 'the type is comment');
-  assert.strictEqual(element.text, 'VOD-STARTTIMESTAMP:1501533337573');
+
+  assert.strictEqual(dataCallback.callCount, 1);
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'TAG',
+    type: 'comment'
+  });
 });
 
 QUnit.test('parses comment lines', function(assert) {
