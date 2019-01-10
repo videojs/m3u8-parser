@@ -1,3 +1,18 @@
+<a name="4.3.0"></a>
+# [4.3.0](https://github.com/videojs/m3u8-parser/compare/v4.2.0...v4.3.0) (2019-01-10)
+
+### Features
+
+* custom tag mapping ([#73](https://github.com/videojs/m3u8-parser/issues/73)) ([0ef040a](https://github.com/videojs/m3u8-parser/commit/0ef040a))
+
+### Chores
+
+* Update to plugin generator 7 standards ([#53](https://github.com/videojs/m3u8-parser/issues/53)) ([35ff471](https://github.com/videojs/m3u8-parser/commit/35ff471))
+* **package:** update rollup to version 0.66.0 ([#55](https://github.com/videojs/m3u8-parser/issues/55)) ([2407466](https://github.com/videojs/m3u8-parser/commit/2407466))
+* Update videojs-generate-karma-config to the latest version 🚀 ([#59](https://github.com/videojs/m3u8-parser/issues/59)) ([023c6c9](https://github.com/videojs/m3u8-parser/commit/023c6c9))
+* Update videojs-generate-karma-config to the latest version 🚀 ([#60](https://github.com/videojs/m3u8-parser/issues/60)) ([2773819](https://github.com/videojs/m3u8-parser/commit/2773819))
+* Update videojs-generate-rollup-config to the latest version 🚀 ([#58](https://github.com/videojs/m3u8-parser/issues/58)) ([8c28a8b](https://github.com/videojs/m3u8-parser/commit/8c28a8b))
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/videojs/m3u8-parser/compare/v4.1.0...v4.2.0) (2018-02-23)
 
