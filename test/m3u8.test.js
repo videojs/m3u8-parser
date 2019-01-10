@@ -1,5 +1,6 @@
 import {ParseStream, LineStream, Parser} from '../src';
 import QUnit from 'qunit';
+import sinon from 'sinon';
 import testDataExpected from './dist/test-expected.js';
 import testDataManifests from './dist/test-manifests.js';
 
@@ -85,6 +86,7 @@ QUnit.module('ParseStream', {
     this.lineStream.pipe(this.parseStream);
   }
 });
+
 QUnit.test('parses custom tags', function(assert) {
   const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
   let element;
@@ -106,6 +108,146 @@ QUnit.test('parses custom tags', function(assert) {
     'startTimestamp',
     'the customType is startTimestamp'
   );
+});
+
+QUnit.test('mapper does not conflict with parser', function(assert) {
+  const manifest = '#EXAMPLE\n';
+  const commentMapper = sinon.spy(line => '#NEW-COMMENT');
+  const commentMapper2 = sinon.spy(line => '#SOMETHING-ELSE');
+  const dataCallback = sinon.spy();
+
+  this.parseStream.addTagMapper({
+    expression: /^#EXAMPLE/,
+    map: commentMapper
+  });
+  this.parseStream.addTagMapper({
+    expression: /^#EXAMPLE/,
+    map: commentMapper2
+  });
+
+  this.parseStream.addParser({
+    expression: /^#EXAMPLE/,
+    customType: 'test'
+  });
+  this.parseStream.addParser({
+    expression: /^#NEW-COMMENT/,
+    customType: 'test2'
+  });
+
+  this.parseStream.on('data', dataCallback);
+  this.lineStream.push(manifest);
+
+  assert.ok(commentMapper.called);
+  assert.ok(commentMapper2.called);
+  assert.strictEqual(dataCallback.callCount, 3);
+
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    data: '#EXAMPLE',
+    type: 'custom',
+    customType: 'test',
+    segment: undefined
+  });
+  assert.deepEqual(dataCallback.getCall(1).args[0], {
+    data: '#NEW-COMMENT',
+    type: 'custom',
+    customType: 'test2',
+    segment: undefined
+  });
+  assert.deepEqual(dataCallback.getCall(2).args[0], {
+    text: 'SOMETHING-ELSE',
+    type: 'comment'
+  });
+});
+
+QUnit.test('maps custom tags', function(assert) {
+  const manifest = '#EXAMPLE\n';
+  const commentMapper = sinon.spy(line => '#NEW-COMMENT');
+  const dataCallback = sinon.spy();
+
+  this.parseStream.addTagMapper({
+    expression: /^#EXAMPLE/,
+    map: commentMapper
+  });
+
+  this.parseStream.on('data', dataCallback);
+  this.lineStream.push(manifest);
+
+  assert.ok(commentMapper.called);
+  assert.strictEqual(dataCallback.callCount, 2);
+
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'EXAMPLE',
+    type: 'comment'
+  });
+  assert.deepEqual(dataCallback.getCall(1).args[0], {
+    text: 'NEW-COMMENT',
+    type: 'comment'
+  });
+});
+
+QUnit.test('maps multiple custom tags', function(assert) {
+  const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
+  const commentMapper = sinon.spy(line => '#NEW-COMMENT');
+  const pdtMapper = sinon.spy((line) => {
+    const match = /#VOD-STARTTIMESTAMP:(\d+)/g.exec(line)[1];
+    const ISOdate = new Date(Number(match)).toISOString();
+
+    return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
+  });
+  const dataCallback = sinon.spy();
+
+  this.parseStream.addTagMapper({
+    expression: /^#VOD-STARTTIMESTAMP/,
+    map: commentMapper
+  });
+  this.parseStream.addTagMapper({
+    expression: /^#VOD-STARTTIMESTAMP/,
+    map: pdtMapper
+  });
+
+  this.parseStream.on('data', dataCallback);
+  this.lineStream.push(manifest);
+
+  assert.ok(commentMapper.called);
+  assert.ok(pdtMapper.called);
+  assert.strictEqual(dataCallback.callCount, 3);
+
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'VOD-STARTTIMESTAMP:1501533337573',
+    type: 'comment'
+  });
+
+  assert.deepEqual(dataCallback.getCall(1).args[0], {
+    text: 'NEW-COMMENT',
+    type: 'comment'
+  });
+
+  const dateTag = dataCallback.getCall(2).args[0];
+
+  assert.strictEqual(dateTag.dateTimeString, '2017-07-31T20:35:37.573Z');
+  assert.strictEqual(dateTag.tagType, 'program-date-time');
+  assert.strictEqual(dateTag.type, 'tag');
+});
+
+QUnit.test('mapper ignores tags', function(assert) {
+  const manifest = '#TAG\n';
+  const dataCallback = sinon.spy();
+
+  this.parseStream.addTagMapper({
+    expression: /^#NO-MATCH/,
+    map(line) {
+      return '#MAPPED';
+    }
+  });
+
+  this.parseStream.on('data', dataCallback);
+  this.lineStream.push(manifest);
+
+  assert.strictEqual(dataCallback.callCount, 1);
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'TAG',
+    type: 'comment'
+  });
 });
 
 QUnit.test('parses comment lines', function(assert) {

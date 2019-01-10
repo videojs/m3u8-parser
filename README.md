@@ -312,6 +312,35 @@ parser.push(manifest);
 parser.end();
 parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485
 ```
+
+Custom parsers may also map a tag to another tag. The old tag will not be replaced and all matching registered mappers and parsers will be executed.
+```js
+const manifest = [
+    '#EXTM3U',
+    '#EXAMPLE',
+    '#EXTINF:8.0,',
+    'ex1.ts',
+    ''
+  ].join('\n');
+
+const parser = new m3u8Parser.Parser();
+parser.addTagMapper({
+  expression: /#EXAMPLE/,
+  map(line) {
+    return `#NEW-TAG:123`;
+  }
+});
+parser.addParser({
+  expression: /#NEW-TAG/,
+  customType: 'mappingExample',
+  segment: true
+});
+
+parser.push(manifest);
+parser.end();
+parser.manifest.segments[0].custom.mappingExample // #NEW-TAG:123
+```
+
 ## Including the Parser
 
 To include m3u8-parser on your website or web application, use any of the following methods.
