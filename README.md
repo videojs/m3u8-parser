@@ -313,7 +313,7 @@ parser.end();
 parser.manifest.segments[0].custom.vodTiming // #VOD-TIMING:1511816599485
 ```
 
-Custom parsers may also map a tag to another tag. Note that the first matching expression will convert the tag, other mappers and parsers expecting the old tag will not be executed.
+Custom parsers may also map a tag to another tag. The old tag will not be replaced and all matching registered mappers and parsers will be executed.
 ```js
 const manifest = [
     '#EXTM3U',
