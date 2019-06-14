@@ -145,7 +145,7 @@ export default class ParseStream extends Stream {
         });
         return;
       }
-      match = (/^#EXTINF:?([0-9\.]*)?,?(.*)?$/).exec(newLine);
+      match = (/^#EXTINF:?(\-?[0-9\.]*)?,?(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
