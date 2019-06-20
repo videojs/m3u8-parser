@@ -146,7 +146,7 @@ export default class Parser extends Stream {
                 return;
               }
 
-              // check if the playlist is Widevine HLS
+              // check if the content is encrypted for Widevine
               if (entry.attributes.KEYFORMAT === widevineUuid) {
                 const VALID_METHODS = ['SAMPLE-AES', 'SAMPLE-AES-CTR', 'SAMPLE-AES-CENC'];
 
