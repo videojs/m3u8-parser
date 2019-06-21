@@ -50,6 +50,8 @@ export default class Parser extends Stream {
       'CLOSED-CAPTIONS': {},
       'SUBTITLES': {}
     };
+    // This is the Widevine UUID from DASH IF IOP. The same exact string is
+    // used in MPDs with Widevine encrypted streams.
     const widevineUuid = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
     // group segments into numbered timelines delineated by discontinuities
     let currentTimeline = 0;
@@ -147,6 +149,7 @@ export default class Parser extends Stream {
               }
 
               // check if the content is encrypted for Widevine
+              // Widevine/HLS spec: https://storage.googleapis.com/wvdocs/Widevine_DRM_HLS.pdf
               if (entry.attributes.KEYFORMAT === widevineUuid) {
                 const VALID_METHODS = ['SAMPLE-AES', 'SAMPLE-AES-CTR', 'SAMPLE-AES-CENC'];
 
