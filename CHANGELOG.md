@@ -1,3 +1,14 @@
+<a name="4.4.0"></a>
+# [4.4.0](https://github.com/videojs/m3u8-parser/compare/v4.3.0...v4.4.0) (2019-06-25)
+
+### Features
+
+* parse key attributes for Widevine HLS ([#88](https://github.com/videojs/m3u8-parser/issues/88)) ([d835fa8](https://github.com/videojs/m3u8-parser/commit/d835fa8))
+
+### Chores
+
+* **package:** update all dev dependencies ([#89](https://github.com/videojs/m3u8-parser/issues/89)) ([e991447](https://github.com/videojs/m3u8-parser/commit/e991447))
+
 <a name="4.3.0"></a>
 # [4.3.0](https://github.com/videojs/m3u8-parser/compare/v4.2.0...v4.3.0) (2019-01-10)
 
