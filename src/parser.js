@@ -4,6 +4,7 @@
 import Stream from './stream';
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
+import decodeB64ToUint8Array from './utils/decode';
 
 /**
  * A parser for M3U8 files. The current interpretation of the input is
@@ -49,6 +50,9 @@ export default class Parser extends Stream {
       'CLOSED-CAPTIONS': {},
       'SUBTITLES': {}
     };
+    // This is the Widevine UUID from DASH IF IOP. The same exact string is
+    // used in MPDs with Widevine encrypted streams.
+    const widevineUuid = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
     // group segments into numbered timelines delineated by discontinuities
     let currentTimeline = 0;
 
@@ -143,6 +147,55 @@ export default class Parser extends Stream {
                 });
                 return;
               }
+
+              // check if the content is encrypted for Widevine
+              // Widevine/HLS spec: https://storage.googleapis.com/wvdocs/Widevine_DRM_HLS.pdf
+              if (entry.attributes.KEYFORMAT === widevineUuid) {
+                const VALID_METHODS = ['SAMPLE-AES', 'SAMPLE-AES-CTR', 'SAMPLE-AES-CENC'];
+
+                if (VALID_METHODS.indexOf(entry.attributes.METHOD) === -1) {
+                  this.trigger('warn', {
+                    message: 'invalid key method provided for Widevine'
+                  });
+                  return;
+                }
+
+                if (entry.attributes.METHOD === 'SAMPLE-AES-CENC') {
+                  this.trigger('warn', {
+                    message: 'SAMPLE-AES-CENC is deprecated, please use SAMPLE-AES-CTR instead'
+                  });
+                }
+
+                if (entry.attributes.URI.substring(0, 23) !== 'data:text/plain;base64,') {
+                  this.trigger('warn', {
+                    message: 'invalid key URI provided for Widevine'
+                  });
+                  return;
+                }
+
+                if (!(entry.attributes.KEYID && entry.attributes.KEYID.substring(0, 2) === '0x')) {
+                  this.trigger('warn', {
+                    message: 'invalid key ID provided for Widevine'
+                  });
+                  return;
+                }
+
+                // if Widevine key attributes are valid, store them as `contentProtection`
+                // on the manifest to emulate Widevine tag structure in a DASH mpd
+                this.manifest.contentProtection = {
+                  'com.widevine.alpha': {
+                    attributes: {
+                      schemeIdUri: entry.attributes.KEYFORMAT,
+                      // remove '0x' from the key id string
+                      keyId: entry.attributes.KEYID.substring(2)
+                    },
+                    // decode the base64-encoded PSSH box
+                    pssh: decodeB64ToUint8Array(entry.attributes.URI.split(',')[1])
+                  }
+                };
+                return;
+              }
+
               if (!entry.attributes.METHOD) {
                 this.trigger('warn', {
                   message: 'defaulting key method to AES-128'

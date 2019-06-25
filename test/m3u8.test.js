@@ -896,6 +896,7 @@ QUnit.test('parses prefixed with 0x or 0X #EXT-X-KEY:IV tags', function(assert) 
     0x90abcdef
   ]), 'parsed an IV value with 0X');
 });
+
 // #EXT-X-START
 QUnit.test('parses EXT-X-START tags', function(assert) {
   const manifest = '#EXT-X-START:TIME-OFFSET=1.1\n';
@@ -1171,6 +1172,116 @@ QUnit.test('parses FORCED attribute', function(assert) {
 
   assert.ok(parser.manifest.mediaGroups.SUBTITLES.subs.test.forced,
     'parsed FORCED attribute');
+});
+
+QUnit.test('parses Widevine #EXT-X-KEY attributes and attaches to manifest', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-KEY:METHOD=SAMPLE-AES-CTR,' +
+      'URI="data:text/plain;base64,AAAAPnBzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAAB4iFnN' +
+      'oYWthX2NlYzJmNjRhYTc4OTBhMTFI49yVmwY=",KEYID=0x800AACAA522958AE888062B5695DB6BF,' +
+      'KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"',
+    '#EXTINF:5,',
+    'ex1.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  assert.ok(parser.manifest.contentProtection, 'contentProtection property added');
+  assert.equal(
+    parser.manifest.contentProtection['com.widevine.alpha'].attributes.schemeIdUri,
+    'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed',
+    'schemeIdUri set correctly'
+  );
+  assert.equal(
+    parser.manifest.contentProtection['com.widevine.alpha'].attributes.keyId,
+    '800AACAA522958AE888062B5695DB6BF',
+    'keyId set correctly'
+  );
+  assert.equal(
+    parser.manifest.contentProtection['com.widevine.alpha'].pssh.byteLength,
+    62,
+    'base64 URI decoded to TypedArray'
+  );
+});
+
+QUnit.test('Widevine #EXT-X-KEY attributes not attached to manifest if METHOD is invalid', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-KEY:METHOD=NONE,' +
+      'URI="data:text/plain;base64,AAAAPnBzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAAB4iFnN' +
+      'oYWthX2NlYzJmNjRhYTc4OTBhMTFI49yVmwY=",KEYID=0x800AACAA522958AE888062B5695DB6BF,' +
+      'KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"',
+    '#EXTINF:5,',
+    'ex1.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  assert.notOk(parser.manifest.contentProtection, 'contentProtection not added');
+});
+
+QUnit.test('Widevine #EXT-X-KEY attributes not attached to manifest if URI is invalid', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-KEY:METHOD=SAMPLE-AES-CTR,' +
+      'URI="AAAAPnBzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAAB4iFnN' +
+      'oYWthX2NlYzJmNjRhYTc4OTBhMTFI49yVmwY=",KEYID=0x800AACAA522958AE888062B5695DB6BF,' +
+      'KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"',
+    '#EXTINF:5,',
+    'ex1.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  assert.notOk(parser.manifest.contentProtection, 'contentProtection not added');
+});
+
+QUnit.test('Widevine #EXT-X-KEY attributes not attached to manifest if KEYID is invalid', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-KEY:METHOD=SAMPLE-AES-CTR,' +
+      'URI="data:text/plain;base64,AAAAPnBzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAAB4iFnN' +
+      'oYWthX2NlYzJmNjRhYTc4OTBhMTFI49yVmwY=",KEYID=800AACAA522958AE888062B5695DB6BF,' +
+      'KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"',
+    '#EXTINF:5,',
+    'ex1.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  assert.notOk(parser.manifest.contentProtection, 'contentProtection not added');
+});
+
+QUnit.test('Widevine #EXT-X-KEY attributes not attached to manifest if KEYFORMAT is not Widevine UUID', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-KEY:METHOD=SAMPLE-AES-CTR,' +
+      'URI="data:text/plain;base64,AAAAPnBzc2gAAAAA7e+LqXnWSs6jyCfc1R0h7QAAAB4iFnN' +
+      'oYWthX2NlYzJmNjRhYTc4OTBhMTFI49yVmwY=",KEYID=0x800AACAA522958AE888062B5695DB6BF,' +
+      'KEYFORMATVERSIONS="1",KEYFORMAT="invalid-keyformat"',
+    '#EXTINF:5,',
+    'ex1.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  assert.notOk(parser.manifest.contentProtection, 'contentProtection not added');
 });
 
 QUnit.module('m3u8s');
