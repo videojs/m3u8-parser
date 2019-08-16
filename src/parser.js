@@ -1,10 +1,9 @@
 /**
  * @file m3u8/parser.js
  */
-import Stream from './stream';
+import {Stream, decodeB64ToUint8Array} from '@videojs/vhs-utils';
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
-import decodeB64ToUint8Array from './utils/decode';
 
 /**
  * A parser for M3U8 files. The current interpretation of the input is
