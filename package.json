@@ -65,22 +65,21 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@videojs/vhs-utils": "github:videojs/vhs-utils#force-dist",
+    "@videojs/vhs-utils": "^1.0.0",
     "global": "^4.3.2"
   },
   "devDependencies": {
     "rollup": "^1.19.4",
     "@videojs/generator-helpers": "~1.2.0",
     "karma": "^4.0.0",
-    "postcss-cli": "^6.0.0",
     "sinon": "^7.2.2",
     "videojs-generate-karma-config": "~5.3.1",
-    "videojs-generator-verify": "~1.2.0",
+    "videojs-generator-verify": "~2.0.0",
     "videojs-generate-rollup-config": "~5.0.1",
     "videojs-standard": "^8.0.3"
   },
   "generator-videojs-plugin": {
-    "version": "7.7.0"
+    "version": "7.7.3"
   },
   "browserslist": [
     "defaults",
