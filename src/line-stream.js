@@ -1,7 +1,7 @@
 /**
  * @file m3u8/line-stream.js
  */
-import Stream from './stream';
+import Stream from '@videojs/vhs-utils/dist/stream.js';
 
 /**
  * A stream that buffers string input and generates a `data` event for each

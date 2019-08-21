@@ -23,27 +23,23 @@
     }
   ],
   "scripts": {
-    "prebuild": "npm-run-all clean test-data",
-    "build": "npm-run-all -p build:*",
+    "build-test": "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
+    "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
+    "build-test-data": "node scripts/m3u8.js",
+    "build": "npm-run-all -s clean build-test-data -p build:*",
     "build:js": "rollup -c scripts/rollup.config.js",
-    "clean": "shx rm -rf ./dist ./test/dist",
-    "postclean": "shx mkdir -p ./dist ./test/dist",
-    "docs": "npm-run-all docs:*",
-    "docs:api": "jsdoc src -g plugins/markdown -r -d docs/api",
-    "docs:toc": "doctoc README.md",
+    "clean": "shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist",
     "lint": "vjsstandard",
-    "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
+    "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose",
     "start": "npm-run-all -p server watch",
-    "pretest": "npm-run-all lint build",
-    "test-data": "node scripts/m3u8.js",
-    "test": "karma start scripts/karma.conf.js",
+    "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
+    "test": "npm-run-all lint build-test && karma start scripts/karma.conf.js",
     "posttest": "shx cat test/dist/coverage/text.txt",
-    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
     "preversion": "npm test",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
+    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
     "watch": "npm-run-all -p watch:*",
-    "watch:js": "npm run build:js -- -w",
-    "prepublishOnly": "npm run build && vjsverify"
+    "watch:js": "npm run build:js -- -w"
   },
   "keywords": [
     "videojs",
@@ -68,30 +64,22 @@
     "test/"
   ],
   "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "@videojs/vhs-utils": "^1.0.0",
     "global": "^4.3.2"
   },
   "devDependencies": {
-    "conventional-changelog-cli": "^2.0.22",
-    "conventional-changelog-videojs": "^3.0.0",
-    "doctoc": "^1.4.0",
-    "husky": "^2.5.0",
-    "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli",
-    "karma": "^4.1.0",
-    "lint-staged": "^8.2.1",
-    "not-prerelease": "^1.0.1",
-    "npm-merge-driver-install": "^1.1.1",
-    "npm-run-all": "^4.1.5",
-    "pkg-ok": "^2.3.1",
-    "rollup": "^1.16.2",
-    "shx": "^0.3.2",
-    "sinon": "^7.3.2",
-    "videojs-generate-karma-config": "^5.3.0",
-    "videojs-generate-rollup-config": "^3.2.0",
-    "videojs-generator-verify": "^1.2.0",
+    "rollup": "^1.19.4",
+    "@videojs/generator-helpers": "~1.2.0",
+    "karma": "^4.0.0",
+    "sinon": "^7.2.2",
+    "videojs-generate-karma-config": "~5.3.1",
+    "videojs-generator-verify": "~2.0.0",
+    "videojs-generate-rollup-config": "~5.0.1",
     "videojs-standard": "^8.0.3"
   },
   "generator-videojs-plugin": {
-    "version": "7.3.2"
+    "version": "7.7.3"
   },
   "browserslist": [
     "defaults",
@@ -108,7 +96,7 @@
       "git add"
     ],
     "README.md": [
-      "npm run docs:toc",
+      "doctoc --notitle",
       "git add"
     ]
   }

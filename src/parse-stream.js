@@ -1,7 +1,7 @@
 /**
  * @file m3u8/parse-stream.js
  */
-import Stream from './stream';
+import Stream from '@videojs/vhs-utils/dist/stream.js';
 
 /**
  * "forgiving" attribute list psuedo-grammar:
