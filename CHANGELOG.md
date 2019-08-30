@@ -1,3 +1,10 @@
+<a name="4.4.2"></a>
+## [4.4.2](https://github.com/videojs/m3u8-parser/compare/v4.4.1...v4.4.2) (2019-08-30)
+
+### Chores
+
+* **package:** update [@videojs](https://github.com/videojs)/vhs-utils ([651b4ae](https://github.com/videojs/m3u8-parser/commit/651b4ae))
+
 <a name="4.4.1"></a>
 ## [4.4.1](https://github.com/videojs/m3u8-parser/compare/v4.4.0...v4.4.1) (2019-08-21)
 
