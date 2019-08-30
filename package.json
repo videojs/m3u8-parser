@@ -65,7 +65,7 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.5.5",
-    "@videojs/vhs-utils": "^1.0.0",
+    "@videojs/vhs-utils": "^1.1.0",
     "global": "^4.3.2"
   },
   "devDependencies": {
