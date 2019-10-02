@@ -1334,6 +1334,62 @@ QUnit.test('Widevine #EXT-X-KEY attributes not attached to manifest if KEYFORMAT
   assert.notOk(parser.manifest.contentProtection, 'contentProtection not added');
 });
 
+QUnit.test('byterange offset defaults to next byte', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXTM3U',
+    '#EXTINF:5,',
+    '#EXT-X-BYTERANGE:10@5',
+    'segment.ts',
+    '#EXTINF:5,',
+    '#EXT-X-BYTERANGE:20',
+    'segment.ts',
+    '#EXTINF:5,',
+    '#EXT-X-BYTERANGE:30',
+    'segment.ts',
+    '#EXTINF:5,',
+    'segment2.ts',
+    '#EXT-X-BYTERANGE:15@100',
+    'segment.ts',
+    '#EXT-X-BYTERANGE:17',
+    'segment.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+
+  parser.push(manifest);
+
+  assert.deepEqual(
+    parser.manifest.segments[0].byterange,
+    { length: 10, offset: 5 },
+    'first segment has correct byterange'
+  );
+  assert.deepEqual(
+    parser.manifest.segments[1].byterange,
+    { length: 20, offset: 15 },
+    'second segment has correct byterange'
+  );
+  assert.deepEqual(
+    parser.manifest.segments[2].byterange,
+    { length: 30, offset: 35 },
+    'third segment has correct byterange'
+  );
+  assert.notOk(parser.manifest.segments[3].byterange, 'fourth segment has no byterange');
+  assert.deepEqual(
+    parser.manifest.segments[4].byterange,
+    { length: 15, offset: 100 },
+    'fifth segment has correct byterange'
+  );
+  // not tested is a segment with no offset coming after a segment that isn't a sub range,
+  // as the spec requires that a byterange without an offset must follow a segment that
+  // is a sub range of the same media resource
+  assert.deepEqual(
+    parser.manifest.segments[5].byterange,
+    { length: 17, offset: 115 },
+    'sixth segment has correct byterange'
+  );
+});
+
 QUnit.module('m3u8s');
 
 QUnit.test('parses static manifests as expected', function(assert) {

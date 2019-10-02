@@ -62,6 +62,10 @@ export default class Parser extends Stream {
       discontinuityStarts: [],
       segments: []
     };
+    // keep track of the last seen segment's byte range end, as segments are not required
+    // to provide the offset, in which case it defaults to the next byte after the
+    // previous segment
+    let lastByterangeEnd = 0;
 
     // update the manifest with the m3u8 entry from the parse stream
     this.parseStream.on('data', function(entry) {
@@ -89,16 +93,24 @@ export default class Parser extends Stream {
                 byterange.length = entry.length;
 
                 if (!('offset' in entry)) {
-                  this.trigger('info', {
-                    message: 'defaulting offset to zero'
-                  });
-                  entry.offset = 0;
+                  /*
+                   * From the latest spec (as of this writing):
+                   * https://tools.ietf.org/html/draft-pantos-http-live-streaming-23#section-4.3.2.2
+                   *
+                   * Same text since EXT-X-BYTERANGE's introduction in draft 7:
+                   * https://tools.ietf.org/html/draft-pantos-http-live-streaming-07#section-3.3.1)
+                   *
+                   * "If o [offset] is not present, the sub-range begins at the next byte
+                   * following the sub-range of the previous media segment."
+                   */
+                  entry.offset = lastByterangeEnd;
                 }
               }
               if ('offset' in entry) {
                 currentUri.byterange = byterange;
                 byterange.offset = entry.offset;
               }
+              lastByterangeEnd = byterange.offset + byterange.length;
             },
             endlist() {
               this.manifest.endList = true;
