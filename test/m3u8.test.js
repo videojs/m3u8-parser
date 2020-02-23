@@ -147,13 +147,15 @@ QUnit.test('mapper does not conflict with parser', function(assert) {
     data: '#EXAMPLE',
     type: 'custom',
     customType: 'test',
-    segment: undefined
+    segment: undefined,
+    multiple: undefined
   });
   assert.deepEqual(dataCallback.getCall(1).args[0], {
     data: '#NEW-COMMENT',
     type: 'custom',
     customType: 'test2',
-    segment: undefined
+    segment: undefined,
+    multiple: undefined
   });
   assert.deepEqual(dataCallback.getCall(2).args[0], {
     text: 'SOMETHING-ELSE',
