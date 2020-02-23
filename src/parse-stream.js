@@ -459,8 +459,9 @@ export default class ParseStream extends Stream {
    * @param {string}   options.customType   the custom type to register to the output
    * @param {Function} [options.dataParser] function to parse the line into an object
    * @param {boolean}  [options.segment]    should tag data be attached to the segment object
+   * @param {boolean}  [options.multiple]      does the tag appear multiple times
    */
-  addParser({expression, customType, dataParser, segment}) {
+  addParser({expression, customType, dataParser, segment, multiple}) {
     if (typeof dataParser !== 'function') {
       dataParser = (line) => line;
     }
@@ -472,7 +473,8 @@ export default class ParseStream extends Stream {
           type: 'custom',
           data: dataParser(line),
           customType,
-          segment
+          segment,
+          multiple
         });
         return true;
       }

@@ -1053,6 +1053,38 @@ QUnit.test('can set custom parsers', function(assert) {
   assert.strictEqual(parser.manifest.custom.framerate, '29.97', 'sets framerate');
 });
 
+QUnit.test('maps custom tag with multiple instances', function(assert) {
+  const parser = new Parser();
+  const manifest = [
+    '#EXTM3U',
+    '#EXT-X-DATERANGE:ID="123"',
+    '#EXT-X-DATERANGE:ID="456"',
+    '#EXT-X-DATERANGE:ID="789"',
+    ''
+  ].join('\n');
+
+  parser.addParser({
+    expression: /^#EXT-X-DATERANGE/,
+    customType: 'dateRanges',
+    multiple: true
+  });
+
+  parser.push(manifest);
+  assert.strictEqual(parser.manifest.custom.dateRanges.length, 3);
+  assert.strictEqual(
+    parser.manifest.custom.dateRanges[0],
+    '#EXT-X-DATERANGE:ID="123"'
+  );
+  assert.strictEqual(
+    parser.manifest.custom.dateRanges[1],
+    '#EXT-X-DATERANGE:ID="456"'
+  );
+  assert.strictEqual(
+    parser.manifest.custom.dateRanges[2],
+    '#EXT-X-DATERANGE:ID="789"'
+  );
+});
+
 QUnit.test('segment level custom data', function(assert) {
   const parser = new Parser();
 
