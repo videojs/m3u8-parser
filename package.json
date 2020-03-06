@@ -71,7 +71,7 @@
     "global": "^4.3.2"
   },
   "devDependencies": {
-    "rollup": "^1.19.4",
+    "rollup": "^2.0.0",
     "@videojs/generator-helpers": "~1.2.0",
     "karma": "^4.0.0",
     "sinon": "^7.2.2",
