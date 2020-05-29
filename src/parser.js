@@ -128,6 +128,14 @@ export default class Parser extends Stream {
                   message: 'defaulting discontinuity sequence to zero'
                 });
               }
+
+              if (entry.duration < 0) {
+                this.trigger('warn', {
+                  message: 'found a negative segment duration'
+                });
+                currentUri.duration = entry.duration;
+              }
+
               if (entry.duration > 0) {
                 currentUri.duration = entry.duration;
               }

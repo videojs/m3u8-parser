@@ -357,6 +357,26 @@ QUnit.test('parses #EXTINF tags with durations', function(assert) {
   assert.strictEqual(element.duration, 21, 'the duration is parsed');
   assert.ok(!('title' in element), 'no title is parsed');
 });
+QUnit.test('warns about #EXTINF tag with negative duration', function(assert) {
+  const parser = new Parser();
+
+  const manifest = [
+    '#EXT-X-VERSION:3',
+    '#EXT-X-TARGETDURATION:10',
+    '#EXTINF:-10,',
+    'media-00001.ts',
+    '#EXT-X-ENDLIST'
+  ].join('\n');
+  let warning;
+
+  parser.on('warn', function(warn) {
+    warning = warn;
+  });
+  parser.push(manifest);
+
+  assert.ok(warning, 'a warning was triggered');
+  assert.ok((/found a negative segment duration/).test(warning.message), `message is about a negative segment duration - ${warning.message}`);
+});
 QUnit.test('parses #EXTINF tags with a duration and title', function(assert) {
   const manifest = '#EXTINF:13,Does anyone really use the title attribute?\n';
   let element;
