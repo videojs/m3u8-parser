@@ -1,3 +1,14 @@
+<a name="4.4.3"></a>
+## [4.4.3](https://github.com/videojs/m3u8-parser/compare/v4.4.2...v4.4.3) (2020-08-12)
+
+### Bug Fixes
+
+* fix default EXT-X-BYTERANGE offset to start after the previous segment ([#98](https://github.com/videojs/m3u8-parser/issues/98)) ([08aca73](https://github.com/videojs/m3u8-parser/commit/08aca73))
+
+### Tests
+
+* run tests on node ([#97](https://github.com/videojs/m3u8-parser/issues/97)) ([4ad5c2d](https://github.com/videojs/m3u8-parser/commit/4ad5c2d))
+
 <a name="4.4.2"></a>
 ## [4.4.2](https://github.com/videojs/m3u8-parser/compare/v4.4.1...v4.4.2) (2019-08-30)
 
