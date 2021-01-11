@@ -1,3 +1,10 @@
+<a name="4.5.1"></a>
+## [4.5.1](https://github.com/videojs/m3u8-parser/compare/v4.5.0...v4.5.1) (2021-01-11)
+
+### Chores
+
+* update to vhs-utils[@3](https://github.com/3) ([#118](https://github.com/videojs/m3u8-parser/issues/118)) ([f701c0f](https://github.com/videojs/m3u8-parser/commit/f701c0f))
+
 <a name="4.5.0"></a>
 # [4.5.0](https://github.com/videojs/m3u8-parser/compare/v4.4.3...v4.5.0) (2020-11-03)
 
