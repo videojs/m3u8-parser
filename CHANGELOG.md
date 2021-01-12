@@ -1,3 +1,10 @@
+<a name="4.5.2"></a>
+## [4.5.2](https://github.com/videojs/m3u8-parser/compare/v4.5.1...v4.5.2) (2021-01-12)
+
+### Bug Fixes
+
+* cjs dist should import only cjs ([#120](https://github.com/videojs/m3u8-parser/issues/120)) ([a58149d](https://github.com/videojs/m3u8-parser/commit/a58149d))
+
 <a name="4.5.1"></a>
 ## [4.5.1](https://github.com/videojs/m3u8-parser/compare/v4.5.0...v4.5.1) (2021-01-11)
 
