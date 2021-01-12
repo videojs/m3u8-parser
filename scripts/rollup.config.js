@@ -14,7 +14,9 @@ const options = {
     // when using "require" rather than import
     // require cjs module
     defaults.replace = replace({
+      // single quote replace
       "require('@videojs/vhs-utils/es": "require('@videojs/vhs-utils/cjs",
+      // double quote replace
       'require("@videojs/vhs-utils/es': 'require("@videojs/vhs-utils/cjs'
     });
 
