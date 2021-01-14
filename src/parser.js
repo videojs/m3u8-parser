@@ -390,6 +390,9 @@ export default class Parser extends Stream {
             'part'() {
               this.manifest.parts = this.manifest.parts || [];
               this.manifest.parts.push(entry.attributes);
+            },
+            'server-control'() {
+              this.manifest.serverControl = entry.attributes;
             }
           })[entry.tagType] || noop).call(self);
         },
