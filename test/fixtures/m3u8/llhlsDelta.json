@@ -29,5 +29,12 @@
       "uri": "fileSequence272.mp4"
     }
   ],
+  "skip": {
+    "SKIPPED-SEGMENTS": 3,
+    "RECENTLY-REMOVED-DATERANGES": [
+      "foo",
+      "bar"
+    ]
+  },
   "targetDuration": 4
 }
