@@ -1392,19 +1392,19 @@ QUnit.test('byterange offset defaults to next byte', function(assert) {
 
 QUnit.module('m3u8s');
 
-QUnit.test('parses static manifests as expected', function(assert) {
-  let key;
-
-  for (key in testDataManifests) {
-    if (testDataExpected[key]) {
-      const parser = new Parser();
-
-      parser.push(testDataManifests[key]);
-      assert.deepEqual(
-        parser.manifest,
-        testDataExpected[key],
-        key + '.m3u8 was parsed correctly'
-      );
-    }
+for (const key in testDataManifests) {
+  if (!testDataExpected[key]) {
+    continue;
   }
-});
+  QUnit.test(`parses ${key} as expected`, function(assert) {
+    const parser = new Parser();
+
+    parser.push(testDataManifests[key]);
+    assert.deepEqual(
+      parser.manifest,
+      testDataExpected[key],
+      key + '.m3u8 was parsed correctly'
+    );
+  });
+}
+
