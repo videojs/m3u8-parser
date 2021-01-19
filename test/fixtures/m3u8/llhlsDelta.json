@@ -9,6 +9,10 @@
     {"TYPE": "PART", "URI": "filePart273.4.mp4"},
     {"TYPE": "PART", "URI": "filePart273.5.mp4"}
   ],
+  "renditionReports": [
+    {"LAST-MSN": 273, "LAST-PART": 3, "URI": "../1M/waitForMSN.php"},
+    {"LAST-MSN": 273, "LAST-PART": 3, "URI": "../4M/waitForMSN.php"}
+  ],
   "parts": [
     {
       "DURATION": 0.33334,
