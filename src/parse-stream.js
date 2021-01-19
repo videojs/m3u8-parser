@@ -520,6 +520,22 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
+      match = (/^#EXT-X-PART-INF:(.*)$/).exec(newLine);
+      if (match && match[1]) {
+        event = {
+          type: 'tag',
+          tagType: 'part-inf'
+        };
+        event.attributes = parseAttributes(match[1]);
+        ['PART-TARGET'].forEach(function(key) {
+          if (event.attributes.hasOwnProperty(key)) {
+            event.attributes[key] = parseFloat(event.attributes[key]);
+          }
+        });
+
+        this.trigger('data', event);
+        return;
+      }
 
       match = (/^#EXT-X-PRELOAD-HINT:(.*)$/).exec(newLine);
       if (match && match[1]) {
