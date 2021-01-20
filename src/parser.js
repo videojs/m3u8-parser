@@ -383,6 +383,9 @@ export default class Parser extends Stream {
             },
             'cue-in'() {
               currentUri.cueIn = entry.data;
+            },
+            'skip'() {
+              this.manifest.skip = entry.attributes;
             }
           })[entry.tagType] || noop).call(self);
         },

@@ -3,6 +3,8 @@
  */
 import Stream from '@videojs/vhs-utils/es/stream.js';
 
+const TAB = String.fromCharCode(0x09);
+
 /**
  * "forgiving" attribute list psuedo-grammar:
  * attributes -> keyvalue (',' keyvalue)*
@@ -439,6 +441,26 @@ export default class ParseStream extends Stream {
         } else {
           event.data = '';
         }
+        this.trigger('data', event);
+        return;
+      }
+      match = (/^#EXT-X-SKIP:(.*)$/).exec(newLine);
+      if (match && match[1]) {
+        event = {
+          type: 'tag',
+          tagType: 'skip'
+        };
+        event.attributes = parseAttributes(match[1]);
+
+        if (event.attributes.hasOwnProperty('SKIPPED-SEGMENTS')) {
+          event.attributes['SKIPPED-SEGMENTS'] = parseInt(event.attributes['SKIPPED-SEGMENTS'], 10);
+        }
+
+        if (event.attributes.hasOwnProperty('RECENTLY-REMOVED-DATERANGES')) {
+          event.attributes['RECENTLY-REMOVED-DATERANGES'] =
+            event.attributes['RECENTLY-REMOVED-DATERANGES'].split(TAB);
+        }
+
         this.trigger('data', event);
         return;
       }
