@@ -1,6 +1,6 @@
 import QUnit from 'qunit';
-import testDataExpected from './dist/test-expected.js';
-import testDataManifests from './dist/test-manifests.js';
+import testDataExpected from 'data-files!expecteds';
+import testDataManifests from 'data-files!manifests';
 import {Parser} from '../src';
 
 QUnit.module('m3u8s', function(hooks) {
@@ -421,12 +421,12 @@ QUnit.module('m3u8s', function(hooks) {
       throw new Error(`${key}.m3u8 does not have an equivelent expected js file to test against`);
     }
     QUnit.test(`parses ${key}.m3u8 as expected in ${key}.js`, function(assert) {
-      this.parser.push(testDataManifests[key]);
+      this.parser.push(testDataManifests[key]());
       this.parser.end();
 
       assert.deepEqual(
         this.parser.manifest,
-        testDataExpected[key],
+        testDataExpected[key](),
         key + '.m3u8 was parsed correctly'
       );
     });

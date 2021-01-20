@@ -1,4 +1,4 @@
-{
+module.exports = {
   "allowCache": false,
   "mediaSequence": 0,
   "playlistType": "VOD",

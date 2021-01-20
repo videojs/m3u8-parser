@@ -25,8 +25,7 @@
   "scripts": {
     "build-test": "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
     "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
-    "build-test-data": "node scripts/m3u8.js",
-    "build": "npm-run-all -s clean build-test-data -p build:*",
+    "build": "npm-run-all -s clean -p build:*",
     "build:js": "rollup -c scripts/rollup.config.js",
     "clean": "shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist",
     "lint": "vjsstandard",
@@ -76,6 +75,7 @@
     "@videojs/generator-helpers": "~2.0.1",
     "karma": "^5.2.3",
     "rollup": "^2.36.1",
+    "rollup-plugin-data-files": "^0.1.0",
     "sinon": "^9.2.3",
     "videojs-generate-karma-config": "~7.0.0",
     "videojs-generate-rollup-config": "~6.1.0",
