@@ -5,6 +5,10 @@
   "discontinuitySequence": 0,
   "discontinuityStarts": [],
   "mediaSequence": 266,
+  "preloadHints": [
+    {"TYPE": "PART", "URI": "filePart273.4.mp4"},
+    {"TYPE": "PART", "URI": "filePart273.5.mp4"}
+  ],
   "parts": [
     {
       "DURATION": 0.33334,
