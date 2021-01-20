@@ -386,6 +386,10 @@ export default class Parser extends Stream {
             },
             'skip'() {
               this.manifest.skip = entry.attributes;
+            },
+            'part'() {
+              this.manifest.parts = this.manifest.parts || [];
+              this.manifest.parts.push(entry.attributes);
             }
           })[entry.tagType] || noop).call(self);
         },
