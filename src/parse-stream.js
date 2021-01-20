@@ -537,6 +537,22 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
+      match = (/^#EXT-X-RENDITION-REPORT:(.*)$/).exec(newLine);
+      if (match && match[1]) {
+        event = {
+          type: 'tag',
+          tagType: 'rendition-report'
+        };
+        event.attributes = parseAttributes(match[1]);
+        ['LAST-MSN', 'LAST-PART'].forEach(function(key) {
+          if (event.attributes.hasOwnProperty(key)) {
+            event.attributes[key] = parseInt(event.attributes[key], 10);
+          }
+        });
+
+        this.trigger('data', event);
+        return;
+      }
 
       // unknown tag type
       this.trigger('data', {

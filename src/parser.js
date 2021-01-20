@@ -397,6 +397,10 @@ export default class Parser extends Stream {
             'preload-hint'() {
               this.manifest.preloadHints = this.manifest.preloadHints || [];
               this.manifest.preloadHints.push(entry.attributes);
+            },
+            'rendition-report'() {
+              this.manifest.renditionReports = this.manifest.renditionReports || [];
+              this.manifest.renditionReports.push(entry.attributes);
             }
           })[entry.tagType] || noop).call(self);
         },
