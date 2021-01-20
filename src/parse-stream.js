@@ -498,6 +498,28 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
+      match = (/^#EXT-X-SERVER-CONTROL:(.*)$/).exec(newLine);
+      if (match && match[1]) {
+        event = {
+          type: 'tag',
+          tagType: 'server-control'
+        };
+        event.attributes = parseAttributes(match[1]);
+        ['CAN-SKIP-UNTIL', 'PART-HOLD-BACK', 'HOLD-BACK'].forEach(function(key) {
+          if (event.attributes.hasOwnProperty(key)) {
+            event.attributes[key] = parseFloat(event.attributes[key]);
+          }
+        });
+
+        ['CAN-SKIP-DATERANGES', 'CAN-BLOCK-RELOAD'].forEach(function(key) {
+          if (event.attributes.hasOwnProperty(key)) {
+            event.attributes[key] = (/YES/).test(event.attributes[key]);
+          }
+        });
+
+        this.trigger('data', event);
+        return;
+      }
 
       match = (/^#EXT-X-PRELOAD-HINT:(.*)$/).exec(newLine);
       if (match && match[1]) {

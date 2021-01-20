@@ -187,5 +187,12 @@
       "uri": "fileSequence272.mp4"
     }
   ],
+  "serverControl": {
+    "CAN-SKIP-DATERANGES": true,
+    "CAN-BLOCK-RELOAD": true,
+    "CAN-SKIP-UNTIL": 12,
+    "PART-HOLD-BACK": 1,
+    "HOLD-BACK": 2
+  },
   "targetDuration": 4
 }

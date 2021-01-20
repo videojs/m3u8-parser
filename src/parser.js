@@ -391,6 +391,9 @@ export default class Parser extends Stream {
               this.manifest.parts = this.manifest.parts || [];
               this.manifest.parts.push(entry.attributes);
             },
+            'server-control'() {
+              this.manifest.serverControl = entry.attributes;
+            },
             'preload-hint'() {
               this.manifest.preloadHints = this.manifest.preloadHints || [];
               this.manifest.preloadHints.push(entry.attributes);
