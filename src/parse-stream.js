@@ -499,6 +499,23 @@ export default class ParseStream extends Stream {
         return;
       }
 
+      match = (/^#EXT-X-PRELOAD-HINT:(.*)$/).exec(newLine);
+      if (match && match[1]) {
+        event = {
+          type: 'tag',
+          tagType: 'preload-hint'
+        };
+        event.attributes = parseAttributes(match[1]);
+        ['BYTERANGE-START', 'BYTERANGE-LENGTH'].forEach(function(key) {
+          if (event.attributes.hasOwnProperty(key)) {
+            event.attributes[key] = parseInt(event.attributes[key], 10);
+          }
+        });
+
+        this.trigger('data', event);
+        return;
+      }
+
       // unknown tag type
       this.trigger('data', {
         type: 'tag',
