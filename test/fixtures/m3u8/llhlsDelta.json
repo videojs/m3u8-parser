@@ -13,6 +13,9 @@
     {"LAST-MSN": 273, "LAST-PART": 3, "URI": "../1M/waitForMSN.php"},
     {"LAST-MSN": 273, "LAST-PART": 3, "URI": "../4M/waitForMSN.php"}
   ],
+  "partInf": {
+    "PART-TARGET": 0.33334
+  },
   "parts": [
     {
       "DURATION": 0.33334,

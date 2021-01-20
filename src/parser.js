@@ -401,6 +401,9 @@ export default class Parser extends Stream {
             'rendition-report'() {
               this.manifest.renditionReports = this.manifest.renditionReports || [];
               this.manifest.renditionReports.push(entry.attributes);
+            },
+            'part-inf'() {
+              this.manifest.partInf = entry.attributes;
             }
           })[entry.tagType] || noop).call(self);
         },
