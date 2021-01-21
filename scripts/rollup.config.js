@@ -1,5 +1,6 @@
 const generate = require('videojs-generate-rollup-config');
 const replace = require('@rollup/plugin-replace');
+const dataFiles = require('rollup-plugin-data-files');
 
 // see https://github.com/videojs/videojs-generate-rollup-config
 // for options
@@ -20,10 +21,16 @@ const options = {
       'require("@videojs/vhs-utils/es': 'require("@videojs/vhs-utils/cjs'
     });
 
+    defaults.dataFiles = dataFiles({
+      expecteds: {include: 'test/fixtures/integration/*.js', transform: 'js', extensions: false},
+      manifests: {include: 'test/fixtures/integration/*.m3u8', transform: 'string', extensions: false}
+    });
+
     return defaults;
   },
   plugins(defaults) {
     defaults.module.unshift('replace');
+    defaults.test.unshift('dataFiles');
 
     return defaults;
   }

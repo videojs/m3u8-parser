@@ -1,4 +1,4 @@
-{
+module.exports = {
   "allowCache": true,
   "dateTimeObject": new Date("2019-02-14T02:13:36.106Z"),
   "dateTimeString": "2019-02-14T02:13:36.106Z",
