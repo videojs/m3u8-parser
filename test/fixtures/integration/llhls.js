@@ -7,7 +7,7 @@ module.exports = {
   mediaSequence: 266,
   preloadHints: [
     {TYPE: 'PART', URI: 'filePart273.3.mp4'},
-    {TYPE: 'PART', URI: 'filePart273.4.mp4'}
+    {'TYPE': 'PART', 'URI': 'filePart273.4.mp4', 'BYTERANGE-LENGTH': 10, 'BYTERANGE-START': 0}
   ],
   renditionReports: [
     {'LAST-MSN': 273, 'LAST-PART': 2, 'URI': '../1M/waitForMSN.php'},

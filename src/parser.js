@@ -41,14 +41,14 @@ const setHoldBack = function(manifest) {
   if (partTargetDuration && !serverControl.hasOwnProperty(phb)) {
     serverControl[phb] = partTargetDuration * 3;
     this.trigger('info', {
-      message: `${tag} defaulting ${phb} to partTargetDuration * 3 ${serverControl[phb]}.`
+      message: `${tag} defaulting ${phb} to partTargetDuration * 3 (${serverControl[phb]}).`
     });
   }
 
   // if part hold back is too small default it to part target duration * 2
   if (partTargetDuration && serverControl[phb] < (minPartDuration)) {
     this.trigger('warn', {
-      message: `${tag} clamping ${phb} (${serverControl[phb]}) to partTargetDuration * 2 ${minPartDuration}).`
+      message: `${tag} clamping ${phb} (${serverControl[phb]}) to partTargetDuration * 2 (${minPartDuration}).`
     });
 
     serverControl[phb] = minPartDuration;
@@ -440,32 +440,44 @@ export default class Parser extends Stream {
 
               if (!entry.attributes.hasOwnProperty('SKIPPED-SEGMENTS')) {
                 this.trigger('warn', {
-                  message: '#EXT-X-SKIP SKIPPED-SEGMENTS is required but missing!'
+                  message: '#EXT-X-SKIP lacks required attribute SKIPPED-SEGMENTS'
                 });
               }
             },
             'part'() {
               this.manifest.parts = this.manifest.parts || [];
               this.manifest.parts.push(entry.attributes);
-              let message = `#EXT-X-PART #${this.manifest.parts.length - 1} lacks`;
-              let warn = true;
+              const missingAttributes = [];
 
               ['URI', 'DURATION'].forEach(function(k) {
                 if (!entry.attributes[k]) {
-                  message += ` ${k}`;
-                  warn = true;
+                  missingAttributes.push(k);
                 }
               });
 
-              if (warn) {
-                this.trigger('warn', {message});
+              if (missingAttributes.length) {
+                const index = this.manifest.parts.length - 1;
+
+                this.trigger('warn', {
+                  message: `#EXT-X-PART #${index} lacks required attribute(s) ${missingAttributes.join(', ')}`
+                });
+              }
+
+              if (this.manifest.renditionReports) {
+                this.manifest.renditionReports.forEach((r, i) => {
+                  if (!r.hasOwnProperty('LAST-PART')) {
+                    this.trigger('warn', {
+                      message: `#EXT-X-RENDITION-REPORT #${i} lacks required attribute(s) LAST-PART`
+                    });
+                  }
+                });
               }
             },
             'server-control'() {
               const attrs = entry.attributes;
 
               this.manifest.serverControl = attrs;
-              if (!attrs['CAN-BLOCK-RELOAD']) {
+              if (!attrs.hasOwnProperty('CAN-BLOCK-RELOAD')) {
                 this.manifest.serverControl['CAN-BLOCK-RELOAD'] = false;
                 this.trigger('info', {
                   message: '#EXT-X-SERVER-CONTROL defaulting CAN-BLOCK-RELOAD to false'
@@ -474,9 +486,8 @@ export default class Parser extends Stream {
               setHoldBack.call(this, this.manifest);
 
               if (attrs.hasOwnProperty('CAN-SKIP-DATERANGES') && !attrs.hasOwnProperty('CAN-SKIP-UNTIL')) {
-
                 this.trigger('warn', {
-                  message: '#EXT-X-SERVER-CONTROL CAN-SKIP-DATERANGES requires CAN-SKIP-UNTIL but it is not present'
+                  message: '#EXT-X-SERVER-CONTROL lacks required attribute CAN-SKIP-UNTIL which is required when CAN-SKIP-DATERANGES is set'
                 });
 
               }
@@ -485,44 +496,41 @@ export default class Parser extends Stream {
               this.manifest.preloadHints = this.manifest.preloadHints || [];
               this.manifest.preloadHints.push(entry.attributes);
 
-              let message = `#EXT-X-PRELOAD-HINT #${this.manifest.preloadHints.length - 1} lacks`;
-              let warn = true;
+              const missingAttributes = [];
 
               ['TYPE', 'URI'].forEach(function(k) {
                 if (!entry.attributes[k]) {
-                  message += ` ${k}`;
-                  warn = true;
+                  missingAttributes.push(k);
                 }
               });
 
-              if (warn) {
-                this.trigger('warn', {message});
+              if (missingAttributes.length) {
+                const index = this.manifest.preloadHints.length - 1;
+
+                this.trigger('warn', {
+                  message: `#EXT-X-PRELOAD-HINT #${index} lacks required attribute(s) ${missingAttributes.join(', ')}`
+                });
               }
             },
             'rendition-report'() {
               this.manifest.renditionReports = this.manifest.renditionReports || [];
               this.manifest.renditionReports.push(entry.attributes);
               const index = this.manifest.renditionReports.length - 1;
-              let message = `#EXT-X-RENDITION-REPORT #${index} lacks`;
-              let warn = true;
+              const missingAttributes = [];
+              const warning = `#EXT-X-RENDITION-REPORT #${index} lacks required attribute(s)`;
 
               ['LAST-MSN', 'URI'].forEach(function(k) {
                 if (!entry.attributes[k]) {
-                  message += ` ${k}`;
-                  warn = true;
+                  missingAttributes.push(k);
                 }
               });
 
-              if (warn) {
-                this.trigger('warn', {message});
+              if (this.manifest.parts && !entry.attributes['LAST-PART']) {
+                missingAttributes.push('LAST-PART');
               }
 
-              if (this.manifest.parts && !entry.attributes['LAST-PART']) {
-                // its only likely, as its not required for all renditions to have parts,
-                // but if the current one does than it likely.
-                this.trigger('warn', {
-                  message: `#EXT-X-RENDITION-REPORT #${index} likely lacks required LAST-PART`
-                });
+              if (missingAttributes.length) {
+                this.trigger('warn', {message: `${warning} ${missingAttributes.join(', ')}`});
               }
             },
             'part-inf'() {
@@ -530,7 +538,7 @@ export default class Parser extends Stream {
 
               if (!entry.attributes.hasOwnProperty('PART-TARGET')) {
                 this.trigger('warn', {
-                  message: '#EXT-X-PART-INF lacks required PART-TARGET'
+                  message: '#EXT-X-PART-INF lacks required attribute PART-TARGET'
                 });
               } else {
                 this.manifest.partTargetDuration = entry.attributes['PART-TARGET'];
