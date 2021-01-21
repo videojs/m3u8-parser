@@ -465,7 +465,7 @@ QUnit.module('m3u8s', function(hooks) {
 
     assert.deepEqual(
       this.warnings,
-      ['#EXT-X-SKIP lacks required attribute SKIPPED-SEGMENTS'],
+      ['#EXT-X-SKIP lacks required attribute: SKIPPED-SEGMENTS'],
       'warnings as expected'
     );
 
@@ -492,9 +492,9 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PART #0 lacks required attribute(s) URI',
-      '#EXT-X-PART #1 lacks required attribute(s) DURATION',
-      '#EXT-X-PART #2 lacks required attribute(s) URI, DURATION'
+      '#EXT-X-PART #0 lacks required attribute(s): URI',
+      '#EXT-X-PART #1 lacks required attribute(s): DURATION',
+      '#EXT-X-PART #2 lacks required attribute(s): URI, DURATION'
     ];
 
     assert.deepEqual(
@@ -526,9 +526,9 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PRELOAD-HINT #0 lacks required attribute(s) URI',
-      '#EXT-X-PRELOAD-HINT #1 lacks required attribute(s) TYPE',
-      '#EXT-X-PRELOAD-HINT #2 lacks required attribute(s) TYPE, URI'
+      '#EXT-X-PRELOAD-HINT #0 lacks required attribute(s): URI',
+      '#EXT-X-PRELOAD-HINT #1 lacks required attribute(s): TYPE',
+      '#EXT-X-PRELOAD-HINT #2 lacks required attribute(s): TYPE, URI'
     ];
 
     assert.deepEqual(
@@ -560,9 +560,9 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-RENDITION-REPORT #0 lacks required attribute(s) LAST-MSN',
-      '#EXT-X-RENDITION-REPORT #1 lacks required attribute(s) URI',
-      '#EXT-X-RENDITION-REPORT #2 lacks required attribute(s) LAST-MSN, URI'
+      '#EXT-X-RENDITION-REPORT #0 lacks required attribute(s): LAST-MSN',
+      '#EXT-X-RENDITION-REPORT #1 lacks required attribute(s): URI',
+      '#EXT-X-RENDITION-REPORT #2 lacks required attribute(s): LAST-MSN, URI'
     ];
 
     assert.deepEqual(
@@ -594,8 +594,8 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-RENDITION-REPORT #0 lacks required attribute(s) LAST-PART',
-      '#EXT-X-RENDITION-REPORT #1 lacks required attribute(s) LAST-PART'
+      '#EXT-X-RENDITION-REPORT #0 lacks required attribute(s): LAST-PART',
+      '#EXT-X-RENDITION-REPORT #1 lacks required attribute(s): LAST-PART'
     ];
 
     assert.deepEqual(
@@ -625,7 +625,7 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PART-INF lacks required attribute PART-TARGET'
+      '#EXT-X-PART-INF lacks required attribute: PART-TARGET'
     ];
 
     assert.deepEqual(

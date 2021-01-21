@@ -440,7 +440,7 @@ export default class Parser extends Stream {
 
               if (!entry.attributes.hasOwnProperty('SKIPPED-SEGMENTS')) {
                 this.trigger('warn', {
-                  message: '#EXT-X-SKIP lacks required attribute SKIPPED-SEGMENTS'
+                  message: '#EXT-X-SKIP lacks required attribute: SKIPPED-SEGMENTS'
                 });
               }
             },
@@ -450,7 +450,7 @@ export default class Parser extends Stream {
               const missingAttributes = [];
 
               ['URI', 'DURATION'].forEach(function(k) {
-                if (!entry.attributes[k]) {
+                if (!entry.attributes.hasOwnProperty(k)) {
                   missingAttributes.push(k);
                 }
               });
@@ -459,7 +459,7 @@ export default class Parser extends Stream {
                 const index = this.manifest.parts.length - 1;
 
                 this.trigger('warn', {
-                  message: `#EXT-X-PART #${index} lacks required attribute(s) ${missingAttributes.join(', ')}`
+                  message: `#EXT-X-PART #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
               }
 
@@ -467,7 +467,7 @@ export default class Parser extends Stream {
                 this.manifest.renditionReports.forEach((r, i) => {
                   if (!r.hasOwnProperty('LAST-PART')) {
                     this.trigger('warn', {
-                      message: `#EXT-X-RENDITION-REPORT #${i} lacks required attribute(s) LAST-PART`
+                      message: `#EXT-X-RENDITION-REPORT #${i} lacks required attribute(s): LAST-PART`
                     });
                   }
                 });
@@ -485,7 +485,7 @@ export default class Parser extends Stream {
               }
               setHoldBack.call(this, this.manifest);
 
-              if (attrs.hasOwnProperty('CAN-SKIP-DATERANGES') && !attrs.hasOwnProperty('CAN-SKIP-UNTIL')) {
+              if (attrs['CAN-SKIP-DATERANGES'] && !attrs.hasOwnProperty('CAN-SKIP-UNTIL')) {
                 this.trigger('warn', {
                   message: '#EXT-X-SERVER-CONTROL lacks required attribute CAN-SKIP-UNTIL which is required when CAN-SKIP-DATERANGES is set'
                 });
@@ -499,7 +499,7 @@ export default class Parser extends Stream {
               const missingAttributes = [];
 
               ['TYPE', 'URI'].forEach(function(k) {
-                if (!entry.attributes[k]) {
+                if (!entry.attributes.hasOwnProperty(k)) {
                   missingAttributes.push(k);
                 }
               });
@@ -508,7 +508,7 @@ export default class Parser extends Stream {
                 const index = this.manifest.preloadHints.length - 1;
 
                 this.trigger('warn', {
-                  message: `#EXT-X-PRELOAD-HINT #${index} lacks required attribute(s) ${missingAttributes.join(', ')}`
+                  message: `#EXT-X-PRELOAD-HINT #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
               }
             },
@@ -517,10 +517,10 @@ export default class Parser extends Stream {
               this.manifest.renditionReports.push(entry.attributes);
               const index = this.manifest.renditionReports.length - 1;
               const missingAttributes = [];
-              const warning = `#EXT-X-RENDITION-REPORT #${index} lacks required attribute(s)`;
+              const warning = `#EXT-X-RENDITION-REPORT #${index} lacks required attribute(s):`;
 
               ['LAST-MSN', 'URI'].forEach(function(k) {
-                if (!entry.attributes[k]) {
+                if (!entry.attributes.hasOwnProperty(k)) {
                   missingAttributes.push(k);
                 }
               });
@@ -538,7 +538,7 @@ export default class Parser extends Stream {
 
               if (!entry.attributes.hasOwnProperty('PART-TARGET')) {
                 this.trigger('warn', {
-                  message: '#EXT-X-PART-INF lacks required attribute PART-TARGET'
+                  message: '#EXT-X-PART-INF lacks required attribute: PART-TARGET'
                 });
               } else {
                 this.manifest.partTargetDuration = entry.attributes['PART-TARGET'];
