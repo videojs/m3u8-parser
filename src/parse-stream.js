@@ -174,18 +174,6 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#ZEN-TOTAL-DURATION:?([0-9.]*)?/).exec(newLine);
-      if (match) {
-        event = {
-          type: 'tag',
-          tagType: 'totalduration'
-        };
-        if (match[1]) {
-          event.duration = parseInt(match[1], 10);
-        }
-        this.trigger('data', event);
-        return;
-      }
       match = (/^#EXT-X-VERSION:?([0-9.]*)?/).exec(newLine);
       if (match) {
         event = {
