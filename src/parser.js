@@ -409,7 +409,6 @@ export default class Parser extends Stream {
         },
         uri() {
           currentUri.uri = entry.uri;
-          uris.push(currentUri);
 
           // if no explicit duration was declared, use the target duration
           if (this.manifest.targetDuration && !('duration' in currentUri)) {
@@ -428,6 +427,7 @@ export default class Parser extends Stream {
             currentUri.map = currentMap;
           }
 
+          uris.push(currentUri);
           // prepare for the next URI
           currentUri = {};
         },
