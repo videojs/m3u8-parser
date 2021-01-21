@@ -10,5 +10,4 @@ http://example.com/00001.ts
  //example.com/00003.ts 
 #EXTINF:10,
 	http://example.com/00004.ts
-#ZEN-TOTAL-DURATION:57.9911
 #EXT-X-ENDLIST
