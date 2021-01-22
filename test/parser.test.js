@@ -393,7 +393,7 @@ QUnit.module('m3u8s', function(hooks) {
 
     }
   });
-  QUnit.test('warn when #EXT-X-TOTAL-DURATION is invalid', function(assert) {
+  QUnit.test('warn when #EXT-X-TARGETDURATION is invalid', function(assert) {
     this.parser.push([
       '#EXT-X-VERSION:3',
       '#EXT-X-MEDIA-SEQUENCE:0',
