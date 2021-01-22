@@ -16,5 +16,6 @@ module.exports = {
   targetDuration: 10,
   endList: true,
   discontinuitySequence: 0,
-  discontinuityStarts: []
+  discontinuityStarts: [],
+  version: 4
 };

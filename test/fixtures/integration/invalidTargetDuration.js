@@ -159,5 +159,6 @@ module.exports = {
   ],
   endList: true,
   discontinuitySequence: 0,
-  discontinuityStarts: []
+  discontinuityStarts: [],
+  version: 4
 };

@@ -56,5 +56,6 @@ module.exports = {
       uri: 'http://media.example.com/fileSequence53-B.ts'
     }
   ],
-  targetDuration: 15
+  targetDuration: 15,
+  version: 3
 };

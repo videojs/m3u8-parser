@@ -174,5 +174,6 @@ module.exports = {
     'PART-HOLD-BACK': 1,
     'HOLD-BACK': 2
   },
-  targetDuration: 4
+  targetDuration: 4,
+  version: 9
 };
