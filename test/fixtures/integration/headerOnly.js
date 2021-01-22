@@ -1,5 +1,5 @@
 module.exports = {
-  "allowCache": true,
-  "discontinuityStarts": [],
-  "segments": []
-}
+  allowCache: true,
+  discontinuityStarts: [],
+  segments: []
+};

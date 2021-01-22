@@ -1,20 +1,20 @@
 module.exports = {
-  "allowCache": true,
-  "mediaSequence": 0,
-  "playlistType": "VOD",
-  "segments": [
+  allowCache: true,
+  mediaSequence: 0,
+  playlistType: 'VOD',
+  segments: [
     {
-      "byterange": {
-        "length": 522828,
-        "offset": 0
+      byterange: {
+        length: 522828,
+        offset: 0
       },
-      "duration": 10,
-      "timeline": 0,
-      "uri": "hls_450k_video.ts"
+      duration: 10,
+      timeline: 0,
+      uri: 'hls_450k_video.ts'
     }
   ],
-  "targetDuration": 10,
-  "endList": true,
-  "discontinuitySequence": 0,
-  "discontinuityStarts": []
-}
+  targetDuration: 10,
+  endList: true,
+  discontinuitySequence: 0,
+  discontinuityStarts: []
+};
