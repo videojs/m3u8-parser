@@ -125,6 +125,11 @@ export default class Parser extends Stream {
         tag() {
           // switch based on the tag type
           (({
+            version() {
+              if (entry.version) {
+                this.manifest.version = entry.version;
+              }
+            },
             'allow-cache'() {
               this.manifest.allowCache = entry.allowed;
               if (!('allowed' in entry)) {
@@ -404,15 +409,6 @@ export default class Parser extends Stream {
               this.manifest.targetDuration = entry.duration;
 
               setHoldBack.call(this, this.manifest);
-            },
-            totalduration() {
-              if (!isFinite(entry.duration) || entry.duration < 0) {
-                this.trigger('warn', {
-                  message: 'ignoring invalid total duration: ' + entry.duration
-                });
-                return;
-              }
-              this.manifest.totalDuration = entry.duration;
             },
             start() {
               if (!entry.attributes || isNaN(entry.attributes['TIME-OFFSET'])) {

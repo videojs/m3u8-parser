@@ -460,5 +460,6 @@ module.exports = {
     timeline: 0,
     uri: 'v1/prog_index.m3u8'
   }],
-  segments: []
+  segments: [],
+  version: 6
 };

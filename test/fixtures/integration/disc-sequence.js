@@ -27,5 +27,6 @@ module.exports = {
   ],
   targetDuration: 19,
   endList: true,
-  discontinuityStarts: [2]
+  discontinuityStarts: [2],
+  version: 3
 };

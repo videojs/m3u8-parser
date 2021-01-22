@@ -39,5 +39,6 @@ module.exports = {
       }
     }
   ],
-  endList: true
+  endList: true,
+  version: 7
 };

@@ -54,5 +54,6 @@ module.exports = {
   ],
   targetDuration: 19,
   endList: true,
-  discontinuityStarts: [2, 4, 7]
+  discontinuityStarts: [2, 4, 7],
+  version: 3
 };

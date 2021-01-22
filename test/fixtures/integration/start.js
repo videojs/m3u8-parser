@@ -31,5 +31,6 @@ module.exports = {
   start: {
     timeOffset: 10.3,
     precise: false
-  }
+  },
+  version: 3
 };
