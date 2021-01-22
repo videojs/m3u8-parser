@@ -52,8 +52,7 @@
     "ignore": [
       "dist",
       "docs",
-      "test/dist",
-      "test/fixtures"
+      "test/dist"
     ]
   },
   "files": [
