@@ -16,6 +16,7 @@ module.exports = {
   partInf: {
     'PART-TARGET': 0.33334
   },
+  partTargetDuration: 0.33334,
   parts: [
     {
       DURATION: 0.33334,
@@ -172,7 +173,7 @@ module.exports = {
     'CAN-BLOCK-RELOAD': true,
     'CAN-SKIP-UNTIL': 12,
     'PART-HOLD-BACK': 1,
-    'HOLD-BACK': 2
+    'HOLD-BACK': 12
   },
   targetDuration: 4
 };

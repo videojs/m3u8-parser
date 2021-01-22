@@ -7,7 +7,7 @@ module.exports = {
   mediaSequence: 266,
   preloadHints: [
     {TYPE: 'PART', URI: 'filePart273.3.mp4'},
-    {TYPE: 'PART', URI: 'filePart273.4.mp4'}
+    {'TYPE': 'PART', 'URI': 'filePart273.4.mp4', 'BYTERANGE-LENGTH': 10, 'BYTERANGE-START': 0}
   ],
   renditionReports: [
     {'LAST-MSN': 273, 'LAST-PART': 2, 'URI': '../1M/waitForMSN.php'},
@@ -16,6 +16,7 @@ module.exports = {
   partInf: {
     'PART-TARGET': 0.33334
   },
+  partTargetDuration: 0.33334,
   parts: [
     {
       DURATION: 0.33334,
@@ -199,7 +200,7 @@ module.exports = {
     'CAN-BLOCK-RELOAD': true,
     'CAN-SKIP-UNTIL': 12,
     'PART-HOLD-BACK': 1,
-    'HOLD-BACK': 2
+    'HOLD-BACK': 12
   },
   targetDuration: 4
 };

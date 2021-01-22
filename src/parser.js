@@ -6,6 +6,55 @@ import decodeB64ToUint8Array from '@videojs/vhs-utils/es/decode-b64-to-uint8-arr
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
 
+// set SERVER-CONTROL hold back based upon targetDuration and partTargetDuration
+// we need this helper because defaults are based upon targetDuration and
+// partTargetDuration being set, but they may not be if SERVER-CONTROL appears before
+// target durations are set.
+const setHoldBack = function(manifest) {
+  const {serverControl, targetDuration, partTargetDuration} = manifest;
+
+  if (!serverControl) {
+    return;
+  }
+
+  const tag = '#EXT-X-SERVER-CONTROL';
+  const hb = 'HOLD-BACK';
+  const phb = 'PART-HOLD-BACK';
+  const minTargetDuration = targetDuration && targetDuration * 3;
+  const minPartDuration = partTargetDuration && partTargetDuration * 2;
+
+  if (targetDuration && !serverControl.hasOwnProperty(hb)) {
+    serverControl[hb] = minTargetDuration;
+    this.trigger('info', {
+      message: `${tag} defaulting ${hb} to targetDuration * 3 (${minTargetDuration}).`
+    });
+  }
+
+  if (minTargetDuration && serverControl[hb] < minTargetDuration) {
+    this.trigger('warn', {
+      message: `${tag} clamping ${hb} (${serverControl[hb]}) to targetDuration * 3 (${minTargetDuration})`
+    });
+    serverControl[hb] = minTargetDuration;
+  }
+
+  // default no part hold back to part target duration * 3
+  if (partTargetDuration && !serverControl.hasOwnProperty(phb)) {
+    serverControl[phb] = partTargetDuration * 3;
+    this.trigger('info', {
+      message: `${tag} defaulting ${phb} to partTargetDuration * 3 (${serverControl[phb]}).`
+    });
+  }
+
+  // if part hold back is too small default it to part target duration * 2
+  if (partTargetDuration && serverControl[phb] < (minPartDuration)) {
+    this.trigger('warn', {
+      message: `${tag} clamping ${phb} (${serverControl[phb]}) to partTargetDuration * 2 (${minPartDuration}).`
+    });
+
+    serverControl[phb] = minPartDuration;
+  }
+};
+
 /**
  * A parser for M3U8 files. The current interpretation of the input is
  * exposed as a property `manifest` on parser objects. It's just two lines to
@@ -353,6 +402,8 @@ export default class Parser extends Stream {
                 return;
               }
               this.manifest.targetDuration = entry.duration;
+
+              setHoldBack.call(this, this.manifest);
             },
             totalduration() {
               if (!isFinite(entry.duration) || entry.duration < 0) {
@@ -386,24 +437,114 @@ export default class Parser extends Stream {
             },
             'skip'() {
               this.manifest.skip = entry.attributes;
+
+              if (!entry.attributes.hasOwnProperty('SKIPPED-SEGMENTS')) {
+                this.trigger('warn', {
+                  message: '#EXT-X-SKIP lacks required attribute: SKIPPED-SEGMENTS'
+                });
+              }
             },
             'part'() {
               this.manifest.parts = this.manifest.parts || [];
               this.manifest.parts.push(entry.attributes);
+              const missingAttributes = [];
+
+              ['URI', 'DURATION'].forEach(function(k) {
+                if (!entry.attributes.hasOwnProperty(k)) {
+                  missingAttributes.push(k);
+                }
+              });
+
+              if (missingAttributes.length) {
+                const index = this.manifest.parts.length - 1;
+
+                this.trigger('warn', {
+                  message: `#EXT-X-PART #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
+                });
+              }
+
+              if (this.manifest.renditionReports) {
+                this.manifest.renditionReports.forEach((r, i) => {
+                  if (!r.hasOwnProperty('LAST-PART')) {
+                    this.trigger('warn', {
+                      message: `#EXT-X-RENDITION-REPORT #${i} lacks required attribute(s): LAST-PART`
+                    });
+                  }
+                });
+              }
             },
             'server-control'() {
-              this.manifest.serverControl = entry.attributes;
+              const attrs = entry.attributes;
+
+              this.manifest.serverControl = attrs;
+              if (!attrs.hasOwnProperty('CAN-BLOCK-RELOAD')) {
+                this.manifest.serverControl['CAN-BLOCK-RELOAD'] = false;
+                this.trigger('info', {
+                  message: '#EXT-X-SERVER-CONTROL defaulting CAN-BLOCK-RELOAD to false'
+                });
+              }
+              setHoldBack.call(this, this.manifest);
+
+              if (attrs['CAN-SKIP-DATERANGES'] && !attrs.hasOwnProperty('CAN-SKIP-UNTIL')) {
+                this.trigger('warn', {
+                  message: '#EXT-X-SERVER-CONTROL lacks required attribute CAN-SKIP-UNTIL which is required when CAN-SKIP-DATERANGES is set'
+                });
+
+              }
             },
             'preload-hint'() {
               this.manifest.preloadHints = this.manifest.preloadHints || [];
               this.manifest.preloadHints.push(entry.attributes);
+
+              const missingAttributes = [];
+
+              ['TYPE', 'URI'].forEach(function(k) {
+                if (!entry.attributes.hasOwnProperty(k)) {
+                  missingAttributes.push(k);
+                }
+              });
+
+              if (missingAttributes.length) {
+                const index = this.manifest.preloadHints.length - 1;
+
+                this.trigger('warn', {
+                  message: `#EXT-X-PRELOAD-HINT #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
+                });
+              }
             },
             'rendition-report'() {
               this.manifest.renditionReports = this.manifest.renditionReports || [];
               this.manifest.renditionReports.push(entry.attributes);
+              const index = this.manifest.renditionReports.length - 1;
+              const missingAttributes = [];
+              const warning = `#EXT-X-RENDITION-REPORT #${index} lacks required attribute(s):`;
+
+              ['LAST-MSN', 'URI'].forEach(function(k) {
+                if (!entry.attributes.hasOwnProperty(k)) {
+                  missingAttributes.push(k);
+                }
+              });
+
+              if (this.manifest.parts && !entry.attributes['LAST-PART']) {
+                missingAttributes.push('LAST-PART');
+              }
+
+              if (missingAttributes.length) {
+                this.trigger('warn', {message: `${warning} ${missingAttributes.join(', ')}`});
+              }
             },
             'part-inf'() {
               this.manifest.partInf = entry.attributes;
+
+              if (!entry.attributes.hasOwnProperty('PART-TARGET')) {
+                this.trigger('warn', {
+                  message: '#EXT-X-PART-INF lacks required attribute: PART-TARGET'
+                });
+              } else {
+                this.manifest.partTargetDuration = entry.attributes['PART-TARGET'];
+              }
+
+              setHoldBack.call(this, this.manifest);
             }
           })[entry.tagType] || noop).call(self);
         },

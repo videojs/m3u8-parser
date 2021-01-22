@@ -383,29 +383,422 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
-  QUnit.module('warn/info');
+  QUnit.module('warn/info', {
+    beforeEach() {
+      this.warnings = [];
+      this.infos = [];
 
-  QUnit.test('triggers warning for missing EXT-X-START TIME-OFFSET attribute', function(assert) {
+      this.parser.on('warn', (warn) => this.warnings.push(warn.message));
+      this.parser.on('info', (info) => this.infos.push(info.message));
 
-    const manifest = [
+    }
+  });
+  QUnit.test('warn when #EXT-X-TARGETDURATION is invalid', function(assert) {
+    this.parser.push([
       '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:foo',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'ignoring invalid target duration: undefined'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-START missing TIME-OFFSET attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
       '#EXT-X-TARGETDURATION:10',
       '#EXT-X-START:PRECISE=YES',
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST'
-    ].join('\n');
-    let warning;
-
-    this.parser.on('warn', function(warn) {
-      warning = warn;
-    });
-    this.parser.push(manifest);
+    ].join('\n'));
     this.parser.end();
 
-    assert.ok(warning, 'a warning was triggered');
-    assert.ok((/ignoring start/).test(warning.message), 'message is about start tag');
+    assert.deepEqual(
+      this.warnings,
+      ['ignoring start declaration without appropriate attribute list'],
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+
     assert.strictEqual(typeof this.parser.manifest.start, 'undefined', 'does not parse start');
+  });
+
+  QUnit.test('warning when #EXT-X-SKIP missing SKIPPED-SEGMENTS attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-SKIP:foo=bar',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.deepEqual(
+      this.warnings,
+      ['#EXT-X-SKIP lacks required attribute: SKIPPED-SEGMENTS'],
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-PART missing URI/DURATION attributes', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART:DURATION=1',
+      '#EXT-X-PART:URI=2',
+      '#EXT-X-PART:foo=bar',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-PART #0 lacks required attribute(s): URI',
+      '#EXT-X-PART #1 lacks required attribute(s): DURATION',
+      '#EXT-X-PART #2 lacks required attribute(s): URI, DURATION'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-PRELOAD-HINT missing TYPE/URI attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PRELOAD-HINT:TYPE=foo',
+      '#EXT-X-PRELOAD-HINT:URI=foo',
+      '#EXT-X-PRELOAD-HINT:foo=bar',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-PRELOAD-HINT #0 lacks required attribute(s): URI',
+      '#EXT-X-PRELOAD-HINT #1 lacks required attribute(s): TYPE',
+      '#EXT-X-PRELOAD-HINT #2 lacks required attribute(s): TYPE, URI'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warn when #EXT-X-RENDITION-REPORT missing LAST-MSN/URI attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-RENDITION-REPORT:URI=foo',
+      '#EXT-X-RENDITION-REPORT:LAST-MSN=2',
+      '#EXT-X-RENDITION-REPORT:foo=bar',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-RENDITION-REPORT #0 lacks required attribute(s): LAST-MSN',
+      '#EXT-X-RENDITION-REPORT #1 lacks required attribute(s): URI',
+      '#EXT-X-RENDITION-REPORT #2 lacks required attribute(s): LAST-MSN, URI'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-RENDITION-REPORT missing LAST-PART attribute with parts', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-RENDITION-REPORT:URI=foo,LAST-MSN=4',
+      '#EXT-X-PART:URI=foo,DURATION=10',
+      '#EXT-X-RENDITION-REPORT:URI=foo,LAST-MSN=4',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-RENDITION-REPORT #0 lacks required attribute(s): LAST-PART',
+      '#EXT-X-RENDITION-REPORT #1 lacks required attribute(s): LAST-PART'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-PART-INF missing PART-TARGET attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:URI=foo',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-PART-INF lacks required attribute: PART-TARGET'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-SERVER-CONTROL missing CAN-SKIP-UNTIL with CAN-SKIP-DATERANGES attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-SERVER-CONTROL:CAN-BLOCK-RELOAD=NO,HOLD-BACK=30,CAN-SKIP-DATERANGES=YES',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-SERVER-CONTROL lacks required attribute CAN-SKIP-UNTIL which is required when CAN-SKIP-DATERANGES is set'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warn when #EXT-X-SERVER-CONTROL HOLD-BACK and PART-HOLD-BACK too low', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:PART-TARGET=1',
+      '#EXT-X-SERVER-CONTROL:CAN-BLOCK-RELOAD=YES,HOLD-BACK=1,PART-HOLD-BACK=0.5',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-SERVER-CONTROL clamping HOLD-BACK (1) to targetDuration * 3 (30)',
+      '#EXT-X-SERVER-CONTROL clamping PART-HOLD-BACK (0.5) to partTargetDuration * 2 (2).'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warn when #EXT-X-SERVER-CONTROL before target durations HOLD-BACK/PART-HOLD-BACK too low', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-SERVER-CONTROL:CAN-BLOCK-RELOAD=YES,HOLD-BACK=1,PART-HOLD-BACK=0.5',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:PART-TARGET=1',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-SERVER-CONTROL clamping HOLD-BACK (1) to targetDuration * 3 (30)',
+      '#EXT-X-SERVER-CONTROL clamping PART-HOLD-BACK (0.5) to partTargetDuration * 2 (2).'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('info when #EXT-X-SERVER-CONTROL sets defaults', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:PART-TARGET=1',
+      '#EXT-X-SERVER-CONTROL:foo=bar',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const infos = [
+      '#EXT-X-SERVER-CONTROL defaulting CAN-BLOCK-RELOAD to false',
+      '#EXT-X-SERVER-CONTROL defaulting HOLD-BACK to targetDuration * 3 (30).',
+      '#EXT-X-SERVER-CONTROL defaulting PART-HOLD-BACK to partTargetDuration * 3 (3).'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      [],
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      infos,
+      'info as expected'
+    );
+  });
+
+  QUnit.test('info when #EXT-X-SERVER-CONTROL before target durations and sets defaults', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-SERVER-CONTROL:foo=bar',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:PART-TARGET=1',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const infos = [
+      '#EXT-X-SERVER-CONTROL defaulting CAN-BLOCK-RELOAD to false',
+      '#EXT-X-SERVER-CONTROL defaulting HOLD-BACK to targetDuration * 3 (30).',
+      '#EXT-X-SERVER-CONTROL defaulting PART-HOLD-BACK to partTargetDuration * 3 (3).'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      [],
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      infos,
+      'info as expected'
+    );
   });
 
   QUnit.module('integration');
