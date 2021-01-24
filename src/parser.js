@@ -92,6 +92,8 @@ export default class Parser extends Stream {
     let currentMap;
     // if specified, the active decryption key
     let key;
+    // the current segment sequence number
+    let seqNum = 0;
     const noop = function() {};
     const defaultMediaGroups = {
       'AUDIO': {},
@@ -286,6 +288,7 @@ export default class Parser extends Stream {
                 return;
               }
               this.manifest.mediaSequence = entry.number;
+              seqNum = entry.number;
             },
             'discontinuity-sequence'() {
               if (!isFinite(entry.number)) {
@@ -313,6 +316,9 @@ export default class Parser extends Stream {
               }
               if (entry.byterange) {
                 currentMap.byterange = entry.byterange;
+              }
+              if (key) {
+                currentMap.key = this.copyKey(key, seqNum);
               }
             },
             'stream-inf'() {
@@ -557,7 +563,7 @@ export default class Parser extends Stream {
           }
           // annotate with encryption information, if necessary
           if (key) {
-            currentUri.key = key;
+            currentUri.key = this.copyKey(key, seqNum);
           }
           currentUri.timeline = currentTimeline;
           // annotate with initialization segment information, if necessary
@@ -567,6 +573,7 @@ export default class Parser extends Stream {
 
           // prepare for the next URI
           currentUri = {};
+          seqNum = seqNum + 1;
         },
         comment() {
           // comments are not important for playback
@@ -625,5 +632,24 @@ export default class Parser extends Stream {
    */
   addTagMapper(options) {
     this.parseStream.addTagMapper(options);
+  }
+
+  /**
+   * Generate a copy of an encryption key tag, filling in the IV if needed
+   *
+   * @param {Object}  key     the key to copy
+   * @param {int}     seqNum  the sequence number to use for the IV if needed
+   * @return                  a copy of the key
+   */
+  copyKey(key, seqNum) {
+    const copy = {
+      method: key.method,
+      uri: key.uri,
+      // if the media sequence is greater than 2^32, the IV will be incorrect
+      // assuming 10s segments, that would be about 1300 years
+      iv: key.iv || new Uint32Array([0, 0, 0, seqNum])
+    };
+
+    return copy;
   }
 }

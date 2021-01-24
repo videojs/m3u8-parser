@@ -9,7 +9,8 @@ module.exports = {
       timeline: 0,
       key: {
         method: 'AES-128',
-        uri: 'https://priv.example.com/key.php?r=52'
+        uri: 'https://priv.example.com/key.php?r=52',
+        iv: new Uint32Array([0, 0, 0, 7794])
       },
       uri: 'http://media.example.com/fileSequence52-A.ts'
     },
@@ -18,7 +19,8 @@ module.exports = {
       timeline: 0,
       key: {
         method: 'AES-128',
-        uri: 'https://priv.example.com/key.php?r=52'
+        uri: 'https://priv.example.com/key.php?r=52',
+        iv: new Uint32Array([0, 0, 0, 7795])
       },
       uri: 'http://media.example.com/fileSequence52-B.ts'
     },
@@ -27,7 +29,8 @@ module.exports = {
       timeline: 0,
       key: {
         method: 'AES-128',
-        uri: 'https://priv.example.com/key.php?r=52'
+        uri: 'https://priv.example.com/key.php?r=52',
+        iv: new Uint32Array([0, 0, 0, 7796])
       },
       uri: 'http://media.example.com/fileSequence52-C.ts'
     },
@@ -36,7 +39,8 @@ module.exports = {
       timeline: 0,
       key: {
         method: 'AES-128',
-        uri: 'https://priv.example.com/key.php?r=53'
+        uri: 'https://priv.example.com/key.php?r=53',
+        iv: new Uint32Array([0, 0, 0, 7797])
       },
       uri: 'http://media.example.com/fileSequence53-A.ts'
     },
