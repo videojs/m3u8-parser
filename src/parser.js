@@ -116,6 +116,10 @@ export default class Parser extends Stream {
     // previous segment
     let lastByterangeEnd = 0;
 
+    this.on('end', () => {
+      this.manifest.preloadSegment = currentUri;
+    });
+
     // update the manifest with the m3u8 entry from the parse stream
     this.parseStream.on('data', function(entry) {
       let mediaGroup;
@@ -441,8 +445,12 @@ export default class Parser extends Stream {
               }
             },
             'part'() {
-              this.manifest.parts = this.manifest.parts || [];
-              this.manifest.parts.push(entry.attributes);
+              // parts are always specifed before a segment
+              const segmentIndex = this.manifest.segments.length;
+
+              currentUri.parts = currentUri.parts || [];
+              currentUri.parts.push(entry.attributes);
+
               const missingAttributes = [];
 
               ['URI', 'DURATION'].forEach(function(k) {
@@ -452,10 +460,10 @@ export default class Parser extends Stream {
               });
 
               if (missingAttributes.length) {
-                const index = this.manifest.parts.length - 1;
+                const partIndex = currentUri.parts.length - 1;
 
                 this.trigger('warn', {
-                  message: `#EXT-X-PART #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
+                  message: `#EXT-X-PART #${partIndex} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
               }
 
@@ -489,8 +497,11 @@ export default class Parser extends Stream {
               }
             },
             'preload-hint'() {
-              this.manifest.preloadHints = this.manifest.preloadHints || [];
-              this.manifest.preloadHints.push(entry.attributes);
+              // parts are always specifed before a segment
+              const segmentIndex = this.manifest.segments.length;
+
+              currentUri.preloadHints = currentUri.preloadHints || [];
+              currentUri.preloadHints.push(entry.attributes);
 
               const missingAttributes = [];
 
@@ -501,10 +512,10 @@ export default class Parser extends Stream {
               });
 
               if (missingAttributes.length) {
-                const index = this.manifest.preloadHints.length - 1;
+                const index = currentUri.preloadHints.length - 1;
 
                 this.trigger('warn', {
-                  message: `#EXT-X-PRELOAD-HINT #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
+                  message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
               }
             },
@@ -603,6 +614,8 @@ export default class Parser extends Stream {
   end() {
     // flush any buffered input
     this.lineStream.push('\n');
+
+    this.trigger('end');
   }
   /**
    * Add an additional parser for non-standard tags
