@@ -117,6 +117,13 @@ export default class Parser extends Stream {
     let lastByterangeEnd = 0;
 
     this.on('end', () => {
+      if (!currentUri.map && currentMap) {
+        currentUri.map = currentMap;
+      }
+
+      if (!currentUri.key && key) {
+        currentUri.key = key;
+      }
       this.manifest.preloadSegment = currentUri;
     });
 
