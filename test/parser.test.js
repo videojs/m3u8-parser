@@ -492,9 +492,9 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PART #0 lacks required attribute(s): URI',
-      '#EXT-X-PART #1 lacks required attribute(s): DURATION',
-      '#EXT-X-PART #2 lacks required attribute(s): URI, DURATION'
+      '#EXT-X-PART #0 for segment #0 lacks required attribute(s): URI',
+      '#EXT-X-PART #1 for segment #0 lacks required attribute(s): DURATION',
+      '#EXT-X-PART #2 for segment #0 lacks required attribute(s): URI, DURATION'
     ];
 
     assert.deepEqual(
@@ -526,9 +526,9 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PRELOAD-HINT #0 lacks required attribute(s): URI',
-      '#EXT-X-PRELOAD-HINT #1 lacks required attribute(s): TYPE',
-      '#EXT-X-PRELOAD-HINT #2 lacks required attribute(s): TYPE, URI'
+      '#EXT-X-PRELOAD-HINT #0 for segment #0 lacks required attribute(s): URI',
+      '#EXT-X-PRELOAD-HINT #1 for segment #0 lacks required attribute(s): TYPE',
+      '#EXT-X-PRELOAD-HINT #2 for segment #0 lacks required attribute(s): TYPE, URI'
     ];
 
     assert.deepEqual(

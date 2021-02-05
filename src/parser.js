@@ -92,6 +92,7 @@ export default class Parser extends Stream {
     let currentMap;
     // if specified, the active decryption key
     let key;
+    let hasParts = false;
     const noop = function() {};
     const defaultMediaGroups = {
       'AUDIO': {},
@@ -462,6 +463,7 @@ export default class Parser extends Stream {
               }
             },
             'part'() {
+              hasParts = true;
               // parts are always specifed before a segment
               const segmentIndex = this.manifest.segments.length;
 
@@ -549,7 +551,7 @@ export default class Parser extends Stream {
                 }
               });
 
-              if (this.manifest.parts && !entry.attributes['LAST-PART']) {
+              if (hasParts && !entry.attributes['LAST-PART']) {
                 missingAttributes.push('LAST-PART');
               }
 
