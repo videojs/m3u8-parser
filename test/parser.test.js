@@ -6,6 +6,7 @@ import {Parser} from '../src';
 QUnit.module('m3u8s', function(hooks) {
   hooks.beforeEach(function() {
     this.parser = new Parser();
+    QUnit.dump.maxDepth = 8;
   });
 
   QUnit.module('general');

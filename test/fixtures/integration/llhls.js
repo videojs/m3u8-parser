@@ -24,7 +24,7 @@ module.exports = {
     ],
     preloadHints: [
       {TYPE: 'PART', URI: 'filePart273.3.mp4'},
-      {'TYPE': 'PART', 'URI': 'filePart273.4.mp4', 'BYTERANGE-LENGTH': 10, 'BYTERANGE-START': 0}
+      {TYPE: 'PART', URI: 'filePart273.4.mp4'}
     ],
     timeline: 0
   },
@@ -134,7 +134,6 @@ module.exports = {
           URI: 'filePart271.10.mp4'
         },
         {
-          BYTERANGE: '587500@522828',
           DURATION: 0.33334,
           URI: 'filePart271.11.mp4'
         }

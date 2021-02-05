@@ -102,7 +102,6 @@ module.exports = {
           URI: 'filePart271.10.mp4'
         },
         {
-          BYTERANGE: '587500@522828',
           DURATION: 0.33334,
           URI: 'filePart271.11.mp4'
         }

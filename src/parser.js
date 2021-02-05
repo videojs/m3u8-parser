@@ -116,6 +116,8 @@ export default class Parser extends Stream {
     // to provide the offset, in which case it defaults to the next byte after the
     // previous segment
     let lastByterangeEnd = 0;
+    // keep track of the last seen part's byte range end.
+    let lastPartByterangeEnd = 0;
 
     this.on('end', () => {
       // only add preloadSegment if we don't yet have a uri for it.
@@ -470,6 +472,19 @@ export default class Parser extends Stream {
               currentUri.parts = currentUri.parts || [];
               currentUri.parts.push(entry.attributes);
 
+              if (entry.attributes.byterange) {
+                const byterange = entry.attributes.byterange;
+
+                if (!byterange.hasOwnProperty('offset')) {
+                  const isFirstPart = currentUri.parts.length === 1;
+
+                  // use last segment byterange end if we are the first part.
+                  // otherwise use lastPartByterangeEnd
+                  byterange.offset = isFirstPart ? lastByterangeEnd : lastPartByterangeEnd;
+                }
+                lastPartByterangeEnd = byterange.offset + byterange.length;
+              }
+
               const missingAttributes = [];
 
               ['URI', 'DURATION'].forEach(function(k) {
@@ -521,6 +536,20 @@ export default class Parser extends Stream {
 
               currentUri.preloadHints = currentUri.preloadHints || [];
               currentUri.preloadHints.push(entry.attributes);
+
+              if (entry.attributes.byterange) {
+                const byterange = entry.attributes.byterange;
+                const isFirstPart = currentUri.parts &&
+                  currentUri.parts.length === 0 &&
+                  currentUri.preloadHints.length === 1;
+
+                if (!byterange.hasOwnProperty('offset')) {
+                  // use last segment byterange end if we are the first part.
+                  // otherwise use lastPartByterangeEnd
+                  byterange.offset = isFirstPart ? lastByterangeEnd : lastPartByterangeEnd;
+                }
+                lastPartByterangeEnd = byterange.offset + byterange.length;
+              }
 
               const missingAttributes = [];
 
