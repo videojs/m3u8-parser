@@ -117,6 +117,11 @@ export default class Parser extends Stream {
     let lastByterangeEnd = 0;
 
     this.on('end', () => {
+      // only add preloadSegment if we don't yet have a uri for it.
+      // and we actually have parts/preloadHints
+      if (currentUri.uri || (!currentUri.parts && !currentUri.preloadHints)) {
+        return;
+      }
       if (!currentUri.map && currentMap) {
         currentUri.map = currentMap;
       }
@@ -124,6 +129,11 @@ export default class Parser extends Stream {
       if (!currentUri.key && key) {
         currentUri.key = key;
       }
+
+      if (!currentUri.timeline && typeof currentTimeline === 'number') {
+        currentUri.timeline = currentTimeline;
+      }
+
       this.manifest.preloadSegment = currentUri;
     });
 
