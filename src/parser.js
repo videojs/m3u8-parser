@@ -558,13 +558,27 @@ export default class Parser extends Stream {
                   missingAttributes.push(k);
                 }
               });
+              const index = currentUri.preloadHints.length - 1;
 
               if (missingAttributes.length) {
-                const index = currentUri.preloadHints.length - 1;
 
                 this.trigger('warn', {
                   message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
+              }
+
+              if (entry.attributes.TYPE) {
+                // search through all preload hints except for the current one for
+                // a duplicate type.
+                for (let i = 0; i < currentUri.preloadHints.length - 1; i++) {
+                  const hint = currentUri.preloadHints[i];
+
+                  if (hint.TYPE && hint.TYPE === entry.attributes.TYPE) {
+                    this.trigger('warn', {
+                      message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} has the same TYPE ${entry.attributes.TYPE} as preload hint #${i}`
+                    });
+                  }
+                }
               }
             },
             'rendition-report'() {

@@ -6,6 +6,8 @@ import Stream from '@videojs/vhs-utils/es/stream.js';
 const TAB = String.fromCharCode(0x09);
 
 const parseByterange = function(byterangeString) {
+  // optinally match and capture 0+ digits before `@`
+  // optinally match and capture 0+ digits after `@`
   const match = /([0-9.]*)?@?([0-9.]*)?/.exec(byterangeString || '');
   const result = {};
 

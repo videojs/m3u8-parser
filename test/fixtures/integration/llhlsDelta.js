@@ -9,7 +9,7 @@ module.exports = {
     timeline: 0,
     preloadHints: [
       {TYPE: 'PART', URI: 'filePart273.4.mp4'},
-      {TYPE: 'PART', URI: 'filePart273.5.mp4'}
+      {TYPE: 'MAP', URI: 'file-init.mp4'}
     ],
     parts: [
       {

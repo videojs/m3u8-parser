@@ -545,6 +545,37 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
+  QUnit.test('warns when we get #EXT-X-PRELOAD-HINT with the same TYPE', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PRELOAD-HINT:TYPE=foo,URI=foo1',
+      '#EXT-X-PRELOAD-HINT:TYPE=foo,URI=foo2',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-PRELOAD-HINT #1 for segment #0 has the same TYPE foo as preload hint #0'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
   QUnit.test('warn when #EXT-X-RENDITION-REPORT missing LAST-MSN/URI attribute', function(assert) {
     this.parser.push([
       '#EXT-X-VERSION:3',

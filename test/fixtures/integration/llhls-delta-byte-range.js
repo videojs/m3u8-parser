@@ -29,8 +29,8 @@ module.exports = {
       {
         'BYTERANGE-LENGTH': 5000,
         'BYTERANGE-START': 8377660,
-        'TYPE': 'PART',
-        'URI': 'filePart273.4.mp4',
+        'TYPE': 'MAP',
+        'URI': 'file-init.mp4',
         'byterange': {
           length: 5000,
           offset: 8377660
@@ -38,8 +38,8 @@ module.exports = {
       },
       {
         'BYTERANGE-LENGTH': 5000,
-        'TYPE': 'PART',
-        'URI': 'filePart273.4.mp4',
+        'TYPE': 'FOO',
+        'URI': 'foo.mp4',
         'byterange': {
           length: 5000,
           offset: 8382660

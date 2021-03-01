@@ -24,7 +24,7 @@ module.exports = {
     ],
     preloadHints: [
       {TYPE: 'PART', URI: 'filePart273.3.mp4'},
-      {TYPE: 'PART', URI: 'filePart273.4.mp4'}
+      {TYPE: 'MAP', URI: 'file-init.mp4'}
     ],
     timeline: 0
   },
