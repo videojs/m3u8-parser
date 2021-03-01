@@ -476,11 +476,7 @@ export default class Parser extends Stream {
                 const byterange = entry.attributes.byterange;
 
                 if (!byterange.hasOwnProperty('offset')) {
-                  const isFirstPart = currentUri.parts.length === 1;
-
-                  // use last segment byterange end if we are the first part.
-                  // otherwise use lastPartByterangeEnd
-                  byterange.offset = isFirstPart ? lastByterangeEnd : lastPartByterangeEnd;
+                  byterange.offset = lastPartByterangeEnd;
                 }
                 lastPartByterangeEnd = byterange.offset + byterange.length;
               }
@@ -539,16 +535,16 @@ export default class Parser extends Stream {
 
               if (entry.attributes.byterange) {
                 const byterange = entry.attributes.byterange;
-                const isFirstPart = currentUri.parts &&
-                  currentUri.parts.length === 0 &&
-                  currentUri.preloadHints.length === 1;
 
                 if (!byterange.hasOwnProperty('offset')) {
-                  // use last segment byterange end if we are the first part.
-                  // otherwise use lastPartByterangeEnd
-                  byterange.offset = isFirstPart ? lastByterangeEnd : lastPartByterangeEnd;
+                  byterange.offset = 0;
+                  if (entry.attributes.TYPE && entry.attributes.TYPE === 'PART') {
+                    // use last segment byterange end if we are the first part.
+                    // otherwise use lastPartByterangeEnd
+                    byterange.offset = lastPartByterangeEnd;
+                    lastPartByterangeEnd = byterange.offset + byterange.length;
+                  }
                 }
-                lastPartByterangeEnd = byterange.offset + byterange.length;
               }
 
               const missingAttributes = [];
@@ -637,6 +633,9 @@ export default class Parser extends Stream {
           if (currentMap) {
             currentUri.map = currentMap;
           }
+
+          // reset the last byterange end as it needs to be 0 between parts
+          lastPartByterangeEnd = 0;
 
           // prepare for the next URI
           currentUri = {};

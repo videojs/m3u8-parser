@@ -12,7 +12,7 @@ module.exports = {
         URI: 'hls_450k_video.ts',
         byterange: {
           length: 22444,
-          offset: 8397772
+          offset: 0
         }
       }
     ],
@@ -20,10 +20,10 @@ module.exports = {
       {
         'BYTERANGE-LENGTH': 2000,
         'TYPE': 'PART',
-        'URI': 'filePart273.3.mp4',
+        'URI': 'filePart273.1.mp4',
         'byterange': {
           length: 2000,
-          offset: 8420216
+          offset: 22444
         }
       },
       {
@@ -42,7 +42,7 @@ module.exports = {
         'URI': 'foo.mp4',
         'byterange': {
           length: 5000,
-          offset: 8382660
+          offset: 0
         }
       }
     ],
@@ -80,7 +80,7 @@ module.exports = {
           URI: 'hls_450k_video.ts',
           byterange: {
             length: 45553,
-            offset: 8021772
+            offset: 0
           }
         },
         {
