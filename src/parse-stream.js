@@ -241,14 +241,9 @@ export default class ParseStream extends Stream {
       }
       match = (/^#EXT-X-BYTERANGE:?(.*)?$/).exec(newLine);
       if (match) {
-        event = {
+        event = Object.assign(parseByterange(match[1]), {
           type: 'tag',
           tagType: 'byterange'
-        };
-        const result = parseByterange(match[1]);
-
-        Object.keys(result).forEach(function(k) {
-          event[k] = result[k];
         });
         this.trigger('data', event);
         return;
@@ -279,12 +274,7 @@ export default class ParseStream extends Stream {
             event.uri = attributes.URI;
           }
           if (attributes.BYTERANGE) {
-            const result = parseByterange(attributes.BYTERANGE);
-
-            event.byterange = {};
-            Object.keys(result).forEach(function(k) {
-              event.byterange[k] = result[k];
-            });
+            event.byterange = parseByterange(attributes.BYTERANGE);
           }
         }
 
@@ -485,12 +475,7 @@ export default class ParseStream extends Stream {
         });
 
         if (event.attributes.hasOwnProperty('BYTERANGE')) {
-          const result = parseByterange(event.attributes.BYTERANGE);
-
-          event.attributes.byterange = {};
-          Object.keys(result).forEach(function(k) {
-            event.attributes.byterange[k] = result[k];
-          });
+          event.attributes.byterange = parseByterange(event.attributes.BYTERANGE);
         }
 
         this.trigger('data', event);
