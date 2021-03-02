@@ -466,7 +466,7 @@ QUnit.module('m3u8s', function(hooks) {
 
     assert.deepEqual(
       this.warnings,
-      ['#EXT-X-SKIP lacks required attribute: SKIPPED-SEGMENTS'],
+      ['#EXT-X-SKIP lacks required attribute(s): SKIPPED-SEGMENTS'],
       'warnings as expected'
     );
 
@@ -657,7 +657,7 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PART-INF lacks required attribute: PART-TARGET'
+      '#EXT-X-PART-INF lacks required attribute(s): PART-TARGET'
     ];
 
     assert.deepEqual(

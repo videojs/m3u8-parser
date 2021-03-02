@@ -6,6 +6,20 @@ import decodeB64ToUint8Array from '@videojs/vhs-utils/es/decode-b64-to-uint8-arr
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
 
+const camelCase = (str) => str
+  .toLowerCase()
+  .replace(/-(\w)/g, (a) => a[1].toUpperCase());
+
+const camelCaseKeys = function(attributes) {
+  const result = {};
+
+  Object.keys(attributes).forEach(function(key) {
+    result[camelCase(key)] = attributes[key];
+  });
+
+  return result;
+};
+
 // set SERVER-CONTROL hold back based upon targetDuration and partTargetDuration
 // we need this helper because defaults are based upon targetDuration and
 // partTargetDuration being set, but they may not be if SERVER-CONTROL appears before
@@ -18,21 +32,21 @@ const setHoldBack = function(manifest) {
   }
 
   const tag = '#EXT-X-SERVER-CONTROL';
-  const hb = 'HOLD-BACK';
-  const phb = 'PART-HOLD-BACK';
+  const hb = 'holdBack';
+  const phb = 'partHoldBack';
   const minTargetDuration = targetDuration && targetDuration * 3;
   const minPartDuration = partTargetDuration && partTargetDuration * 2;
 
   if (targetDuration && !serverControl.hasOwnProperty(hb)) {
     serverControl[hb] = minTargetDuration;
     this.trigger('info', {
-      message: `${tag} defaulting ${hb} to targetDuration * 3 (${minTargetDuration}).`
+      message: `${tag} defaulting HOLD-BACK to targetDuration * 3 (${minTargetDuration}).`
     });
   }
 
   if (minTargetDuration && serverControl[hb] < minTargetDuration) {
     this.trigger('warn', {
-      message: `${tag} clamping ${hb} (${serverControl[hb]}) to targetDuration * 3 (${minTargetDuration})`
+      message: `${tag} clamping HOLD-BACK (${serverControl[hb]}) to targetDuration * 3 (${minTargetDuration})`
     });
     serverControl[hb] = minTargetDuration;
   }
@@ -41,14 +55,14 @@ const setHoldBack = function(manifest) {
   if (partTargetDuration && !serverControl.hasOwnProperty(phb)) {
     serverControl[phb] = partTargetDuration * 3;
     this.trigger('info', {
-      message: `${tag} defaulting ${phb} to partTargetDuration * 3 (${serverControl[phb]}).`
+      message: `${tag} defaulting PART-HOLD-BACK to partTargetDuration * 3 (${serverControl[phb]}).`
     });
   }
 
   // if part hold back is too small default it to part target duration * 2
   if (partTargetDuration && serverControl[phb] < (minPartDuration)) {
     this.trigger('warn', {
-      message: `${tag} clamping ${phb} (${serverControl[phb]}) to partTargetDuration * 2 (${minPartDuration}).`
+      message: `${tag} clamping PART-HOLD-BACK (${serverControl[phb]}) to partTargetDuration * 2 (${minPartDuration}).`
     });
 
     serverControl[phb] = minPartDuration;
@@ -456,50 +470,41 @@ export default class Parser extends Stream {
               currentUri.cueIn = entry.data;
             },
             'skip'() {
-              this.manifest.skip = entry.attributes;
+              this.manifest.skip = camelCaseKeys(entry.attributes);
 
-              if (!entry.attributes.hasOwnProperty('SKIPPED-SEGMENTS')) {
-                this.trigger('warn', {
-                  message: '#EXT-X-SKIP lacks required attribute: SKIPPED-SEGMENTS'
-                });
-              }
+              this.warnOnMissingAttributes_(
+                '#EXT-X-SKIP',
+                entry.attributes,
+                ['SKIPPED-SEGMENTS']
+              );
             },
             'part'() {
               hasParts = true;
               // parts are always specifed before a segment
               const segmentIndex = this.manifest.segments.length;
+              const part = camelCaseKeys(entry.attributes);
 
               currentUri.parts = currentUri.parts || [];
-              currentUri.parts.push(entry.attributes);
+              currentUri.parts.push(part);
 
-              if (entry.attributes.byterange) {
-                const byterange = entry.attributes.byterange;
-
-                if (!byterange.hasOwnProperty('offset')) {
-                  byterange.offset = lastPartByterangeEnd;
+              if (part.byterange) {
+                if (!part.byterange.hasOwnProperty('offset')) {
+                  part.byterange.offset = lastPartByterangeEnd;
                 }
-                lastPartByterangeEnd = byterange.offset + byterange.length;
+                lastPartByterangeEnd = part.byterange.offset + part.byterange.length;
               }
 
-              const missingAttributes = [];
+              const partIndex = currentUri.parts.length - 1;
 
-              ['URI', 'DURATION'].forEach(function(k) {
-                if (!entry.attributes.hasOwnProperty(k)) {
-                  missingAttributes.push(k);
-                }
-              });
-
-              if (missingAttributes.length) {
-                const partIndex = currentUri.parts.length - 1;
-
-                this.trigger('warn', {
-                  message: `#EXT-X-PART #${partIndex} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
-                });
-              }
+              this.warnOnMissingAttributes_(
+                `#EXT-X-PART #${partIndex} for segment #${segmentIndex}`,
+                entry.attributes,
+                ['URI', 'DURATION']
+              );
 
               if (this.manifest.renditionReports) {
                 this.manifest.renditionReports.forEach((r, i) => {
-                  if (!r.hasOwnProperty('LAST-PART')) {
+                  if (!r.hasOwnProperty('lastPart')) {
                     this.trigger('warn', {
                       message: `#EXT-X-RENDITION-REPORT #${i} lacks required attribute(s): LAST-PART`
                     });
@@ -508,105 +513,96 @@ export default class Parser extends Stream {
               }
             },
             'server-control'() {
-              const attrs = entry.attributes;
+              const attrs = this.manifest.serverControl = camelCaseKeys(entry.attributes);
 
-              this.manifest.serverControl = attrs;
-              if (!attrs.hasOwnProperty('CAN-BLOCK-RELOAD')) {
-                this.manifest.serverControl['CAN-BLOCK-RELOAD'] = false;
+              if (!attrs.hasOwnProperty('canBlockReload')) {
+                attrs.canBlockReload = false;
                 this.trigger('info', {
                   message: '#EXT-X-SERVER-CONTROL defaulting CAN-BLOCK-RELOAD to false'
                 });
               }
               setHoldBack.call(this, this.manifest);
 
-              if (attrs['CAN-SKIP-DATERANGES'] && !attrs.hasOwnProperty('CAN-SKIP-UNTIL')) {
+              if (attrs.canSkipDateranges && !attrs.hasOwnProperty('canSkipUntil')) {
                 this.trigger('warn', {
                   message: '#EXT-X-SERVER-CONTROL lacks required attribute CAN-SKIP-UNTIL which is required when CAN-SKIP-DATERANGES is set'
                 });
-
               }
             },
             'preload-hint'() {
               // parts are always specifed before a segment
               const segmentIndex = this.manifest.segments.length;
+              const hint = camelCaseKeys(entry.attributes);
+              const isPart = hint.type && hint.type === 'PART';
 
               currentUri.preloadHints = currentUri.preloadHints || [];
-              currentUri.preloadHints.push(entry.attributes);
+              currentUri.preloadHints.push(hint);
 
-              if (entry.attributes.byterange) {
-                const byterange = entry.attributes.byterange;
+              if (hint.byterange) {
 
-                if (!byterange.hasOwnProperty('offset')) {
-                  byterange.offset = 0;
-                  if (entry.attributes.TYPE && entry.attributes.TYPE === 'PART') {
-                    // use last segment byterange end if we are the first part.
-                    // otherwise use lastPartByterangeEnd
-                    byterange.offset = lastPartByterangeEnd;
-                    lastPartByterangeEnd = byterange.offset + byterange.length;
+                if (!hint.byterange.hasOwnProperty('offset')) {
+                  // use last part byterange end or zero if not a part.
+                  hint.byterange.offset = isPart ? lastPartByterangeEnd : 0;
+                  if (isPart) {
+                    lastPartByterangeEnd = hint.byterange.offset + hint.byterange.length;
                   }
                 }
               }
-
-              const missingAttributes = [];
-
-              ['TYPE', 'URI'].forEach(function(k) {
-                if (!entry.attributes.hasOwnProperty(k)) {
-                  missingAttributes.push(k);
-                }
-              });
               const index = currentUri.preloadHints.length - 1;
 
-              if (missingAttributes.length) {
+              this.warnOnMissingAttributes_(
+                `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex}`,
+                entry.attributes,
+                ['TYPE', 'URI']
+              );
 
-                this.trigger('warn', {
-                  message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
-                });
+              if (!hint.type) {
+                return;
               }
+              // search through all preload hints except for the current one for
+              // a duplicate type.
+              for (let i = 0; i < currentUri.preloadHints.length - 1; i++) {
+                const otherHint = currentUri.preloadHints[i];
 
-              if (entry.attributes.TYPE) {
-                // search through all preload hints except for the current one for
-                // a duplicate type.
-                for (let i = 0; i < currentUri.preloadHints.length - 1; i++) {
-                  const hint = currentUri.preloadHints[i];
+                if (!otherHint.type) {
+                  continue;
+                }
 
-                  if (hint.TYPE && hint.TYPE === entry.attributes.TYPE) {
-                    this.trigger('warn', {
-                      message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} has the same TYPE ${entry.attributes.TYPE} as preload hint #${i}`
-                    });
-                  }
+                if (otherHint.type === hint.type) {
+                  this.trigger('warn', {
+                    message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} has the same TYPE ${hint.type} as preload hint #${i}`
+                  });
                 }
               }
             },
             'rendition-report'() {
+              const report = camelCaseKeys(entry.attributes);
+
               this.manifest.renditionReports = this.manifest.renditionReports || [];
-              this.manifest.renditionReports.push(entry.attributes);
+              this.manifest.renditionReports.push(report);
               const index = this.manifest.renditionReports.length - 1;
-              const missingAttributes = [];
-              const warning = `#EXT-X-RENDITION-REPORT #${index} lacks required attribute(s):`;
+              const required = ['LAST-MSN', 'URI'];
 
-              ['LAST-MSN', 'URI'].forEach(function(k) {
-                if (!entry.attributes.hasOwnProperty(k)) {
-                  missingAttributes.push(k);
-                }
-              });
-
-              if (hasParts && !entry.attributes['LAST-PART']) {
-                missingAttributes.push('LAST-PART');
+              if (hasParts) {
+                required.push('LAST-PART');
               }
 
-              if (missingAttributes.length) {
-                this.trigger('warn', {message: `${warning} ${missingAttributes.join(', ')}`});
-              }
+              this.warnOnMissingAttributes_(
+                `#EXT-X-RENDITION-REPORT #${index}`,
+                entry.attributes,
+                required
+              );
             },
             'part-inf'() {
-              this.manifest.partInf = entry.attributes;
+              this.manifest.partInf = camelCaseKeys(entry.attributes);
 
-              if (!entry.attributes.hasOwnProperty('PART-TARGET')) {
-                this.trigger('warn', {
-                  message: '#EXT-X-PART-INF lacks required attribute: PART-TARGET'
-                });
-              } else {
-                this.manifest.partTargetDuration = entry.attributes['PART-TARGET'];
+              this.warnOnMissingAttributes_(
+                '#EXT-X-PART-INF',
+                entry.attributes,
+                ['PART-TARGET']
+              );
+              if (this.manifest.partInf.partTarget) {
+                this.manifest.partTargetDuration = this.manifest.partInf.partTarget;
               }
 
               setHoldBack.call(this, this.manifest);
@@ -656,6 +652,20 @@ export default class Parser extends Stream {
         }
       })[entry.type].call(self);
     });
+  }
+
+  warnOnMissingAttributes_(identifier, attributes, required) {
+    const missing = [];
+
+    required.forEach(function(key) {
+      if (!attributes.hasOwnProperty(key)) {
+        missing.push(key);
+      }
+    });
+
+    if (missing.length) {
+      this.trigger('warn', {message: `${identifier} lacks required attribute(s): ${missing.join(', ')}`});
+    }
   }
 
   /**

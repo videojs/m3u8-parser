@@ -535,6 +535,8 @@ export default class ParseStream extends Stream {
 
             event.attributes.byterange = event.attributes.byterange || {};
             event.attributes.byterange[subkey] = event.attributes[key];
+            // only keep the parsed byterange object.
+            delete event.attributes[key];
           }
         });
 
