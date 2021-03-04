@@ -1,3 +1,33 @@
+<a name="4.6.0"></a>
+# [4.6.0](https://github.com/videojs/m3u8-parser/compare/v4.5.2...v4.6.0) (2021-03-04)
+
+### Features
+
+* add support for #EXT-X-PART ([#127](https://github.com/videojs/m3u8-parser/issues/127)) ([9f5a224](https://github.com/videojs/m3u8-parser/commit/9f5a224)), closes [/developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls#3282436](https://github.com//developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls/issues/3282436) [/tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08#section-4](https://github.com//tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08/issues/section-4)
+* add support for #EXT-X-PART-INF ([#126](https://github.com/videojs/m3u8-parser/issues/126)) ([985ab68](https://github.com/videojs/m3u8-parser/commit/985ab68)), closes [/developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls#3282434](https://github.com//developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls/issues/3282434) [/tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08#section-4](https://github.com//tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08/issues/section-4)
+* add support for #EXT-X-PRELOAD-HINT ([#123](https://github.com/videojs/m3u8-parser/issues/123)) ([4fd693a](https://github.com/videojs/m3u8-parser/commit/4fd693a)), closes [/developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls#3526694](https://github.com//developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls/issues/3526694) [/tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08#section-4](https://github.com//tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08/issues/section-4)
+* add support for #EXT-X-RENDITION-REPORT ([#124](https://github.com/videojs/m3u8-parser/issues/124)) ([03f4345](https://github.com/videojs/m3u8-parser/commit/03f4345)), closes [/developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls#3282435](https://github.com//developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls/issues/3282435) [/tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08#section-4](https://github.com//tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08/issues/section-4)
+* add support for #EXT-X-SERVER-CONTROL ([#121](https://github.com/videojs/m3u8-parser/issues/121)) ([7f82f53](https://github.com/videojs/m3u8-parser/commit/7f82f53)), closes [/developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls#3281374](https://github.com//developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls/issues/3281374) [/tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08#section-4](https://github.com//tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08/issues/section-4)
+* add support for #EXT-X-SKIP ([#122](https://github.com/videojs/m3u8-parser/issues/122)) ([9cebc86](https://github.com/videojs/m3u8-parser/commit/9cebc86)), closes [/developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls#3282433](https://github.com//developer.apple.com/documentation/http_live_streaming/enabling_low-latency_hls/issues/3282433) [/tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08#section-4](https://github.com//tools.ietf.org/html/draft-pantos-hls-rfc8216bis-08/issues/section-4)
+* add version parsing and remove totalduration ([#135](https://github.com/videojs/m3u8-parser/issues/135)) ([98f0421](https://github.com/videojs/m3u8-parser/commit/98f0421))
+* add warn/info triggers and defaults for ll-hls tags ([#131](https://github.com/videojs/m3u8-parser/issues/131)) ([4f4da3d](https://github.com/videojs/m3u8-parser/commit/4f4da3d))
+* **llhls:** preloadSegment, associate parts/preloadHints with segments, unify byterange handling ([#137](https://github.com/videojs/m3u8-parser/issues/137)) ([2c2dffe](https://github.com/videojs/m3u8-parser/commit/2c2dffe))
+
+### Chores
+
+* lint fixtures ([#134](https://github.com/videojs/m3u8-parser/issues/134)) ([e09c7ed](https://github.com/videojs/m3u8-parser/commit/e09c7ed))
+* remove unused and non-standard tag #ZEN-TOTAL-DURATION ([#133](https://github.com/videojs/m3u8-parser/issues/133)) ([fb3b629](https://github.com/videojs/m3u8-parser/commit/fb3b629))
+* switch to rollup-plugin-data-files ([#130](https://github.com/videojs/m3u8-parser/issues/130)) ([8f69b45](https://github.com/videojs/m3u8-parser/commit/8f69b45))
+
+### Code Refactoring
+
+* llhls attributes to camel case ([#138](https://github.com/videojs/m3u8-parser/issues/138)) ([31ed052](https://github.com/videojs/m3u8-parser/commit/31ed052))
+
+### Tests
+
+* add llhls manifests for incoming features ([#125](https://github.com/videojs/m3u8-parser/issues/125)) ([0823ea8](https://github.com/videojs/m3u8-parser/commit/0823ea8))
+* move tests around ([#129](https://github.com/videojs/m3u8-parser/issues/129)) ([e86dcae](https://github.com/videojs/m3u8-parser/commit/e86dcae))
+
 <a name="4.5.2"></a>
 ## [4.5.2](https://github.com/videojs/m3u8-parser/compare/v4.5.1...v4.5.2) (2021-01-12)
 
