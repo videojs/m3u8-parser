@@ -7,29 +7,25 @@ module.exports = {
   preloadSegment: {
     preloadHints: [
       {
-        'BYTERANGE-LENGTH': 2000,
-        'TYPE': 'PART',
-        'URI': 'filePart273.1.mp4',
-        'byterange': {
+        type: 'PART',
+        uri: 'filePart273.1.mp4',
+        byterange: {
           length: 2000,
           offset: 0
         }
       },
       {
-        'BYTERANGE-LENGTH': 5000,
-        'BYTERANGE-START': 8355216,
-        'TYPE': 'MAP',
-        'URI': 'file-init.mp4',
-        'byterange': {
+        type: 'MAP',
+        uri: 'file-init.mp4',
+        byterange: {
           length: 5000,
           offset: 8355216
         }
       },
       {
-        'BYTERANGE-LENGTH': 5000,
-        'TYPE': 'FOO',
-        'URI': 'foo.mp4',
-        'byterange': {
+        type: 'FOO',
+        uri: 'foo.mp4',
+        byterange: {
           length: 5000,
           offset: 0
         }
@@ -181,36 +177,32 @@ module.exports = {
       duration: 10,
       parts: [
         {
-          BYTERANGE: '45553',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.part.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.part.ts',
           byterange: {
             length: 45553,
             offset: 0
           }
         },
         {
-          BYTERANGE: '28823@7622329',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.part.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.part.ts',
           byterange: {
             length: 28823,
             offset: 7622329
           }
         },
         {
-          BYTERANGE: '22444',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.part.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.part.ts',
           byterange: {
             length: 22444,
             offset: 7651152
           }
         },
         {
-          BYTERANGE: '22444',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.part.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.part.ts',
           byterange: {
             length: 22444,
             offset: 7673596
@@ -228,27 +220,24 @@ module.exports = {
       duration: 1.4167,
       parts: [
         {
-          BYTERANGE: '45553@8021772',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.ts',
           byterange: {
             length: 45553,
             offset: 8021772
           }
         },
         {
-          BYTERANGE: '28823',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.ts',
           byterange: {
             length: 28823,
             offset: 8067325
           }
         },
         {
-          BYTERANGE: '22444',
-          DURATION: 0.33334,
-          URI: 'hls_450k_video.ts',
+          duration: 0.33334,
+          uri: 'hls_450k_video.ts',
           byterange: {
             length: 22444,
             offset: 8096148

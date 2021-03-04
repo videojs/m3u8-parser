@@ -9,31 +9,31 @@ module.exports = {
     map: {uri: 'init.mp4'},
     parts: [
       {
-        DURATION: 0.33334,
-        INDEPENDENT: true,
-        URI: 'filePart273.0.mp4'
+        duration: 0.33334,
+        independent: true,
+        uri: 'filePart273.0.mp4'
       },
       {
-        DURATION: 0.33334,
-        URI: 'filePart273.1.mp4'
+        duration: 0.33334,
+        uri: 'filePart273.1.mp4'
       },
       {
-        DURATION: 0.33334,
-        URI: 'filePart273.2.mp4'
+        duration: 0.33334,
+        uri: 'filePart273.2.mp4'
       }
     ],
     preloadHints: [
-      {TYPE: 'PART', URI: 'filePart273.3.mp4'},
-      {TYPE: 'MAP', URI: 'file-init.mp4'}
+      {type: 'PART', uri: 'filePart273.3.mp4'},
+      {type: 'MAP', uri: 'file-init.mp4'}
     ],
     timeline: 0
   },
   renditionReports: [
-    {'LAST-MSN': 273, 'LAST-PART': 2, 'URI': '../1M/waitForMSN.php'},
-    {'LAST-MSN': 273, 'LAST-PART': 1, 'URI': '../4M/waitForMSN.php'}
+    {lastMsn: 273, lastPart: 2, uri: '../1M/waitForMSN.php'},
+    {lastMsn: 273, lastPart: 1, uri: '../4M/waitForMSN.php'}
   ],
   partInf: {
-    'PART-TARGET': 0.33334
+    partTarget: 0.33334
   },
   partTargetDuration: 0.33334,
   segments: [
@@ -88,54 +88,54 @@ module.exports = {
       uri: 'fileSequence271.mp4',
       parts: [
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.0.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.0.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.1.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.1.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.2.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.2.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.3.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.3.mp4'
         },
         {
-          DURATION: 0.33334,
-          INDEPENDENT: true,
-          URI: 'filePart271.4.mp4'
+          duration: 0.33334,
+          independent: true,
+          uri: 'filePart271.4.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.5.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.5.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.6.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.6.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.7.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.7.mp4'
         },
         {
-          DURATION: 0.33334,
-          INDEPENDENT: true,
-          URI: 'filePart271.8.mp4'
+          duration: 0.33334,
+          independent: true,
+          uri: 'filePart271.8.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.9.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.9.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.10.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.10.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart271.11.mp4'
+          duration: 0.33334,
+          uri: 'filePart271.11.mp4'
         }
       ]
     },
@@ -150,64 +150,64 @@ module.exports = {
       uri: 'fileSequence272.mp4',
       parts: [
         {
-          DURATION: 0.33334,
-          GAP: true,
-          URI: 'filePart272.a.mp4'
+          duration: 0.33334,
+          gap: true,
+          uri: 'filePart272.a.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.b.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.b.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.c.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.c.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.d.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.d.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.e.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.e.mp4'
         },
         {
-          DURATION: 0.33334,
-          INDEPENDENT: true,
-          URI: 'filePart272.f.mp4'
+          duration: 0.33334,
+          independent: true,
+          uri: 'filePart272.f.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.g.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.g.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.h.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.h.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.i.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.i.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.j.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.j.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.k.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.k.mp4'
         },
         {
-          DURATION: 0.33334,
-          URI: 'filePart272.l.mp4'
+          duration: 0.33334,
+          uri: 'filePart272.l.mp4'
         }
       ]
     }
   ],
   serverControl: {
-    'CAN-SKIP-DATERANGES': true,
-    'CAN-BLOCK-RELOAD': true,
-    'CAN-SKIP-UNTIL': 12,
-    'PART-HOLD-BACK': 1,
-    'HOLD-BACK': 12
+    canSkipDateranges: true,
+    canBlockReload: true,
+    canSkipUntil: 12,
+    partHoldBack: 1,
+    holdBack: 12
   },
   targetDuration: 4,
   version: 6
