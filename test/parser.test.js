@@ -6,6 +6,7 @@ import {Parser} from '../src';
 QUnit.module('m3u8s', function(hooks) {
   hooks.beforeEach(function() {
     this.parser = new Parser();
+    QUnit.dump.maxDepth = 8;
   });
 
   QUnit.module('general');
@@ -492,9 +493,9 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PART #0 lacks required attribute(s): URI',
-      '#EXT-X-PART #1 lacks required attribute(s): DURATION',
-      '#EXT-X-PART #2 lacks required attribute(s): URI, DURATION'
+      '#EXT-X-PART #0 for segment #0 lacks required attribute(s): URI',
+      '#EXT-X-PART #1 for segment #0 lacks required attribute(s): DURATION',
+      '#EXT-X-PART #2 for segment #0 lacks required attribute(s): URI, DURATION'
     ];
 
     assert.deepEqual(
@@ -526,9 +527,40 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-PRELOAD-HINT #0 lacks required attribute(s): URI',
-      '#EXT-X-PRELOAD-HINT #1 lacks required attribute(s): TYPE',
-      '#EXT-X-PRELOAD-HINT #2 lacks required attribute(s): TYPE, URI'
+      '#EXT-X-PRELOAD-HINT #0 for segment #0 lacks required attribute(s): URI',
+      '#EXT-X-PRELOAD-HINT #1 for segment #0 lacks required attribute(s): TYPE',
+      '#EXT-X-PRELOAD-HINT #2 for segment #0 lacks required attribute(s): TYPE, URI'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+
+    assert.deepEqual(
+      this.infos,
+      [],
+      'info as expected'
+    );
+  });
+
+  QUnit.test('warns when we get #EXT-X-PRELOAD-HINT with the same TYPE', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PRELOAD-HINT:TYPE=foo,URI=foo1',
+      '#EXT-X-PRELOAD-HINT:TYPE=foo,URI=foo2',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-PRELOAD-HINT #1 for segment #0 has the same TYPE foo as preload hint #0'
     ];
 
     assert.deepEqual(

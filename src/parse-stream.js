@@ -5,6 +5,23 @@ import Stream from '@videojs/vhs-utils/es/stream.js';
 
 const TAB = String.fromCharCode(0x09);
 
+const parseByterange = function(byterangeString) {
+  // optionally match and capture 0+ digits before `@`
+  // optionally match and capture 0+ digits after `@`
+  const match = /([0-9.]*)?@?([0-9.]*)?/.exec(byterangeString || '');
+  const result = {};
+
+  if (match[1]) {
+    result.length = parseInt(match[1], 10);
+  }
+
+  if (match[2]) {
+    result.offset = parseInt(match[2], 10);
+  }
+
+  return result;
+};
+
 /**
  * "forgiving" attribute list psuedo-grammar:
  * attributes -> keyvalue (',' keyvalue)*
@@ -222,18 +239,12 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-BYTERANGE:?([0-9.]*)?@?([0-9.]*)?/).exec(newLine);
+      match = (/^#EXT-X-BYTERANGE:?(.*)?$/).exec(newLine);
       if (match) {
-        event = {
+        event = Object.assign(parseByterange(match[1]), {
           type: 'tag',
           tagType: 'byterange'
-        };
-        if (match[1]) {
-          event.length = parseInt(match[1], 10);
-        }
-        if (match[2]) {
-          event.offset = parseInt(match[2], 10);
-        }
+        });
         this.trigger('data', event);
         return;
       }
@@ -263,15 +274,7 @@ export default class ParseStream extends Stream {
             event.uri = attributes.URI;
           }
           if (attributes.BYTERANGE) {
-            const [length, offset] = attributes.BYTERANGE.split('@');
-
-            event.byterange = {};
-            if (length) {
-              event.byterange.length = parseInt(length, 10);
-            }
-            if (offset) {
-              event.byterange.offset = parseInt(offset, 10);
-            }
+            event.byterange = parseByterange(attributes.BYTERANGE);
           }
         }
 
@@ -472,15 +475,7 @@ export default class ParseStream extends Stream {
         });
 
         if (event.attributes.hasOwnProperty('BYTERANGE')) {
-          const [length, offset] = event.attributes.BYTERANGE.split('@');
-
-          event.byterange = {};
-          if (length) {
-            event.byterange.length = parseInt(length, 10);
-          }
-          if (offset) {
-            event.byterange.offset = parseInt(offset, 10);
-          }
+          event.attributes.byterange = parseByterange(event.attributes.BYTERANGE);
         }
 
         this.trigger('data', event);
@@ -535,6 +530,11 @@ export default class ParseStream extends Stream {
         ['BYTERANGE-START', 'BYTERANGE-LENGTH'].forEach(function(key) {
           if (event.attributes.hasOwnProperty(key)) {
             event.attributes[key] = parseInt(event.attributes[key], 10);
+
+            const subkey = key === 'BYTERANGE-LENGTH' ? 'length' : 'offset';
+
+            event.attributes.byterange = event.attributes.byterange || {};
+            event.attributes.byterange[subkey] = event.attributes[key];
           }
         });
 

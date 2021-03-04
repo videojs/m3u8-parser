@@ -92,6 +92,7 @@ export default class Parser extends Stream {
     let currentMap;
     // if specified, the active decryption key
     let key;
+    let hasParts = false;
     const noop = function() {};
     const defaultMediaGroups = {
       'AUDIO': {},
@@ -115,6 +116,29 @@ export default class Parser extends Stream {
     // to provide the offset, in which case it defaults to the next byte after the
     // previous segment
     let lastByterangeEnd = 0;
+    // keep track of the last seen part's byte range end.
+    let lastPartByterangeEnd = 0;
+
+    this.on('end', () => {
+      // only add preloadSegment if we don't yet have a uri for it.
+      // and we actually have parts/preloadHints
+      if (currentUri.uri || (!currentUri.parts && !currentUri.preloadHints)) {
+        return;
+      }
+      if (!currentUri.map && currentMap) {
+        currentUri.map = currentMap;
+      }
+
+      if (!currentUri.key && key) {
+        currentUri.key = key;
+      }
+
+      if (!currentUri.timeline && typeof currentTimeline === 'number') {
+        currentUri.timeline = currentTimeline;
+      }
+
+      this.manifest.preloadSegment = currentUri;
+    });
 
     // update the manifest with the m3u8 entry from the parse stream
     this.parseStream.on('data', function(entry) {
@@ -441,8 +465,22 @@ export default class Parser extends Stream {
               }
             },
             'part'() {
-              this.manifest.parts = this.manifest.parts || [];
-              this.manifest.parts.push(entry.attributes);
+              hasParts = true;
+              // parts are always specifed before a segment
+              const segmentIndex = this.manifest.segments.length;
+
+              currentUri.parts = currentUri.parts || [];
+              currentUri.parts.push(entry.attributes);
+
+              if (entry.attributes.byterange) {
+                const byterange = entry.attributes.byterange;
+
+                if (!byterange.hasOwnProperty('offset')) {
+                  byterange.offset = lastPartByterangeEnd;
+                }
+                lastPartByterangeEnd = byterange.offset + byterange.length;
+              }
+
               const missingAttributes = [];
 
               ['URI', 'DURATION'].forEach(function(k) {
@@ -452,10 +490,10 @@ export default class Parser extends Stream {
               });
 
               if (missingAttributes.length) {
-                const index = this.manifest.parts.length - 1;
+                const partIndex = currentUri.parts.length - 1;
 
                 this.trigger('warn', {
-                  message: `#EXT-X-PART #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
+                  message: `#EXT-X-PART #${partIndex} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
               }
 
@@ -489,8 +527,25 @@ export default class Parser extends Stream {
               }
             },
             'preload-hint'() {
-              this.manifest.preloadHints = this.manifest.preloadHints || [];
-              this.manifest.preloadHints.push(entry.attributes);
+              // parts are always specifed before a segment
+              const segmentIndex = this.manifest.segments.length;
+
+              currentUri.preloadHints = currentUri.preloadHints || [];
+              currentUri.preloadHints.push(entry.attributes);
+
+              if (entry.attributes.byterange) {
+                const byterange = entry.attributes.byterange;
+
+                if (!byterange.hasOwnProperty('offset')) {
+                  byterange.offset = 0;
+                  if (entry.attributes.TYPE && entry.attributes.TYPE === 'PART') {
+                    // use last segment byterange end if we are the first part.
+                    // otherwise use lastPartByterangeEnd
+                    byterange.offset = lastPartByterangeEnd;
+                    lastPartByterangeEnd = byterange.offset + byterange.length;
+                  }
+                }
+              }
 
               const missingAttributes = [];
 
@@ -499,13 +554,27 @@ export default class Parser extends Stream {
                   missingAttributes.push(k);
                 }
               });
+              const index = currentUri.preloadHints.length - 1;
 
               if (missingAttributes.length) {
-                const index = this.manifest.preloadHints.length - 1;
 
                 this.trigger('warn', {
-                  message: `#EXT-X-PRELOAD-HINT #${index} lacks required attribute(s): ${missingAttributes.join(', ')}`
+                  message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} lacks required attribute(s): ${missingAttributes.join(', ')}`
                 });
+              }
+
+              if (entry.attributes.TYPE) {
+                // search through all preload hints except for the current one for
+                // a duplicate type.
+                for (let i = 0; i < currentUri.preloadHints.length - 1; i++) {
+                  const hint = currentUri.preloadHints[i];
+
+                  if (hint.TYPE && hint.TYPE === entry.attributes.TYPE) {
+                    this.trigger('warn', {
+                      message: `#EXT-X-PRELOAD-HINT #${index} for segment #${segmentIndex} has the same TYPE ${entry.attributes.TYPE} as preload hint #${i}`
+                    });
+                  }
+                }
               }
             },
             'rendition-report'() {
@@ -521,7 +590,7 @@ export default class Parser extends Stream {
                 }
               });
 
-              if (this.manifest.parts && !entry.attributes['LAST-PART']) {
+              if (hasParts && !entry.attributes['LAST-PART']) {
                 missingAttributes.push('LAST-PART');
               }
 
@@ -565,6 +634,9 @@ export default class Parser extends Stream {
             currentUri.map = currentMap;
           }
 
+          // reset the last byterange end as it needs to be 0 between parts
+          lastPartByterangeEnd = 0;
+
           // prepare for the next URI
           currentUri = {};
         },
@@ -603,6 +675,8 @@ export default class Parser extends Stream {
   end() {
     // flush any buffered input
     this.lineStream.push('\n');
+
+    this.trigger('end');
   }
   /**
    * Add an additional parser for non-standard tags
