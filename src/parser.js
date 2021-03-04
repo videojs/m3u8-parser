@@ -418,7 +418,11 @@ export default class Parser extends Stream {
           if (entry.segment) {
             currentUri.custom = currentUri.custom || {};
             currentUri.custom[entry.customType] = entry.data;
-          // if this is manifest-level data attach to the top level manifest object
+            // if this is manifest-level data attach to the top level manifest object
+          } else if (entry.multiple) {
+            this.manifest.custom = this.manifest.custom || {};
+            this.manifest.custom[entry.customType] = this.manifest.custom[entry.customType] || [];
+            this.manifest.custom[entry.customType].push(entry.data);
           } else {
             this.manifest.custom = this.manifest.custom || {};
             this.manifest.custom[entry.customType] = entry.data;
