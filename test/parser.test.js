@@ -833,6 +833,29 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
+  QUnit.test('Can understand widevine/safari drm ext-x-key', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:PART-TARGET=1',
+      '#EXT-X-SERVER-CONTROL:foo=bar',
+      '#EXT-X-KEY:METHOD=SAMPLE-AES,URI="data:text/plain;base64,foo",KEYID=0x555777,IV=1234567890abcdef1234567890abcdef,KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"',
+      '#EXT-X-KEY:METHOD=SAMPLE-AES,URI="skd://foo",KEYFORMATVERSIONS="1",KEYFORMAT="com.apple.streamingkeydelivery"',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.deepEqual(
+      Object.keys(this.parser.manifest.contentProtection),
+      ['com.widevine.alpha', 'com.apple.fps.1_0'],
+      'info as expected'
+    );
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {
