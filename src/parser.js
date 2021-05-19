@@ -362,6 +362,10 @@ export default class Parser extends Stream {
               if (entry.byterange) {
                 currentMap.byterange = entry.byterange;
               }
+
+              if (key) {
+                currentMap.key = key;
+              }
             },
             'stream-inf'() {
               this.manifest.playlists = uris;
