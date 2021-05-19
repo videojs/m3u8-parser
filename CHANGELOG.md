@@ -1,3 +1,14 @@
+<a name="4.7.0"></a>
+# [4.7.0](https://github.com/videojs/m3u8-parser/compare/v4.6.0...v4.7.0) (2021-05-19)
+
+### Features
+
+* add key property to init segment/map ([#141](https://github.com/videojs/m3u8-parser/issues/141)) ([ae5fa64](https://github.com/videojs/m3u8-parser/commit/ae5fa64))
+
+### Bug Fixes
+
+* ignore fairplay content protection ([#140](https://github.com/videojs/m3u8-parser/issues/140)) ([9f62c85](https://github.com/videojs/m3u8-parser/commit/9f62c85))
+
 <a name="4.6.0"></a>
 # [4.6.0](https://github.com/videojs/m3u8-parser/compare/v4.5.2...v4.6.0) (2021-03-04)
 
