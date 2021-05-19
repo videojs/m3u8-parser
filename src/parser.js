@@ -252,6 +252,17 @@ export default class Parser extends Stream {
                 return;
               }
 
+              if (entry.attributes.KEYFORMAT === 'com.apple.streamingkeydelivery') {
+                this.manifest.contentProtection = this.manifest.contentProtection || {};
+
+                // TODO: add full support for this.
+                this.manifest.contentProtection['com.apple.fps.1_0'] = {
+                  attributes: entry.attributes
+                };
+
+                return;
+              }
+
               // check if the content is encrypted for Widevine
               // Widevine/HLS spec: https://storage.googleapis.com/wvdocs/Widevine_DRM_HLS.pdf
               if (entry.attributes.KEYFORMAT === widevineUuid) {
@@ -286,16 +297,15 @@ export default class Parser extends Stream {
 
                 // if Widevine key attributes are valid, store them as `contentProtection`
                 // on the manifest to emulate Widevine tag structure in a DASH mpd
-                this.manifest.contentProtection = {
-                  'com.widevine.alpha': {
-                    attributes: {
-                      schemeIdUri: entry.attributes.KEYFORMAT,
-                      // remove '0x' from the key id string
-                      keyId: entry.attributes.KEYID.substring(2)
-                    },
-                    // decode the base64-encoded PSSH box
-                    pssh: decodeB64ToUint8Array(entry.attributes.URI.split(',')[1])
-                  }
+                this.manifest.contentProtection = this.manifest.contentProtection || {};
+                this.manifest.contentProtection['com.widevine.alpha'] = {
+                  attributes: {
+                    schemeIdUri: entry.attributes.KEYFORMAT,
+                    // remove '0x' from the key id string
+                    keyId: entry.attributes.KEYID.substring(2)
+                  },
+                  // decode the base64-encoded PSSH box
+                  pssh: decodeB64ToUint8Array(entry.attributes.URI.split(',')[1])
                 };
                 return;
               }
