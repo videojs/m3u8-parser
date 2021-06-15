@@ -268,7 +268,7 @@ export default class Parser extends Stream {
 
                 // TODO: add full support for this.
                 this.manifest.contentProtection['com.microsoft.playready'] = {
-                  url: entry.attributes.URI
+                  uri: entry.attributes.URI
                 };
 
                 return;
