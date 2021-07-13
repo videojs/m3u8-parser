@@ -5,6 +5,10 @@ module.exports = {
   segments: [
     {
       duration: 0.01,
+      raw: [
+        '#EXTINF:0,',
+        'http://example.com/00001.ts'
+      ],
       timeline: 0,
       uri: 'http://example.com/00001.ts'
     }

@@ -54,6 +54,10 @@ module.exports = {
       'CODECS': 'mp4a.40.5',
       'AUDIO': 'audio-lo'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=195023,CODECS=\"mp4a.40.5\", AUDIO=\"audio-lo\"',
+      'lo/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'lo/prog_index.m3u8'
   }, {
@@ -63,6 +67,10 @@ module.exports = {
       'CODECS': 'avc1.42e01e,mp4a.40.2',
       'AUDIO': 'audio-lo'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=260000,CODECS=\"avc1.42e01e,mp4a.40.2\", AUDIO=\"audio-lo\"',
+      'lo2/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'lo2/prog_index.m3u8'
   }, {
@@ -72,6 +80,10 @@ module.exports = {
       'CODECS': 'mp4a.40.2, avc1.64001e',
       'AUDIO': 'audio-hi'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=591680,CODECS=\"mp4a.40.2, avc1.64001e\", AUDIO=\"audio-hi\"',
+      'hi/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'hi/prog_index.m3u8'
   }, {
@@ -81,6 +93,10 @@ module.exports = {
       'CODECS': 'avc1.42e01e,mp4a.40.2',
       'AUDIO': 'audio-hi'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=650000,CODECS=\"avc1.42e01e,mp4a.40.2\", AUDIO=\"audio-hi\"',
+      'hi2/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'hi2/prog_index.m3u8'
   }],

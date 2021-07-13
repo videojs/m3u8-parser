@@ -9,6 +9,11 @@ module.exports = {
         offset: 0
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10',
+        '#EXT-X-BYTERANGE:522828@0',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -18,6 +23,11 @@ module.exports = {
         offset: 522828
       },
       duration: 10,
+      raw: [
+        '#EXTINF:;asljasdfii11)))00,',
+        '#EXT-X-BYTERANGE:587500@522828',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -27,6 +37,11 @@ module.exports = {
         offset: 1110328
       },
       duration: 5,
+      raw: [
+        '#EXTINF:5,',
+        '#EXT-X-BYTERANGE:713084@1110328',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -36,6 +51,11 @@ module.exports = {
         offset: 1823412
       },
       duration: 9.7,
+      raw: [
+        '#EXTINF:9.7,',
+        '#EXT-X-BYTERANGE:476580@1823412',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -45,6 +65,11 @@ module.exports = {
         offset: 2299992
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:535612@2299992',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -54,6 +79,11 @@ module.exports = {
         offset: 2835604
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:207176@2835604',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -63,6 +93,11 @@ module.exports = {
         offset: 3042780
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:455900@3042780',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -72,6 +107,11 @@ module.exports = {
         offset: 3498680
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:657248@3498680',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -81,6 +121,11 @@ module.exports = {
         offset: 4155928
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:571708@4155928',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -90,6 +135,11 @@ module.exports = {
         offset: 4727636
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:485040@4727636',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -99,6 +149,11 @@ module.exports = {
         offset: 5212676
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:709136@5212676',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -108,6 +163,11 @@ module.exports = {
         offset: 5921812
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:730004@5921812',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -117,6 +177,11 @@ module.exports = {
         offset: 6651816
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:456276@6651816',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -126,6 +191,11 @@ module.exports = {
         offset: 7108092
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:468684@7108092',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -135,6 +205,11 @@ module.exports = {
         offset: 7576776
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:444996@7576776',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -144,6 +219,12 @@ module.exports = {
         offset: 8021772
       },
       duration: 10,
+      raw: [
+        '#EXTINF:22,',
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:331444@8021772',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -153,6 +234,10 @@ module.exports = {
         offset: 8353216
       },
       duration: 10,
+      raw: [
+        '#EXT-X-BYTERANGE:44556@8353216',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     }

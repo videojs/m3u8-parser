@@ -12,6 +12,11 @@ module.exports = {
         offset: 720
       },
       duration: 6.006,
+      raw: [
+        '#EXTINF:6.00600,',
+        '#EXT-X-BYTERANGE:5666510@720',
+        'main.mp4'
+      ],
       timeline: 0,
       uri: 'main.mp4',
       map: {
@@ -28,6 +33,11 @@ module.exports = {
         offset: 5667230
       },
       duration: 6.006,
+      raw: [
+        '#EXTINF:6.00600,',
+        '#EXT-X-BYTERANGE:5861577@5667230',
+        'main.mp4'
+      ],
       timeline: 0,
       uri: 'main.mp4',
       map: {

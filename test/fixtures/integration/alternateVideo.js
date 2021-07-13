@@ -41,6 +41,10 @@ module.exports = {
       'AUDIO': 'aac',
       'VIDEO': '500kbs'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=754857,CODECS=\"mp4a.40.2,avc1.4d401e\",VIDEO=\"500kbs\",AUDIO=\"aac\"',
+      'Angle1/500kbs/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'Angle1/500kbs/prog_index.m3u8'
   }],

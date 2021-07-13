@@ -41,6 +41,12 @@ module.exports = {
         }
       }
     ],
+    raw: [
+      '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=22444',
+      '#EXT-X-PRELOAD-HINT:TYPE=PART,URI=\"filePart273.1.mp4\",BYTERANGE-LENGTH=2000',
+      '#EXT-X-PRELOAD-HINT:TYPE=MAP,URI=\"file-init.mp4\",BYTERANGE-LENGTH=5000,BYTERANGE-START=8377660',
+      '#EXT-X-PRELOAD-HINT:TYPE=FOO,URI=\"foo.mp4\",BYTERANGE-LENGTH=5000'
+    ],
     timeline: 0
   },
   segments: [
@@ -50,6 +56,12 @@ module.exports = {
         offset: 7108092
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:468684@7108092',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -59,6 +71,11 @@ module.exports = {
         offset: 7576776
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:444996@7576776',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -102,6 +119,15 @@ module.exports = {
           }
         }
       ],
+      raw: [
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=45553',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=28823@7622329',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=22444',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=22444',
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:331444@8021772',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -136,6 +162,14 @@ module.exports = {
             offset: 8096148
           }
         }
+      ],
+      raw: [
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=45553@8021772',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=28823',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=22444',
+        '#EXTINF:1.4167,',
+        '#EXT-X-BYTERANGE:44556@8353216',
+        'hls_450k_video.ts'
       ],
       timeline: 0,
       uri: 'hls_450k_video.ts'

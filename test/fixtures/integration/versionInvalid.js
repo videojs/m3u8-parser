@@ -5,6 +5,10 @@ module.exports = {
   segments: [
     {
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     }

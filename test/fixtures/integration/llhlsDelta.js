@@ -6,6 +6,14 @@ module.exports = {
   discontinuityStarts: [],
   mediaSequence: 266,
   preloadSegment: {
+    raw: [
+      '#EXT-X-PART:DURATION=0.33334,URI=\"filePart273.0.mp4\",INDEPENDENT=YES',
+      '#EXT-X-PART:DURATION=0.33334,URI=\"filePart273.1.mp4\"',
+      '#EXT-X-PART:DURATION=0.33334,URI=\"filePart273.2.mp4\"',
+      '#EXT-X-PART:DURATION=0.33334,URI=\"filePart273.3.mp4\"',
+      '#EXT-X-PRELOAD-HINT:TYPE=PART,URI=\"filePart273.4.mp4\"',
+      '#EXT-X-PRELOAD-HINT:TYPE=MAP,URI=\"file-init.mp4\"'
+    ],
     timeline: 0,
     preloadHints: [
       {type: 'PART', uri: 'filePart273.4.mp4'},
@@ -42,16 +50,40 @@ module.exports = {
   segments: [
     {
       duration: 4.00008,
+      raw: [
+        '#EXTINF:4.00008,',
+        'fileSequence269.mp4'
+      ],
       timeline: 0,
       uri: 'fileSequence269.mp4'
     },
     {
       duration: 4.00008,
+      raw: [
+        '#EXTINF:4.00008,',
+        'fileSequence270.mp4'
+      ],
       timeline: 0,
       uri: 'fileSequence270.mp4'
     },
     {
       duration: 4.00008,
+      raw: [
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.0.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.1.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.2.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.3.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.4.mp4\",INDEPENDENT=YES',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.5.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.6.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.7.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.8.mp4\",INDEPENDENT=YES',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.9.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.10.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart271.11.mp4\"',
+        '#EXTINF:4.00008,',
+        'fileSequence271.mp4'
+      ],
       timeline: 0,
       uri: 'fileSequence271.mp4',
       parts: [
@@ -111,6 +143,23 @@ module.exports = {
       dateTimeObject: new Date('2019-02-14T02:14:00.106Z'),
       dateTimeString: '2019-02-14T02:14:00.106Z',
       duration: 4.00008,
+      raw: [
+        '#EXT-X-PROGRAM-DATE-TIME:2019-02-14T02:14:00.106Z',
+        '#EXT-X-PART:GAP=YES,DURATION=0.33334,URI=\"filePart272.a.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.b.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.c.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.d.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.e.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.f.mp4\",INDEPENDENT=YES',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.g.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.h.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.i.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.j.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.k.mp4\"',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"filePart272.l.mp4\"',
+        '#EXTINF:4.00008,',
+        'fileSequence272.mp4'
+      ],
       timeline: 0,
       uri: 'fileSequence272.mp4',
       parts: [

@@ -17,6 +17,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init52.mp4'
       },
+      raw: [
+        '#EXTINF:2.833,',
+        'http://media.example.com/fileSequence52-A.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence52-A.m4s'
     },
@@ -33,6 +37,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init52.mp4'
       },
+      raw: [
+        '#EXTINF:15.0,',
+        'http://media.example.com/fileSequence52-B.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence52-B.m4s'
     },
@@ -49,6 +57,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init52.mp4'
       },
+      raw: [
+        '#EXTINF:13.333,',
+        'http://media.example.com/fileSequence52-C.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence52-C.m4s'
     },
@@ -65,6 +77,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init53-A.mp4'
       },
+      raw: [
+        '#EXTINF:15.0,',
+        'http://media.example.com/fileSequence53-A.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence53-A.m4s'
     },
@@ -83,6 +99,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init53-B.mp4'
       },
+      raw: [
+        '#EXTINF:14.0,',
+        'http://media.example.com/fileSequence53-B.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence53-B.m4s'
     },
@@ -95,6 +115,10 @@ module.exports = {
       map: {
         uri: 'http://media.example.com/init54-A.mp4'
       },
+      raw: [
+        '#EXTINF:12.0,',
+        'http://media.example.com/fileSequence54-A.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence54-A.m4s'
     },
@@ -107,6 +131,10 @@ module.exports = {
       map: {
         uri: 'http://media.example.com/init54-A.mp4'
       },
+      raw: [
+        '#EXTINF:13.0,',
+        'http://media.example.com/fileSequence54-B.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence54-B.m4s'
     },
@@ -119,6 +147,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init54-B.mp4'
       },
+      raw: [
+        '#EXTINF:10.0,',
+        'http://media.example.com/fileSequence54-A.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence54-A.m4s'
     },
@@ -131,6 +163,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init54-B.mp4'
       },
+      raw: [
+        '#EXTINF:11.0,',
+        'http://media.example.com/fileSequence54-B.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence54-B.m4s'
     },
@@ -147,6 +183,10 @@ module.exports = {
         },
         uri: 'http://media.example.com/init54-D.mp4'
       },
+      raw: [
+        '#EXTINF:4.0,',
+        'http://media.example.com/fileSequence54-A.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence54-A.m4s'
     },
@@ -155,6 +195,10 @@ module.exports = {
       map: {
         uri: 'http://media.example.com/init54-E.mp4'
       },
+      raw: [
+        '#EXTINF:12.0,',
+        'http://media.example.com/fileSequence54-A.m4s'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence54-A.m4s'
     }

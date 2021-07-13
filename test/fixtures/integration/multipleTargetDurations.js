@@ -5,21 +5,34 @@ module.exports = {
   segments: [
     {
       uri: '001.ts',
+      raw: [
+        '001.ts'
+      ],
       timeline: 0
     },
     {
       uri: '002.ts',
       duration: 9,
+      raw: [
+        '002.ts'
+      ],
       timeline: 0
     },
     {
       uri: '003.ts',
       duration: 7,
+      raw: [
+        '#EXTINF:7',
+        '003.ts'
+      ],
       timeline: 0
     },
     {
       uri: '004.ts',
       duration: 10,
+      raw: [
+        '004.ts'
+      ],
       timeline: 0
     }
   ],

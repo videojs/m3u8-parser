@@ -6,6 +6,10 @@ module.exports = {
   segments: [
     {
       duration: 2.833,
+      raw: [
+        '#EXTINF:2.833,',
+        'http://media.example.com/fileSequence52-A.ts'
+      ],
       timeline: 0,
       key: {
         method: 'AES-128',
@@ -15,6 +19,10 @@ module.exports = {
     },
     {
       duration: 15,
+      raw: [
+        '#EXTINF:15.0,',
+        'http://media.example.com/fileSequence52-B.ts'
+      ],
       timeline: 0,
       key: {
         method: 'AES-128',
@@ -24,6 +32,10 @@ module.exports = {
     },
     {
       duration: 13.333,
+      raw: [
+        '#EXTINF:13.333,',
+        'http://media.example.com/fileSequence52-C.ts'
+      ],
       timeline: 0,
       key: {
         method: 'AES-128',
@@ -33,6 +45,10 @@ module.exports = {
     },
     {
       duration: 15,
+      raw: [
+        '#EXTINF:15.0,',
+        'http://media.example.com/fileSequence53-A.ts'
+      ],
       timeline: 0,
       key: {
         method: 'AES-128',
@@ -42,6 +58,10 @@ module.exports = {
     },
     {
       duration: 14,
+      raw: [
+        '#EXTINF:14.0,',
+        'http://media.example.com/fileSequence53-B.ts'
+      ],
       timeline: 0,
       key: {
         method: 'AES-128',
@@ -52,6 +72,10 @@ module.exports = {
     },
     {
       duration: 15,
+      raw: [
+        '#EXTINF:15.0,',
+        'http://media.example.com/fileSequence53-B.ts'
+      ],
       timeline: 0,
       uri: 'http://media.example.com/fileSequence53-B.ts'
     }

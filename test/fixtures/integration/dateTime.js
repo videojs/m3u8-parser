@@ -7,6 +7,11 @@ module.exports = {
       dateTimeString: '2016-06-22T09:20:16.166-04:00',
       dateTimeObject: new Date('2016-06-22T09:20:16.166-04:00'),
       duration: 10,
+      raw: [
+        '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.166-04:00',
+        '#EXTINF:10',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -14,6 +19,11 @@ module.exports = {
       dateTimeString: '2016-06-22T09:20:26.166-04:00',
       dateTimeObject: new Date('2016-06-22T09:20:26.166-04:00'),
       duration: 10,
+      raw: [
+        '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:26.166-04:00',
+        '#EXTINF:10',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     }

@@ -5,10 +5,18 @@ module.exports = {
       attributes: {
         'PROGRAM-ID': 1
       },
+      raw: [
+        '#EXT-X-STREAM-INF:PROGRAM-ID=1',
+        'media.m3u8'
+      ],
       timeline: 0,
       uri: 'media.m3u8'
     },
     {
+      raw: [
+        '#EXT-X-STREAM-INF:',
+        'media1.m3u8'
+      ],
       timeline: 0,
       uri: 'media1.m3u8'
     }

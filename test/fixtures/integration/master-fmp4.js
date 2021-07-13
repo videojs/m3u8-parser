@@ -65,6 +65,10 @@ module.exports = {
       'AUDIO': 'aud1',
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2165224,BANDWIDTH=2215219,CODECS=\"avc1.640020,mp4a.40.2\",RESOLUTION=960x540,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v4/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v4/prog_index.m3u8'
   },
@@ -83,6 +87,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=7962844,BANDWIDTH=7976430,CODECS=\"avc1.64002a,mp4a.40.2\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v8/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v8/prog_index.m3u8'
   },
@@ -100,6 +108,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=6165024,BANDWIDTH=6181885,CODECS=\"avc1.64002a,mp4a.40.2\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v7/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v7/prog_index.m3u8'
   },
@@ -117,6 +129,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=4664459,BANDWIDTH=4682666,CODECS=\"avc1.64002a,mp4a.40.2\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v6/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v6/prog_index.m3u8'
   },
@@ -134,6 +150,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=3164759,BANDWIDTH=3170746,CODECS=\"avc1.640020,mp4a.40.2\",RESOLUTION=1280x720,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v5/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v5/prog_index.m3u8'
   },
@@ -151,6 +171,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=1262552,BANDWIDTH=1276223,CODECS=\"avc1.64001e,mp4a.40.2\",RESOLUTION=768x432,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v3/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v3/prog_index.m3u8'
   },
@@ -168,6 +192,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=893243,BANDWIDTH=904744,CODECS=\"avc1.64001e,mp4a.40.2\",RESOLUTION=640x360,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v2/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v2/prog_index.m3u8'
   },
@@ -185,6 +213,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=527673,BANDWIDTH=538201,CODECS=\"avc1.640015,mp4a.40.2\",RESOLUTION=480x270,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud1\",SUBTITLES=\"sub1\"',
+      'v1/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v1/prog_index.m3u8'
   },
@@ -202,6 +234,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2390334,BANDWIDTH=2440329,CODECS=\"avc1.640020,ac-3\",RESOLUTION=960x540,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v4/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v4/prog_index.m3u8'
   },
@@ -219,6 +255,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=8187954,BANDWIDTH=8201540,CODECS=\"avc1.64002a,ac-3\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v8/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v8/prog_index.m3u8'
   },
@@ -236,6 +276,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=6390134,BANDWIDTH=6406995,CODECS=\"avc1.64002a,ac-3\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v7/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v7/prog_index.m3u8'
   },
@@ -253,6 +297,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=4889569,BANDWIDTH=4907776,CODECS=\"avc1.64002a,ac-3\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v6/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v6/prog_index.m3u8'
   },
@@ -270,6 +318,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=3389869,BANDWIDTH=3395856,CODECS=\"avc1.640020,ac-3\",RESOLUTION=1280x720,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v5/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v5/prog_index.m3u8'
   },
@@ -287,6 +339,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=1487662,BANDWIDTH=1501333,CODECS=\"avc1.64001e,ac-3\",RESOLUTION=768x432,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v3/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v3/prog_index.m3u8'
   },
@@ -304,6 +360,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=1118353,BANDWIDTH=1129854,CODECS=\"avc1.64001e,ac-3\",RESOLUTION=640x360,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v2/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v2/prog_index.m3u8'
   },
@@ -321,6 +381,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=752783,BANDWIDTH=763311,CODECS=\"avc1.640015,ac-3\",RESOLUTION=480x270,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud2\",SUBTITLES=\"sub1\"',
+      'v1/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v1/prog_index.m3u8'
   },
@@ -338,6 +402,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2198334,BANDWIDTH=2248329,CODECS=\"avc1.640020,ec-3\",RESOLUTION=960x540,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v4/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v4/prog_index.m3u8'
   },
@@ -355,6 +423,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=7995954,BANDWIDTH=8009540,CODECS=\"avc1.64002a,ec-3\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v8/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v8/prog_index.m3u8'
   },
@@ -372,6 +444,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=6198134,BANDWIDTH=6214995,CODECS=\"avc1.64002a,ec-3\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v7/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v7/prog_index.m3u8'
   },
@@ -389,6 +465,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=4697569,BANDWIDTH=4715776,CODECS=\"avc1.64002a,ec-3\",RESOLUTION=1920x1080,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v6/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v6/prog_index.m3u8'
   },
@@ -406,6 +486,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=3197869,BANDWIDTH=3203856,CODECS=\"avc1.640020,ec-3\",RESOLUTION=1280x720,FRAME-RATE=59.940,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v5/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v5/prog_index.m3u8'
   },
@@ -423,6 +507,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=1295662,BANDWIDTH=1309333,CODECS=\"avc1.64001e,ec-3\",RESOLUTION=768x432,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v3/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v3/prog_index.m3u8'
   },
@@ -440,6 +528,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=926353,BANDWIDTH=937854,CODECS=\"avc1.64001e,ec-3\",RESOLUTION=640x360,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v2/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v2/prog_index.m3u8'
   },
@@ -457,6 +549,10 @@ module.exports = {
       },
       'SUBTITLES': 'sub1'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=560783,BANDWIDTH=571311,CODECS=\"avc1.640015,ec-3\",RESOLUTION=480x270,FRAME-RATE=29.970,CLOSED-CAPTIONS=\"cc1\",AUDIO=\"aud3\",SUBTITLES=\"sub1\"',
+      'v1/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'v1/prog_index.m3u8'
   }],

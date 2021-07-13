@@ -78,7 +78,8 @@ QUnit.test('mapper does not conflict with parser', function(assert) {
   });
   assert.deepEqual(dataCallback.getCall(2).args[0], {
     text: 'SOMETHING-ELSE',
-    type: 'comment'
+    type: 'comment',
+    raw: '#SOMETHING-ELSE'
   });
 });
 
@@ -100,11 +101,13 @@ QUnit.test('maps custom tags', function(assert) {
 
   assert.deepEqual(dataCallback.getCall(0).args[0], {
     text: 'EXAMPLE',
-    type: 'comment'
+    type: 'comment',
+    raw: '#EXAMPLE'
   });
   assert.deepEqual(dataCallback.getCall(1).args[0], {
     text: 'NEW-COMMENT',
-    type: 'comment'
+    type: 'comment',
+    raw: '#NEW-COMMENT'
   });
 });
 
@@ -137,12 +140,14 @@ QUnit.test('maps multiple custom tags', function(assert) {
 
   assert.deepEqual(dataCallback.getCall(0).args[0], {
     text: 'VOD-STARTTIMESTAMP:1501533337573',
-    type: 'comment'
+    type: 'comment',
+    raw: '#VOD-STARTTIMESTAMP:1501533337573'
   });
 
   assert.deepEqual(dataCallback.getCall(1).args[0], {
     text: 'NEW-COMMENT',
-    type: 'comment'
+    type: 'comment',
+    raw: '#NEW-COMMENT'
   });
 
   const dateTag = dataCallback.getCall(2).args[0];
@@ -169,7 +174,8 @@ QUnit.test('mapper ignores tags', function(assert) {
   assert.strictEqual(dataCallback.callCount, 1);
   assert.deepEqual(dataCallback.getCall(0).args[0], {
     text: 'TAG',
-    type: 'comment'
+    type: 'comment',
+    raw: '#TAG'
   });
 });
 
@@ -752,7 +758,8 @@ QUnit.test('parses valid #EXT-X-KEY tags', function(assert) {
     attributes: {
       METHOD: 'AES-128',
       URI: 'https://priv.example.com/key.php?r=52'
-    }
+    },
+    raw: '#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\"'
   }, 'parsed a valid key');
 
   manifest = '#EXT-X-KEY:URI="https://example.com/key#1",METHOD=FutureType-1024\n';
@@ -764,7 +771,8 @@ QUnit.test('parses valid #EXT-X-KEY tags', function(assert) {
     attributes: {
       METHOD: 'FutureType-1024',
       URI: 'https://example.com/key#1'
-    }
+    },
+    raw: '#EXT-X-KEY:URI=\"https://example.com/key#1\",METHOD=FutureType-1024'
   }, 'parsed the attribute list independent of order');
 
   manifest = '#EXT-X-KEY:IV=1234567890abcdef1234567890abcdef\n';
@@ -790,7 +798,8 @@ QUnit.test('parses minimal #EXT-X-KEY tags', function(assert) {
   assert.ok(element, 'an event was triggered');
   assert.deepEqual(element, {
     type: 'tag',
-    tagType: 'key'
+    tagType: 'key',
+    raw: '#EXT-X-KEY:'
   }, 'parsed a minimal key tag');
 });
 

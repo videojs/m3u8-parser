@@ -9,6 +9,11 @@ module.exports = {
         offset: 0
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:522828@0',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     }

@@ -31,6 +31,11 @@ module.exports = {
         }
       }
     ],
+    raw: [
+      '#EXT-X-PRELOAD-HINT:TYPE=PART,URI=\"filePart273.1.mp4\",BYTERANGE-LENGTH=2000',
+      '#EXT-X-PRELOAD-HINT:TYPE=MAP,URI=\"file-init.mp4\",BYTERANGE-LENGTH=5000,BYTERANGE-START=8355216',
+      '#EXT-X-PRELOAD-HINT:TYPE=FOO,URI=\"foo.mp4\",BYTERANGE-LENGTH=5000'
+    ],
     timeline: 0
   },
   segments: [
@@ -40,6 +45,11 @@ module.exports = {
         offset: 0
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:587500@',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -49,6 +59,11 @@ module.exports = {
         offset: 522828
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:587500@522828',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -58,6 +73,11 @@ module.exports = {
         offset: 1110328
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:713084',
+        'hls_450k_video2.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video2.ts'
     },
@@ -67,6 +87,11 @@ module.exports = {
         offset: 1823412
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:476580@1823412',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -76,6 +101,11 @@ module.exports = {
         offset: 2299992
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:535612@2299992',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -85,6 +115,11 @@ module.exports = {
         offset: 2835604
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:207176@2835604',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -94,6 +129,11 @@ module.exports = {
         offset: 3042780
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:455900@3042780',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -103,6 +143,11 @@ module.exports = {
         offset: 3498680
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:657248@3498680',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -112,6 +157,11 @@ module.exports = {
         offset: 4155928
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:571708@4155928',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -121,6 +171,11 @@ module.exports = {
         offset: 4727636
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:485040@4727636',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -130,6 +185,11 @@ module.exports = {
         offset: 5212676
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:709136@5212676',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -139,6 +199,11 @@ module.exports = {
         offset: 5921812
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:730004@5921812',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -148,6 +213,11 @@ module.exports = {
         offset: 6651816
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:456276@6651816',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -157,6 +227,11 @@ module.exports = {
         offset: 7108092
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:468684@7108092',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -166,6 +241,11 @@ module.exports = {
         offset: 7576776
       },
       duration: 10,
+      raw: [
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:444996@7576776',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -209,6 +289,15 @@ module.exports = {
           }
         }
       ],
+      raw: [
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.part.ts\",BYTERANGE=45553',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.part.ts\",BYTERANGE=28823@7622329',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.part.ts\",BYTERANGE=22444',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.part.ts\",BYTERANGE=22444',
+        '#EXTINF:10,',
+        '#EXT-X-BYTERANGE:331444@8021772',
+        'hls_450k_video.ts'
+      ],
       timeline: 0,
       uri: 'hls_450k_video.ts'
     },
@@ -243,6 +332,14 @@ module.exports = {
             offset: 8096148
           }
         }
+      ],
+      raw: [
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=45553@8021772',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=28823',
+        '#EXT-X-PART:DURATION=0.33334,URI=\"hls_450k_video.ts\",BYTERANGE=22444',
+        '#EXTINF:1.4167,',
+        '#EXT-X-BYTERANGE:44556@8353216',
+        'hls_450k_video.ts'
       ],
       timeline: 0,
       uri: 'hls_450k_video.ts'

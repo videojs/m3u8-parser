@@ -40,6 +40,10 @@ module.exports = {
       'CODECS': 'avc1.42e00a,mp4a.40.2',
       'AUDIO': 'audio'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=195023,CODECS=\"avc1.42e00a,mp4a.40.2\",AUDIO=\"audio\"',
+      'lo/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'lo/prog_index.m3u8'
   }, {
@@ -49,6 +53,10 @@ module.exports = {
       'CODECS': 'avc1.42e01e,mp4a.40.2',
       'AUDIO': 'audio'
     },
+    raw: [
+      '#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=591680,CODECS=\"avc1.42e01e,mp4a.40.2\",AUDIO=\"audio\"',
+      'hi/prog_index.m3u8'
+    ],
     timeline: 0,
     uri: 'hi/prog_index.m3u8'
   }],
