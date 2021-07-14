@@ -22,8 +22,10 @@ const options = {
     });
 
     defaults.dataFiles = dataFiles({
-      expecteds: {include: 'test/fixtures/integration/*.js', transform: 'js', extensions: false},
-      manifests: {include: 'test/fixtures/integration/*.m3u8', transform: 'string', extensions: false}
+      expecteds: {include: 'test/fixtures/integration/without-raw/*.js', transform: 'js', extensions: false},
+      manifests: {include: 'test/fixtures/integration/without-raw/*.m3u8', transform: 'string', extensions: false},
+      expectedsWithRaw: {include: 'test/fixtures/integration/with-raw/*.js', transform: 'js', extensions: false},
+      manifestsWithRaw: {include: 'test/fixtures/integration/with-raw/*.m3u8', transform: 'string', extensions: false}
     });
 
     return defaults;

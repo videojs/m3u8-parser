@@ -91,10 +91,11 @@ const parseAttributes = function(attributes) {
  * @extends Stream
  */
 export default class ParseStream extends Stream {
-  constructor() {
+  constructor(returnRaw = false) {
     super();
     this.customParsers = [];
     this.tagMappers = [];
+    this.returnRaw = returnRaw;
   }
 
   /**
@@ -119,7 +120,7 @@ export default class ParseStream extends Stream {
       this.trigger('data', {
         type: 'uri',
         uri: line,
-        raw: line
+        raw: this.returnRaw ? line : undefined
       });
       return;
     }
@@ -148,7 +149,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', {
           type: 'comment',
           text: newLine.slice(1),
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         });
         return;
       }
@@ -163,7 +164,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', {
           type: 'tag',
           tagType: 'm3u',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         });
         return;
       }
@@ -172,7 +173,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'inf',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.duration = parseFloat(match[1]);
@@ -188,7 +189,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'targetduration',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.duration = parseInt(match[1], 10);
@@ -201,7 +202,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'version',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.version = parseInt(match[1], 10);
@@ -214,7 +215,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'media-sequence',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.number = parseInt(match[1], 10);
@@ -227,7 +228,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'discontinuity-sequence',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.number = parseInt(match[1], 10);
@@ -240,7 +241,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'playlist-type',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.playlistType = match[1];
@@ -253,7 +254,7 @@ export default class ParseStream extends Stream {
         event = Object.assign(parseByterange(match[1]), {
           type: 'tag',
           tagType: 'byterange',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         });
         this.trigger('data', event);
         return;
@@ -263,7 +264,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'allow-cache',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.allowed = !(/NO/).test(match[1]);
@@ -276,7 +277,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'map',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
 
         if (match[1]) {
@@ -298,7 +299,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'stream-inf',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.attributes = parseAttributes(match[1]);
@@ -330,7 +331,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'media',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.attributes = parseAttributes(match[1]);
@@ -343,7 +344,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', {
           type: 'tag',
           tagType: 'endlist',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         });
         return;
       }
@@ -352,7 +353,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', {
           type: 'tag',
           tagType: 'discontinuity',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         });
         return;
       }
@@ -361,7 +362,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'program-date-time',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.dateTimeString = match[1];
@@ -375,7 +376,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'key',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.attributes = parseAttributes(match[1]);
@@ -401,7 +402,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'start',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.attributes = parseAttributes(match[1]);
@@ -417,7 +418,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'cue-out-cont',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.data = match[1];
@@ -432,7 +433,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'cue-out',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.data = match[1];
@@ -447,7 +448,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'cue-in',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         if (match[1]) {
           event.data = match[1];
@@ -462,7 +463,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'skip',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         event.attributes = parseAttributes(match[1]);
 
@@ -483,7 +484,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'part',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         event.attributes = parseAttributes(match[1]);
         ['DURATION'].forEach(function(key) {
@@ -510,7 +511,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'server-control',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         event.attributes = parseAttributes(match[1]);
         ['CAN-SKIP-UNTIL', 'PART-HOLD-BACK', 'HOLD-BACK'].forEach(function(key) {
@@ -533,7 +534,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'part-inf',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         event.attributes = parseAttributes(match[1]);
         ['PART-TARGET'].forEach(function(key) {
@@ -551,7 +552,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'preload-hint',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         event.attributes = parseAttributes(match[1]);
         ['BYTERANGE-START', 'BYTERANGE-LENGTH'].forEach(function(key) {
@@ -575,7 +576,7 @@ export default class ParseStream extends Stream {
         event = {
           type: 'tag',
           tagType: 'rendition-report',
-          raw: newLine
+          raw: this.returnRaw ? newLine : undefined
         };
         event.attributes = parseAttributes(match[1]);
         ['LAST-MSN', 'LAST-PART'].forEach(function(key) {
@@ -592,7 +593,7 @@ export default class ParseStream extends Stream {
       this.trigger('data', {
         type: 'tag',
         data: newLine.slice(4),
-        raw: newLine
+        raw: this.returnRaw ? newLine : undefined
       });
     });
   }

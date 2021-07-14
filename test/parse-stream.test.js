@@ -5,8 +5,11 @@ import sinon from 'sinon';
 QUnit.module('ParseStream', {
   beforeEach() {
     this.lineStream = new LineStream();
+    this.lineStreamReturnRaw = new LineStream();
     this.parseStream = new ParseStream();
+    this.parseStreamReturnRaw = new ParseStream(true);
     this.lineStream.pipe(this.parseStream);
+    this.lineStreamReturnRaw.pipe(this.parseStreamReturnRaw);
   }
 });
 
@@ -79,6 +82,56 @@ QUnit.test('mapper does not conflict with parser', function(assert) {
   assert.deepEqual(dataCallback.getCall(2).args[0], {
     text: 'SOMETHING-ELSE',
     type: 'comment',
+    raw: undefined
+  });
+});
+
+QUnit.test('mapper does not conflict with parser and returns raw', function(assert) {
+  const manifest = '#EXAMPLE\n';
+  const commentMapper = sinon.spy(line => '#NEW-COMMENT');
+  const commentMapper2 = sinon.spy(line => '#SOMETHING-ELSE');
+  const dataCallback = sinon.spy();
+
+  this.parseStreamReturnRaw.addTagMapper({
+    expression: /^#EXAMPLE/,
+    map: commentMapper
+  });
+  this.parseStreamReturnRaw.addTagMapper({
+    expression: /^#EXAMPLE/,
+    map: commentMapper2
+  });
+
+  this.parseStreamReturnRaw.addParser({
+    expression: /^#EXAMPLE/,
+    customType: 'test'
+  });
+  this.parseStreamReturnRaw.addParser({
+    expression: /^#NEW-COMMENT/,
+    customType: 'test2'
+  });
+
+  this.parseStreamReturnRaw.on('data', dataCallback);
+  this.lineStreamReturnRaw.push(manifest);
+
+  assert.ok(commentMapper.called);
+  assert.ok(commentMapper2.called);
+  assert.strictEqual(dataCallback.callCount, 3);
+
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    data: '#EXAMPLE',
+    type: 'custom',
+    customType: 'test',
+    segment: undefined
+  });
+  assert.deepEqual(dataCallback.getCall(1).args[0], {
+    data: '#NEW-COMMENT',
+    type: 'custom',
+    customType: 'test2',
+    segment: undefined
+  });
+  assert.deepEqual(dataCallback.getCall(2).args[0], {
+    text: 'SOMETHING-ELSE',
+    type: 'comment',
     raw: '#SOMETHING-ELSE'
   });
 });
@@ -95,6 +148,34 @@ QUnit.test('maps custom tags', function(assert) {
 
   this.parseStream.on('data', dataCallback);
   this.lineStream.push(manifest);
+
+  assert.ok(commentMapper.called);
+  assert.strictEqual(dataCallback.callCount, 2);
+
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'EXAMPLE',
+    type: 'comment',
+    raw: undefined
+  });
+  assert.deepEqual(dataCallback.getCall(1).args[0], {
+    text: 'NEW-COMMENT',
+    type: 'comment',
+    raw: undefined
+  });
+});
+
+QUnit.test('maps custom tags and returns raw', function(assert) {
+  const manifest = '#EXAMPLE\n';
+  const commentMapper = sinon.spy(line => '#NEW-COMMENT');
+  const dataCallback = sinon.spy();
+
+  this.parseStreamReturnRaw.addTagMapper({
+    expression: /^#EXAMPLE/,
+    map: commentMapper
+  });
+
+  this.parseStreamReturnRaw.on('data', dataCallback);
+  this.lineStreamReturnRaw.push(manifest);
 
   assert.ok(commentMapper.called);
   assert.strictEqual(dataCallback.callCount, 2);
@@ -141,6 +222,52 @@ QUnit.test('maps multiple custom tags', function(assert) {
   assert.deepEqual(dataCallback.getCall(0).args[0], {
     text: 'VOD-STARTTIMESTAMP:1501533337573',
     type: 'comment',
+    raw: undefined
+  });
+
+  assert.deepEqual(dataCallback.getCall(1).args[0], {
+    text: 'NEW-COMMENT',
+    type: 'comment',
+    raw: undefined
+  });
+
+  const dateTag = dataCallback.getCall(2).args[0];
+
+  assert.strictEqual(dateTag.dateTimeString, '2017-07-31T20:35:37.573Z');
+  assert.strictEqual(dateTag.tagType, 'program-date-time');
+  assert.strictEqual(dateTag.type, 'tag');
+});
+
+QUnit.test('maps multiple custom tags and returns raw', function(assert) {
+  const manifest = '#VOD-STARTTIMESTAMP:1501533337573\n';
+  const commentMapper = sinon.spy(line => '#NEW-COMMENT');
+  const pdtMapper = sinon.spy((line) => {
+    const match = /#VOD-STARTTIMESTAMP:(\d+)/g.exec(line)[1];
+    const ISOdate = new Date(Number(match)).toISOString();
+
+    return `#EXT-X-PROGRAM-DATE-TIME:${ISOdate}`;
+  });
+  const dataCallback = sinon.spy();
+
+  this.parseStreamReturnRaw.addTagMapper({
+    expression: /^#VOD-STARTTIMESTAMP/,
+    map: commentMapper
+  });
+  this.parseStreamReturnRaw.addTagMapper({
+    expression: /^#VOD-STARTTIMESTAMP/,
+    map: pdtMapper
+  });
+
+  this.parseStreamReturnRaw.on('data', dataCallback);
+  this.lineStreamReturnRaw.push(manifest);
+
+  assert.ok(commentMapper.called);
+  assert.ok(pdtMapper.called);
+  assert.strictEqual(dataCallback.callCount, 3);
+
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'VOD-STARTTIMESTAMP:1501533337573',
+    type: 'comment',
     raw: '#VOD-STARTTIMESTAMP:1501533337573'
   });
 
@@ -170,6 +297,28 @@ QUnit.test('mapper ignores tags', function(assert) {
 
   this.parseStream.on('data', dataCallback);
   this.lineStream.push(manifest);
+
+  assert.strictEqual(dataCallback.callCount, 1);
+  assert.deepEqual(dataCallback.getCall(0).args[0], {
+    text: 'TAG',
+    type: 'comment',
+    raw: undefined
+  });
+});
+
+QUnit.test('mapper ignores tags and returns raw', function(assert) {
+  const manifest = '#TAG\n';
+  const dataCallback = sinon.spy();
+
+  this.parseStreamReturnRaw.addTagMapper({
+    expression: /^#NO-MATCH/,
+    map(line) {
+      return '#MAPPED';
+    }
+  });
+
+  this.parseStreamReturnRaw.on('data', dataCallback);
+  this.lineStreamReturnRaw.push(manifest);
 
   assert.strictEqual(dataCallback.callCount, 1);
   assert.deepEqual(dataCallback.getCall(0).args[0], {
@@ -759,7 +908,7 @@ QUnit.test('parses valid #EXT-X-KEY tags', function(assert) {
       METHOD: 'AES-128',
       URI: 'https://priv.example.com/key.php?r=52'
     },
-    raw: '#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\"'
+    raw: undefined
   }, 'parsed a valid key');
 
   manifest = '#EXT-X-KEY:URI="https://example.com/key#1",METHOD=FutureType-1024\n';
@@ -772,11 +921,57 @@ QUnit.test('parses valid #EXT-X-KEY tags', function(assert) {
       METHOD: 'FutureType-1024',
       URI: 'https://example.com/key#1'
     },
-    raw: '#EXT-X-KEY:URI=\"https://example.com/key#1\",METHOD=FutureType-1024'
+    raw: undefined
   }, 'parsed the attribute list independent of order');
 
   manifest = '#EXT-X-KEY:IV=1234567890abcdef1234567890abcdef\n';
   this.lineStream.push(manifest);
+  assert.ok(element.attributes.IV, 'detected an IV attribute');
+  assert.deepEqual(element.attributes.IV, new Uint32Array([
+    0x12345678,
+    0x90abcdef,
+    0x12345678,
+    0x90abcdef
+  ]), 'parsed an IV value');
+});
+
+// #EXT-X-KEY
+QUnit.test('parses valid #EXT-X-KEY tags and returns raw', function(assert) {
+  let manifest =
+    '#EXT-X-KEY:METHOD=AES-128,URI="https://priv.example.com/key.php?r=52"\n';
+  let element;
+
+  this.parseStreamReturnRaw.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStreamReturnRaw.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.deepEqual(element, {
+    type: 'tag',
+    tagType: 'key',
+    attributes: {
+      METHOD: 'AES-128',
+      URI: 'https://priv.example.com/key.php?r=52'
+    },
+    raw: '#EXT-X-KEY:METHOD=AES-128,URI=\"https://priv.example.com/key.php?r=52\"'
+  }, 'parsed a valid key');
+
+  manifest = '#EXT-X-KEY:URI="https://example.com/key#1",METHOD=FutureType-1024\n';
+  this.lineStreamReturnRaw.push(manifest);
+  assert.ok(element, 'an event was triggered');
+  assert.deepEqual(element, {
+    type: 'tag',
+    tagType: 'key',
+    attributes: {
+      METHOD: 'FutureType-1024',
+      URI: 'https://example.com/key#1'
+    },
+    raw: '#EXT-X-KEY:URI=\"https://example.com/key#1\",METHOD=FutureType-1024'
+  }, 'parsed the attribute list independent of order');
+
+  manifest = '#EXT-X-KEY:IV=1234567890abcdef1234567890abcdef\n';
+  this.lineStreamReturnRaw.push(manifest);
   assert.ok(element.attributes.IV, 'detected an IV attribute');
   assert.deepEqual(element.attributes.IV, new Uint32Array([
     0x12345678,
@@ -794,6 +989,23 @@ QUnit.test('parses minimal #EXT-X-KEY tags', function(assert) {
     element = elem;
   });
   this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.deepEqual(element, {
+    type: 'tag',
+    tagType: 'key',
+    raw: undefined
+  }, 'parsed a minimal key tag');
+});
+
+QUnit.test('parses minimal #EXT-X-KEY tags and returns raw', function(assert) {
+  const manifest = '#EXT-X-KEY:\n';
+  let element;
+
+  this.parseStreamReturnRaw.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStreamReturnRaw.push(manifest);
 
   assert.ok(element, 'an event was triggered');
   assert.deepEqual(element, {
