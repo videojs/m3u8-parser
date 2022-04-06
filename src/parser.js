@@ -91,17 +91,18 @@ const setHoldBack = function(manifest) {
  * @extends Stream
  */
 export default class Parser extends Stream {
-  constructor() {
+  constructor(returnRaw = false) {
     super();
     this.lineStream = new LineStream();
-    this.parseStream = new ParseStream();
+    this.parseStream = new ParseStream(returnRaw);
     this.lineStream.pipe(this.parseStream);
+    this.returnRaw = returnRaw;
 
     /* eslint-disable consistent-this */
     const self = this;
     /* eslint-enable consistent-this */
     const uris = [];
-    let currentUri = {};
+    let currentUri = { raw: this.returnRaw ? [] : undefined };
     // if specified, the active EXT-X-MAP definition
     let currentMap;
     // if specified, the active decryption key
@@ -178,6 +179,10 @@ export default class Parser extends Stream {
               }
             },
             byterange() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
+
               const byterange = {};
 
               if ('length' in entry) {
@@ -208,6 +213,9 @@ export default class Parser extends Stream {
               this.manifest.endList = true;
             },
             inf() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               if (!('mediaSequence' in this.manifest)) {
                 this.manifest.mediaSequence = 0;
                 this.trigger('info', {
@@ -379,6 +387,10 @@ export default class Parser extends Stream {
               }
             },
             'stream-inf'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
+
               this.manifest.playlists = uris;
               this.manifest.mediaGroups =
                 this.manifest.mediaGroups || defaultMediaGroups;
@@ -445,11 +457,18 @@ export default class Parser extends Stream {
               mediaGroup[entry.attributes.NAME] = rendition;
             },
             discontinuity() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
+
               currentTimeline += 1;
               currentUri.discontinuity = true;
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               if (typeof this.manifest.dateTimeString === 'undefined') {
                 // PROGRAM-DATE-TIME is a media-segment tag, but for backwards
                 // compatibility, we add the first occurence of the PROGRAM-DATE-TIME tag
@@ -486,12 +505,21 @@ export default class Parser extends Stream {
               };
             },
             'cue-out'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               currentUri.cueOut = entry.data;
             },
             'cue-out-cont'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               currentUri.cueOutCont = entry.data;
             },
             'cue-in'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               currentUri.cueIn = entry.data;
             },
             'skip'() {
@@ -504,6 +532,9 @@ export default class Parser extends Stream {
               );
             },
             'part'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               hasParts = true;
               // parts are always specifed before a segment
               const segmentIndex = this.manifest.segments.length;
@@ -555,6 +586,9 @@ export default class Parser extends Stream {
               }
             },
             'preload-hint'() {
+              if (this.returnRaw) {
+                currentUri.raw.push(entry.raw);
+              }
               // parts are always specifed before a segment
               const segmentIndex = this.manifest.segments.length;
               const hint = camelCaseKeys(entry.attributes);
@@ -635,6 +669,9 @@ export default class Parser extends Stream {
           })[entry.tagType] || noop).call(self);
         },
         uri() {
+          if (this.returnRaw) {
+            currentUri.raw.push(entry.raw);
+          }
           currentUri.uri = entry.uri;
           uris.push(currentUri);
 
@@ -659,7 +696,7 @@ export default class Parser extends Stream {
           lastPartByterangeEnd = 0;
 
           // prepare for the next URI
-          currentUri = {};
+          currentUri = { raw: this.returnRaw ? [] : undefined };
         },
         comment() {
           // comments are not important for playback
@@ -667,6 +704,9 @@ export default class Parser extends Stream {
         custom() {
           // if this is segment-level data attach the output to the segment
           if (entry.segment) {
+            if (this.returnRaw) {
+              currentUri.raw.push(entry.raw);
+            }
             currentUri.custom = currentUri.custom || {};
             currentUri.custom[entry.customType] = entry.data;
           // if this is manifest-level data attach to the top level manifest object

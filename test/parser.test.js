@@ -1,11 +1,14 @@
 import QUnit from 'qunit';
 import testDataExpected from 'data-files!expecteds';
 import testDataManifests from 'data-files!manifests';
+import testDataExpectedWithRaw from 'data-files!expectedsWithRaw';
+import testDataManifestsWithRaw from 'data-files!manifestsWithRaw';
 import {Parser} from '../src';
 
 QUnit.module('m3u8s', function(hooks) {
   hooks.beforeEach(function() {
     this.parser = new Parser();
+    this.parserReturnRaw = new Parser(true);
     QUnit.dump.maxDepth = 8;
   });
 
@@ -876,6 +879,28 @@ QUnit.module('m3u8s', function(hooks) {
       assert.deepEqual(
         this.parser.manifest,
         testDataExpected[key](),
+        key + '.m3u8 was parsed correctly'
+      );
+    });
+  }
+
+  for (const key in testDataExpectedWithRaw) {
+    if (!testDataManifestsWithRaw[key]) {
+      throw new Error(`${key}.js does not have an equivelent m3u8 manifest to test against`);
+    }
+  }
+
+  for (const key in testDataManifestsWithRaw) {
+    if (!testDataExpectedWithRaw[key]) {
+      throw new Error(`${key}.m3u8 does not have an equivelent expected js file to test against`);
+    }
+    QUnit.test(`parses ${key}.m3u8 as expected in ${key}.js`, function(assert) {
+      this.parserReturnRaw.push(testDataManifestsWithRaw[key]());
+      this.parserReturnRaw.end();
+
+      assert.deepEqual(
+        this.parserReturnRaw.manifest,
+        testDataExpectedWithRaw[key](),
         key + '.m3u8 was parsed correctly'
       );
     });
