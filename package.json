@@ -86,7 +86,7 @@
   },
   "browserslist": [
     "defaults",
-    "ie 11"
+    "not ie 11"
   ],
   "husky": {
     "hooks": {
