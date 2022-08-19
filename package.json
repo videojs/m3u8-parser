@@ -29,7 +29,7 @@
     "build:js": "rollup -c scripts/rollup.config.js",
     "clean": "shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist",
     "lint": "vjsstandard",
-    "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose",
+    "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose --skip-es-check",
     "start": "npm-run-all -p server watch",
     "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
     "test": "npm-run-all lint build-test test:*",
