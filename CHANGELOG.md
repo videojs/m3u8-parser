@@ -1,3 +1,22 @@
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/videojs/m3u8-parser/compare/v4.7.1...v5.0.0) (2022-08-19)
+
+### Features
+
+* parse FRAME-RATE as a number ([#150](https://github.com/videojs/m3u8-parser/issues/150)) ([d51e93f](https://github.com/videojs/m3u8-parser/commit/d51e93f))
+
+### Chores
+
+* do not run es-check on publish ([#153](https://github.com/videojs/m3u8-parser/issues/153)) ([4e0bc63](https://github.com/videojs/m3u8-parser/commit/4e0bc63))
+* remove IE11 support ([#152](https://github.com/videojs/m3u8-parser/issues/152)) ([fc12241](https://github.com/videojs/m3u8-parser/commit/fc12241))
+
+
+### BREAKING CHANGES
+
+* Internet Explorer is no longer supported.
+* parser changes an output type for 'FRAME-RATE'
+attribute from a string to a number.
+
 <a name="4.7.1"></a>
 ## [4.7.1](https://github.com/videojs/m3u8-parser/compare/v4.7.0...v4.7.1) (2022-04-05)
 
