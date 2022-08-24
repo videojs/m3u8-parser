@@ -856,6 +856,30 @@ QUnit.module('m3u8s', function(hooks) {
       'info as expected'
     );
   });
+  QUnit.test('Can skip wiseplay with widevine/fairplay/playready drm ext-x-key', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:10',
+      '#EXT-X-PART-INF:PART-TARGET=1',
+      '#EXT-X-SERVER-CONTROL:foo=bar',
+      '#EXT-X-KEY:METHOD=SAMPLE-AES,URI="data:text/plain;base64,foo",KEYID=0x555777,IV=1234567890abcdef1234567890abcdef,KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:3d5e6d35-9b9a-41e8-b843-dd3c6e72c42c"',
+      '#EXT-X-KEY:METHOD=SAMPLE-AES,URI="data:text/plain;base64,foo",KEYID=0x555777,IV=1234567890abcdef1234567890abcdef,KEYFORMATVERSIONS="1",KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"',
+      '#EXT-X-KEY:METHOD=SAMPLE-AES,URI="skd://foo",KEYFORMATVERSIONS="1",KEYFORMAT="com.apple.streamingkeydelivery"',
+      '#EXT-X-KEY:METHOD=SAMPLE-AES,URI="http://example.com",KEYFORMATVERSIONS="1",KEYFORMAT="com.microsoft.playready"',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.deepEqual(
+      Object.keys(this.parser.manifest.contentProtection),
+      ['com.widevine.alpha', 'com.apple.fps.1_0', 'com.microsoft.playready'],
+      'info as expected'
+    );
+  });
 
   QUnit.module('integration');
 
