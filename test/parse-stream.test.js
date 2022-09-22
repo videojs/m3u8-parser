@@ -810,16 +810,6 @@ QUnit.test('parses lightly-broken #EXT-X-KEY tags', function(assert) {
   );
 
   element = null;
-  manifest = '#EXT-X-KEYURI="https://example.com/key",METHOD=AES-128\n';
-  this.lineStream.push(manifest);
-  assert.strictEqual(element.tagType, 'key', 'parsed the tag type');
-  assert.strictEqual(
-    element.attributes.URI,
-    'https://example.com/key',
-    'inferred a colon after the tag type'
-  );
-
-  element = null;
   manifest = '#EXT-X-KEY:  URI =  "https://example.com/key",METHOD=AES-128\n';
   this.lineStream.push(manifest);
   assert.strictEqual(

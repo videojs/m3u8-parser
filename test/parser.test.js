@@ -108,11 +108,10 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXT-X-CUE-OUT:10',
       '#EXTINF:5,',
       'ex2.ts',
-      '#EXT-X-CUE-OUT15',
       '#EXT-UKNOWN-TAG',
       '#EXTINF:5,',
       'ex3.ts',
-      '#EXT-X-CUE-OUT',
+      '#EXT-X-CUE-OUT:',
       '#EXTINF:5,',
       'ex3.ts',
       '#EXT-X-ENDLIST'
@@ -122,7 +121,6 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     assert.equal(this.parser.manifest.segments[1].cueOut, '10', 'parser attached cue out tag');
-    assert.equal(this.parser.manifest.segments[2].cueOut, '15', 'cue out without : seperator');
     assert.equal(this.parser.manifest.segments[3].cueOut, '', 'cue out without data');
   });
 
@@ -135,11 +133,10 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXT-X-CUE-OUT-CONT:10/60',
       '#EXTINF:5,',
       'ex2.ts',
-      '#EXT-X-CUE-OUT-CONT15/30',
       '#EXT-UKNOWN-TAG',
       '#EXTINF:5,',
       'ex3.ts',
-      '#EXT-X-CUE-OUT-CONT',
+      '#EXT-X-CUE-OUT-CONT:',
       '#EXTINF:5,',
       'ex3.ts',
       '#EXT-X-ENDLIST'
@@ -152,10 +149,6 @@ QUnit.module('m3u8s', function(hooks) {
       this.parser.manifest.segments[1].cueOutCont, '10/60',
       'parser attached cue out cont tag'
     );
-    assert.equal(
-      this.parser.manifest.segments[2].cueOutCont, '15/30',
-      'cue out cont without : seperator'
-    );
     assert.equal(this.parser.manifest.segments[3].cueOutCont, '', 'cue out cont without data');
   });
 
@@ -165,14 +158,13 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:5,',
       '#COMMENT',
       'ex1.ts',
-      '#EXT-X-CUE-IN',
+      '#EXT-X-CUE-IN:',
       '#EXTINF:5,',
       'ex2.ts',
       '#EXT-X-CUE-IN:15',
       '#EXT-UKNOWN-TAG',
       '#EXTINF:5,',
       'ex3.ts',
-      '#EXT-X-CUE-IN=abc',
       '#EXTINF:5,',
       'ex3.ts',
       '#EXT-X-ENDLIST'
@@ -183,10 +175,6 @@ QUnit.module('m3u8s', function(hooks) {
 
     assert.equal(this.parser.manifest.segments[1].cueIn, '', 'parser attached cue in tag');
     assert.equal(this.parser.manifest.segments[2].cueIn, '15', 'cue in with data');
-    assert.equal(
-      this.parser.manifest.segments[3].cueIn, '=abc',
-      'cue in without colon seperator'
-    );
   });
 
   QUnit.test('parses characteristics attribute', function(assert) {
