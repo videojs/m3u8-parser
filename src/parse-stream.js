@@ -43,9 +43,14 @@ const attributeSeparator = function() {
  * @param {string} attributes the attribute line to parse
  */
 const parseAttributes = function(attributes) {
+  const result = {};
+
+  if (!attributes) {
+    return result;
+  }
+
   // split the string using attributes as the separator
   const attrs = attributes.split(attributeSeparator());
-  const result = {};
   let i = attrs.length;
   let attr;
 
@@ -164,7 +169,7 @@ export default class ParseStream extends Stream {
         });
         return;
       }
-      match = (/^#EXTINF:?([0-9\.]*)?,?(.*)?$/).exec(newLine);
+      match = (/^#EXTINF:([0-9\.]*)?,?(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -179,7 +184,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-TARGETDURATION:?([0-9.]*)?/).exec(newLine);
+      match = (/^#EXT-X-TARGETDURATION:([0-9.]*)?/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -191,7 +196,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-VERSION:?([0-9.]*)?/).exec(newLine);
+      match = (/^#EXT-X-VERSION:([0-9.]*)?/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -203,7 +208,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-MEDIA-SEQUENCE:?(\-?[0-9.]*)?/).exec(newLine);
+      match = (/^#EXT-X-MEDIA-SEQUENCE:(\-?[0-9.]*)?/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -215,7 +220,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-DISCONTINUITY-SEQUENCE:?(\-?[0-9.]*)?/).exec(newLine);
+      match = (/^#EXT-X-DISCONTINUITY-SEQUENCE:(\-?[0-9.]*)?/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -227,7 +232,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-PLAYLIST-TYPE:?(.*)?$/).exec(newLine);
+      match = (/^#EXT-X-PLAYLIST-TYPE:(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -239,7 +244,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-BYTERANGE:?(.*)?$/).exec(newLine);
+      match = (/^#EXT-X-BYTERANGE:(.*)?$/).exec(newLine);
       if (match) {
         event = Object.assign(parseByterange(match[1]), {
           type: 'tag',
@@ -248,7 +253,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-ALLOW-CACHE:?(YES|NO)?/).exec(newLine);
+      match = (/^#EXT-X-ALLOW-CACHE:(YES|NO)?/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -260,7 +265,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-MAP:?(.*)$/).exec(newLine);
+      match = (/^#EXT-X-MAP:(.*)$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -281,7 +286,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-STREAM-INF:?(.*)$/).exec(newLine);
+      match = (/^#EXT-X-STREAM-INF:(.*)$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -315,7 +320,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-MEDIA:?(.*)$/).exec(newLine);
+      match = (/^#EXT-X-MEDIA:(.*)$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -343,7 +348,7 @@ export default class ParseStream extends Stream {
         });
         return;
       }
-      match = (/^#EXT-X-PROGRAM-DATE-TIME:?(.*)$/).exec(newLine);
+      match = (/^#EXT-X-PROGRAM-DATE-TIME:(.*)$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -356,7 +361,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-KEY:?(.*)$/).exec(newLine);
+      match = (/^#EXT-X-KEY:(.*)$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -381,7 +386,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-START:?(.*)$/).exec(newLine);
+      match = (/^#EXT-X-START:(.*)$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -396,7 +401,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-CUE-OUT-CONT:?(.*)?$/).exec(newLine);
+      match = (/^#EXT-X-CUE-OUT-CONT:(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -410,7 +415,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-CUE-OUT:?(.*)?$/).exec(newLine);
+      match = (/^#EXT-X-CUE-OUT:(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
@@ -424,7 +429,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-CUE-IN:?(.*)?$/).exec(newLine);
+      match = (/^#EXT-X-CUE-IN:(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',

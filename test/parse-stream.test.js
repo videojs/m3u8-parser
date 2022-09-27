@@ -242,7 +242,7 @@ QUnit.test('parses #EXTM3U tags', function(assert) {
 
 // #EXTINF
 QUnit.test('parses minimal #EXTINF tags', function(assert) {
-  const manifest = '#EXTINF\n';
+  const manifest = '#EXTINF:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -319,7 +319,7 @@ QUnit.test('parses #EXTINF tags with carriage returns', function(assert) {
 
 // #EXT-X-TARGETDURATION
 QUnit.test('parses minimal #EXT-X-TARGETDURATION tags', function(assert) {
-  const manifest = '#EXT-X-TARGETDURATION\n';
+  const manifest = '#EXT-X-TARGETDURATION:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -379,7 +379,7 @@ QUnit.test('parses #EXT-X-VERSION with a version', function(assert) {
 
 // #EXT-X-MEDIA-SEQUENCE
 QUnit.test('parses minimal #EXT-X-MEDIA-SEQUENCE tags', function(assert) {
-  const manifest = '#EXT-X-MEDIA-SEQUENCE\n';
+  const manifest = '#EXT-X-MEDIA-SEQUENCE:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -453,7 +453,7 @@ QUnit.test('parses #EXT-X-PLAYLIST-TYPE with mutability info', function(assert) 
 
 // #EXT-X-BYTERANGE
 QUnit.test('parses minimal #EXT-X-BYTERANGE tags', function(assert) {
-  const manifest = '#EXT-X-BYTERANGE\n';
+  const manifest = '#EXT-X-BYTERANGE:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -589,7 +589,7 @@ QUnit.test('parses #EXT-X-MAP tags with arbitrary attributes', function(assert) 
 });
 // #EXT-X-STREAM-INF
 QUnit.test('parses minimal #EXT-X-STREAM-INF tags', function(assert) {
-  const manifest = '#EXT-X-STREAM-INF\n';
+  const manifest = '#EXT-X-STREAM-INF:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -604,7 +604,7 @@ QUnit.test('parses minimal #EXT-X-STREAM-INF tags', function(assert) {
 });
 // #EXT-X-PROGRAM-DATE-TIME
 QUnit.test('parses minimal EXT-X-PROGRAM-DATE-TIME tags', function(assert) {
-  const manifest = '#EXT-X-PROGRAM-DATE-TIME\n';
+  const manifest = '#EXT-X-PROGRAM-DATE-TIME:\n';
   let element;
 
   this.parseStream.on('data', function(elem) {
@@ -807,16 +807,6 @@ QUnit.test('parses lightly-broken #EXT-X-KEY tags', function(assert) {
     element.attributes.URI,
     'https://example.com/single-quote',
     'parsed a single-quoted uri'
-  );
-
-  element = null;
-  manifest = '#EXT-X-KEYURI="https://example.com/key",METHOD=AES-128\n';
-  this.lineStream.push(manifest);
-  assert.strictEqual(element.tagType, 'key', 'parsed the tag type');
-  assert.strictEqual(
-    element.attributes.URI,
-    'https://example.com/key',
-    'inferred a colon after the tag type'
   );
 
   element = null;
