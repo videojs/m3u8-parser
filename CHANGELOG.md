@@ -1,3 +1,19 @@
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/videojs/m3u8-parser/compare/v5.0.0...v6.0.0) (2022-09-27)
+
+### Bug Fixes
+
+* non standard tag match ([#156](https://github.com/videojs/m3u8-parser/issues/156)) ([8d56f30](https://github.com/videojs/m3u8-parser/commit/8d56f30)), closes [#22](https://github.com/videojs/m3u8-parser/issues/22)
+
+### Chores
+
+* don't run tests on version ([b84575f](https://github.com/videojs/m3u8-parser/commit/b84575f))
+
+
+### BREAKING CHANGES
+
+* Missing colon (:) tag delimiters are no longer supported
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/videojs/m3u8-parser/compare/v4.7.1...v5.0.0) (2022-08-19)
 
