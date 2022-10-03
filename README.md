@@ -113,6 +113,7 @@ Manifest {
   discontinuityStarts: [number],
   segments: [
     {
+      title: string,
       byterange: {
         length: number,
         offset: number

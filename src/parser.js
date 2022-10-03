@@ -220,6 +220,11 @@ export default class Parser extends Stream {
                   message: 'defaulting discontinuity sequence to zero'
                 });
               }
+
+              if (entry.title) {
+                currentUri.title = entry.title;
+              }
+
               if (entry.duration > 0) {
                 currentUri.duration = entry.duration;
               }
