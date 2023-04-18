@@ -631,6 +631,48 @@ export default class Parser extends Stream {
               }
 
               setHoldBack.call(this, this.manifest);
+            },
+            'daterange'() {
+              this.manifest.daterange = camelCaseKeys(entry.attributes);
+              this.warnOnMissingAttributes_(
+                '#EXT-X-DATERANGE',
+                entry.attributes,
+                ['ID', 'START-DATE']
+              );
+              const daterange = this.manifest.daterange;
+
+              if (daterange.endDate && daterange.startDate && new Date(daterange.endDate) < new Date(daterange.startDate)) {
+                this.trigger('warn', {
+                  message: 'EXT-X-DATERANGE END-DATE must be equal to or later than the value of the START-DATE'
+                });
+              }
+              if (daterange.duration && daterange.duration < 0) {
+                this.trigger('warn', {
+                  message: 'EXT-X-DATERANGE DURATION must not be negative'
+                });
+              }
+              if (daterange.plannedDuration && daterange.plannedDuration < 0) {
+                this.trigger('warn', {
+                  message: 'EXT-X-DATERANGE PLANNED-DURATION must not be negative'
+                });
+              }
+              const endOnNextYes = daterange.endOnNext && (/YES/i).test(daterange.endOnNext);
+
+              if (endOnNextYes && !daterange.class) {
+                this.trigger('warn', {
+                  message: 'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute'
+                });
+              }
+              if (endOnNextYes && (daterange.duration || daterange.endDate)) {
+                this.trigger('warn', {
+                  message: 'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must not contain DURATION or END-DATE attributes'
+                });
+              }
+              if (daterange.duration && daterange.endDate && (new Date(daterange.endDate) !== new Date(daterange.startDate) + daterange.duration)) {
+                this.trigger('warn', {
+                  message: 'EXT-X-DATERANGE with DURATION and END-DATE attribute must have END-DATE equal to START-DATE +  DURATION'
+                });
+              }
             }
           })[entry.tagType] || noop).call(self);
         },

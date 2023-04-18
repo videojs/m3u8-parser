@@ -879,7 +879,22 @@ QUnit.test('parses EXT-X-START PRECISE attribute', function(assert) {
   assert.strictEqual(element.attributes['TIME-OFFSET'], 1.4, 'parses time offset');
   assert.strictEqual(element.attributes.PRECISE, true, 'parses precise attribute');
 });
+//  #EXT-X-DATERANGE:
+QUnit.only('parses minimal EXT-X-DATERANGE tags', function(assert) {
+  const manifest = '#EXT-X-DATERANGE:ID=\"12345\",START-DATE=\"2023-04-13T15:15:15.840000Z\"\n';
+  let element;
 
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.strictEqual(element.type, 'tag', 'the line type is tag');
+  assert.strictEqual(element.tagType, 'daterange', 'the tag type is daterange');
+  assert.strictEqual(element.attributes.ID, '12345');
+  assert.deepEqual(element.attributes['START-DATE'], new Date('2023-04-13T15:15:15.840000Z'));
+});
 QUnit.test('ignores empty lines', function(assert) {
   const manifest = '\n';
   let event = false;

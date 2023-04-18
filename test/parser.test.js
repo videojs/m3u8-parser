@@ -845,6 +845,122 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
+  QUnit.test('warns when #EXT-X-DATERANGE missing attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-DATERANGE:ID="12345"'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-DATERANGE lacks required attribute(s): START-DATE'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+  // '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z",PLANNED-DURATION=38.4,SCTE35-OUT=0xFC302000000000000000FFF00F0500D41AA67FFFFE0034BC00C00000000000E4612424,X-COM-EXAMPLE-AD-ID="XYZ123"'
+  QUnit.test('warns when #EXT-X-DATERANGE end date attribute is less than start date', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-DATE="2023-04-13T15:15:15.840000Z"'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'EXT-X-DATERANGE END-DATE must be equal to or later than the value of the START-DATE'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-DATERANGE duration or planned duration attribute is negative', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",PLANNED-DURATION=-38.4,DURATION=-15.5'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'EXT-X-DATERANGE DURATION must not be negative',
+      'EXT-X-DATERANGE PLANNED-DURATION must not be negative'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-DATERANGE has a END-ON-NEXT=YES attribute and a DURATION or END-DATE attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z",END-ON-NEXT=YES, END-DATE="2023-04-13T18:16:15.840000Z",CLASS="CLASSATTRIBUTE'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must not contain DURATION or END-DATE attributes'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-DATERANGE has a END-ON-NEXT=YES attribute but not a CLASS attribute', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {
