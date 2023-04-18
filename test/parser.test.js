@@ -853,6 +853,7 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
       '#EXT-X-DATERANGE:ID="12345"'
     ].join('\n'));
     this.parser.end();
@@ -876,6 +877,7 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
       '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-DATE="2023-04-13T15:15:15.840000Z"'
     ].join('\n'));
     this.parser.end();
@@ -899,6 +901,7 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
       '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",PLANNED-DURATION=-38.4,DURATION=-15.5'
     ].join('\n'));
     this.parser.end();
@@ -923,6 +926,7 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
       '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z",END-ON-NEXT=YES, END-DATE="2023-04-13T18:16:15.840000Z",CLASS="CLASSATTRIBUTE'
     ].join('\n'));
     this.parser.end();
@@ -951,7 +955,32 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute'
+      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute',
+      'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('warns when playlist contains #EXT-X-DATERANGE tag but no #EXT-X-PROGRAM-DATE-TIME', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute',
+      'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
     ];
 
     assert.deepEqual(

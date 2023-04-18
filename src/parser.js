@@ -673,6 +673,12 @@ export default class Parser extends Stream {
                   message: 'EXT-X-DATERANGE with DURATION and END-DATE attribute must have END-DATE equal to START-DATE +  DURATION'
                 });
               }
+
+              if (daterange && !this.manifest.dateTimeString) {
+                this.trigger('warn', {
+                  message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
+                });
+              }
             }
           })[entry.tagType] || noop).call(self);
         },

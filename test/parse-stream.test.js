@@ -880,7 +880,7 @@ QUnit.test('parses EXT-X-START PRECISE attribute', function(assert) {
   assert.strictEqual(element.attributes.PRECISE, true, 'parses precise attribute');
 });
 //  #EXT-X-DATERANGE:
-QUnit.only('parses minimal EXT-X-DATERANGE tags', function(assert) {
+QUnit.test('parses minimal EXT-X-DATERANGE tags', function(assert) {
   const manifest = '#EXT-X-DATERANGE:ID=\"12345\",START-DATE=\"2023-04-13T15:15:15.840000Z\"\n';
   let element;
 
