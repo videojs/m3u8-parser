@@ -867,7 +867,7 @@ QUnit.module('m3u8s', function(hooks) {
       'warnings as expected'
     );
   });
-  // '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z",PLANNED-DURATION=38.4,SCTE35-OUT=0xFC302000000000000000FFF00F0500D41AA67FFFFE0034BC00C00000000000E4612424,X-COM-EXAMPLE-AD-ID="XYZ123"'
+
   QUnit.test('warns when #EXT-X-DATERANGE end date attribute is less than start date', function(assert) {
     this.parser.push([
       '#EXT-X-VERSION:3',
