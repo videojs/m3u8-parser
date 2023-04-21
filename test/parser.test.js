@@ -927,7 +927,7 @@ QUnit.module('m3u8s', function(hooks) {
       'media-00001.ts',
       '#EXT-X-ENDLIST',
       '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
-      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z",END-ON-NEXT=YES, END-DATE="2023-04-13T18:16:15.840000Z",CLASS="CLASSATTRIBUTE'
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z",END-ON-NEXT=YES, END-DATE="2023-04-13T18:16:15.840000Z",CLASS="CLASSATTRIBUTE"'
     ].join('\n'));
     this.parser.end();
 
@@ -950,13 +950,13 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
       '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES'
     ].join('\n'));
     this.parser.end();
 
     const warnings = [
-      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute',
-      'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
+      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute'
     ];
 
     assert.deepEqual(
@@ -964,6 +964,47 @@ QUnit.module('m3u8s', function(hooks) {
       warnings,
       'warnings as expected'
     );
+  });
+
+  QUnit.test('warns when playlist has multiple #EXT-X-DATERANGE tag same ID but different attribute names and values', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES,CLASS="CLASSATTRIBUTE"',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:20.840000Z"'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes and same attribute values'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('when #EXT-X-DATERANGE has both DURATION and END-DATE attributes, value of the END-DATE attribute must be START-DATE + DURATION', function(assert) {
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:16:15.840000Z",DURATION=14.0,END-DATE="2023-04-13T18:15:15.840000Z"'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.deepEqual(this.parser.manifest.daterange.endDate, new Date('2023-04-13T15:16:29.840000Z'));
   });
 
   QUnit.test('warns when playlist contains #EXT-X-DATERANGE tag but no #EXT-X-PROGRAM-DATE-TIME', function(assert) {
@@ -974,12 +1015,11 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXTINF:10,',
       'media-00001.ts',
       '#EXT-X-ENDLIST',
-      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES'
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES,CLASS="sampleClassAttrib"'
     ].join('\n'));
     this.parser.end();
 
     const warnings = [
-      'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute',
       'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
     ];
 
