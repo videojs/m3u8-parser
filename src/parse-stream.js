@@ -592,20 +592,20 @@ export default class ParseStream extends Stream {
 
         ['SCTE35-CMD', ' SCTE35-OUT', 'SCTE35-IN'].forEach(function(key) {
           if (event.attributes.hasOwnProperty(key)) {
-            event.attributes[key] = parseInt(event.attributes[key], 16);
+            event.attributes[key] = event.attributes[key].toString(16);
           }
         });
 
         const clientAttributePattern = /^X-([A-Z]+-)+[A-Z]+$/;
 
         for (const key in event.attributes) {
-          if (!clientAttributePattern.test(event.attributes[key])) {
+          if (!clientAttributePattern.test(key)) {
             continue;
           }
           const isHexaDecimal = (/[0-9A-Fa-f]{6}/g).test(event.attributes[key]);
           const isDecimalFloating = (/^\d+(\.\d+)?$/).test(event.attributes[key]);
 
-          event.attributes[key] = isHexaDecimal ? parseInt(event.attributes[key], 16) : isDecimalFloating ? parseFloat(event.attributes[key]) : String(event.attributes[key]);
+          event.attributes[key] = isHexaDecimal ? event.attributes[key].toString(16) : isDecimalFloating ? parseFloat(event.attributes[key]) : String(event.attributes[key]);
 
         }
 

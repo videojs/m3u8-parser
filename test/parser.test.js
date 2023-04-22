@@ -859,7 +859,7 @@ QUnit.module('m3u8s', function(hooks) {
     this.parser.end();
 
     const warnings = [
-      '#EXT-X-DATERANGE lacks required attribute(s): START-DATE'
+      '#EXT-X-DATERANGE #0 lacks required attribute(s): START-DATE'
     ];
 
     assert.deepEqual(
@@ -1004,7 +1004,7 @@ QUnit.module('m3u8s', function(hooks) {
     ].join('\n'));
     this.parser.end();
 
-    assert.deepEqual(this.parser.manifest.daterange.endDate, new Date('2023-04-13T15:16:29.840000Z'));
+    assert.deepEqual(this.parser.manifest.daterange[0].endDate, new Date('2023-04-13T15:16:29.840000Z'));
   });
 
   QUnit.test('warns when playlist contains #EXT-X-DATERANGE tag but no #EXT-X-PROGRAM-DATE-TIME', function(assert) {
@@ -1028,6 +1028,32 @@ QUnit.module('m3u8s', function(hooks) {
       warnings,
       'warnings as expected'
     );
+  });
+
+  QUnit.test(' playlist with multiple ext-x-daterange ', function(assert) {
+    this.parser.push([
+      ' #EXTM3U',
+      '#EXT-X-VERSION:6',
+      '#EXT-X-TARGETDURATION:8',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      '#EXT-X-DATERANGE:ID="event1",START-DATE="2023-04-20T10:00:00Z",DURATION=30.0,END-DATE="2023-04-20T10:00:30Z",X-CUSTOM-KEY="value"',
+      '#EXTINF:8.0',
+      'https://example.com/playlist1.m3u8',
+      '#EXT-SCTE35-IN:0xFC002F0000000000FF000014056FFFFFFF065870697070657220506F6F7200',
+      '#EXT-X-DATERANGE:ID="event2",START-DATE="2023-04-20T11:00:00Z",DURATION=60.0,END-DATE="2023-04-20T11:01:00Z",X-CUSTOM-KEY="value"',
+      '#EXTINF:8.0,',
+      'https://example.com/playlist2.m3u8',
+      '#EXT-SCTE35-OUT:0xFC002F0000000000FF000014056FFFFFFF065870697070657220506F6F7200',
+      '#EXT-X-DATERANGE:ID="event3",START-DATE="2023-04-20T12:00:00Z",DURATION=120.0,END-DATE="2023-04-20T12:02:00Z",X-CUSTOM-KEY="value"',
+      '#EXTINF:8.0',
+      'https://example.com/playlist3.m3u8',
+      '#EXT-SCTE35-IN:0xFC002F0000000000FF000014056FFFFFFF065870697070657220506F6F7200',
+      '#EXT-SCTE35-OUT:0xFC002F0000000000FF000014056FFFFFFF065870697070657220506F6F7200',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+    assert.equal(this.parser.manifest.daterange.length, 3);
   });
 
   QUnit.module('integration');
