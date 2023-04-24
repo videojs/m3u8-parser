@@ -880,7 +880,7 @@ QUnit.test('parses EXT-X-START PRECISE attribute', function(assert) {
   assert.strictEqual(element.attributes.PRECISE, true, 'parses precise attribute');
 });
 //  #EXT-X-DATERANGE:
-QUnit.test('parses minimal EXT-X-DATERANGE tags', function(assert) {
+QUnit.test('parses minimal EXT-X-DATERANGE tag', function(assert) {
   const manifest = '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T15:15:15.840000Z"\n';
   let element;
 
@@ -894,6 +894,24 @@ QUnit.test('parses minimal EXT-X-DATERANGE tags', function(assert) {
   assert.strictEqual(element.tagType, 'daterange', 'the tag type is daterange');
   assert.strictEqual(element.attributes.ID, '12345');
   assert.deepEqual(element.attributes['START-DATE'], new Date('2023-04-13T15:15:15.840000Z'));
+});
+
+QUnit.test('parses DURATION and PLANNED-DURATION attributes in EXT-X-DATERANGE tag', function(assert) {
+  const manifest = '#EXT-X-DATERANGE:ID="54545",START-DATE="2023-04-23T18:17:16.54000Z",PLANNED-DURATION="38.4",DURATION="15.5"\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.strictEqual(element.type, 'tag', 'the line type is tag');
+  assert.strictEqual(element.tagType, 'daterange', 'the tag type is daterange');
+  assert.strictEqual(element.attributes.ID, '54545');
+  assert.deepEqual(element.attributes['START-DATE'], new Date('2023-04-23T18:17:16.540000Z'));
+  assert.strictEqual(element.attributes.DURATION, 15.5);
+  assert.strictEqual(element.attributes['PLANNED-DURATION'], 38.4);
 });
 
 QUnit.test('parses SCTE35-CMD, SCTE35-OUT, SCTE35-IN EXT-X-DATERANGE tags', function(assert) {
