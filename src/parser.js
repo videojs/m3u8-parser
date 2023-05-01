@@ -660,7 +660,7 @@ export default class Parser extends Stream {
                   message: 'EXT-X-DATERANGE PLANNED-DURATION must not be negative'
                 });
               }
-              const endOnNextYes = daterange.endOnNext && (/YES/i).test(daterange.endOnNext);
+              const endOnNextYes = !!daterange.endOnNext;
 
               if (endOnNextYes && !daterange.class) {
                 this.trigger('warn', {

@@ -589,7 +589,11 @@ export default class ParseStream extends Stream {
             event.attributes[key] = parseFloat(event.attributes[key]);
           }
         });
-
+        ['END-ON-NEXT'].forEach(function(key) {
+          if (event.attributes.hasOwnProperty(key)) {
+            event.attributes[key] = (/YES/i).test(event.attributes[key]);
+          }
+        });
         ['SCTE35-CMD', ' SCTE35-OUT', 'SCTE35-IN'].forEach(function(key) {
           if (event.attributes.hasOwnProperty(key)) {
             event.attributes[key] = event.attributes[key].toString(16);
