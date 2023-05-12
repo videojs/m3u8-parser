@@ -1,3 +1,6 @@
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/videojs/m3u8-parser/compare/v6.0.0...v6.1.0) (2023-05-12)
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/videojs/m3u8-parser/compare/v5.0.0...v6.0.0) (2022-09-27)
 
