@@ -963,6 +963,21 @@ QUnit.test('custom attributes in EXT-X-DATERANGE are parsed', function(assert) {
   assert.ok(element, 'an event was triggered');
   assert.strictEqual(element.attributes['X-CUSTOM-KEY'], '0X12345abcde');
 });
+
+QUnit.test('parses EXT-X-INDEPENDENT-SEGMENTS', function(assert) {
+  const manifest = '#EXT-X-INDEPENDENT-SEGMENTS\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.strictEqual(element.type, 'tag', 'the line type is tag');
+  assert.strictEqual(element.tagType, 'independent-segments', 'the tag type is independent-segments');
+});
+
 QUnit.test('ignores empty lines', function(assert) {
   const manifest = '\n';
   let event = false;
