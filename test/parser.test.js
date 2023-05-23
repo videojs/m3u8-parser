@@ -1056,6 +1056,17 @@ QUnit.module('m3u8s', function(hooks) {
     assert.equal(this.parser.manifest.daterange.length, 3);
   });
 
+  QUnit.test('parses #EXT-X-INDEPENDENT-SEGMENTS', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-VERSION:6',
+      '#EXT-X-SERVER-CONTROL:CAN-BLOCK-RELOAD=YES,PART-HOLD-BACK=3.252,CAN-SKIP-UNTIL=42.0',
+      '#EXT-X-INDEPENDENT-SEGMENTS'
+    ].join('\n'));
+    this.parser.end();
+    assert.equal(this.parser.manifest.independentSegments, true);
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {

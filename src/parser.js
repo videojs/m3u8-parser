@@ -695,6 +695,9 @@ export default class Parser extends Stream {
                   }
                 }
               }
+            },
+            'independent-segments'() {
+              this.manifest.independentSegments = true;
             }
           })[entry.tagType] || noop).call(self);
         },
