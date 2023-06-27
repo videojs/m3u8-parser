@@ -132,7 +132,7 @@ export default class Parser extends Stream {
     let lastByterangeEnd = 0;
     // keep track of the last seen part's byte range end.
     let lastPartByterangeEnd = 0;
-    const daterangeTags = {};
+    const dateRangeTags = {};
 
     this.on('end', () => {
       // only add preloadSegment if we don't yet have a uri for it.
@@ -634,60 +634,60 @@ export default class Parser extends Stream {
               setHoldBack.call(this, this.manifest);
             },
             'daterange'() {
-              this.manifest.daterange = this.manifest.daterange || [];
-              this.manifest.daterange.push(camelCaseKeys(entry.attributes));
-              const index = this.manifest.daterange.length - 1;
+              this.manifest.dateRange = this.manifest.dateRange || [];
+              this.manifest.dateRange.push(camelCaseKeys(entry.attributes));
+              const index = this.manifest.dateRange.length - 1;
 
               this.warnOnMissingAttributes_(
                 `#EXT-X-DATERANGE #${index}`,
                 entry.attributes,
                 ['ID', 'START-DATE']
               );
-              const daterange = this.manifest.daterange[index];
+              const dateRange = this.manifest.dateRange[index];
 
-              if (daterange.endDate && daterange.startDate && new Date(daterange.endDate) < new Date(daterange.startDate)) {
+              if (dateRange.endDate && dateRange.startDate && new Date(dateRange.endDate) < new Date(dateRange.startDate)) {
                 this.trigger('warn', {
                   message: 'EXT-X-DATERANGE END-DATE must be equal to or later than the value of the START-DATE'
                 });
               }
-              if (daterange.duration && daterange.duration < 0) {
+              if (dateRange.duration && dateRange.duration < 0) {
                 this.trigger('warn', {
                   message: 'EXT-X-DATERANGE DURATION must not be negative'
                 });
               }
-              if (daterange.plannedDuration && daterange.plannedDuration < 0) {
+              if (dateRange.plannedDuration && dateRange.plannedDuration < 0) {
                 this.trigger('warn', {
                   message: 'EXT-X-DATERANGE PLANNED-DURATION must not be negative'
                 });
               }
-              const endOnNextYes = !!daterange.endOnNext;
+              const endOnNextYes = !!dateRange.endOnNext;
 
-              if (endOnNextYes && !daterange.class) {
+              if (endOnNextYes && !dateRange.class) {
                 this.trigger('warn', {
                   message: 'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must have a CLASS attribute'
                 });
               }
-              if (endOnNextYes && (daterange.duration || daterange.endDate)) {
+              if (endOnNextYes && (dateRange.duration || dateRange.endDate)) {
                 this.trigger('warn', {
                   message: 'EXT-X-DATERANGE with an END-ON-NEXT=YES attribute must not contain DURATION or END-DATE attributes'
                 });
               }
-              if (daterange.duration && daterange.endDate) {
-                const startDate = daterange.startDate;
-                const newDateInSeconds = startDate.setSeconds(startDate.getSeconds() + daterange.duration);
+              if (dateRange.duration && dateRange.endDate) {
+                const startDate = dateRange.startDate;
+                const newDateInSeconds = startDate.setSeconds(startDate.getSeconds() + dateRange.duration);
 
-                this.manifest.daterange[index].endDate = new Date(newDateInSeconds);
+                this.manifest.dateRange[index].endDate = new Date(newDateInSeconds);
               }
-              if (daterange && !this.manifest.dateTimeString) {
+              if (dateRange && !this.manifest.dateTimeString) {
                 this.trigger('warn', {
                   message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
                 });
               }
-              if (!daterangeTags[daterange.id]) {
-                daterangeTags[daterange.id] = daterange;
+              if (!dateRangeTags[dateRange.id]) {
+                dateRangeTags[dateRange.id] = dateRange;
               } else {
-                for (const attribute in daterangeTags[daterange.id]) {
-                  if (daterangeTags[daterange.id][attribute] !== daterange[attribute]) {
+                for (const attribute in dateRangeTags[dateRange.id]) {
+                  if (dateRangeTags[dateRange.id][attribute] !== dateRange[attribute]) {
                     this.trigger('warn', {
                       message: 'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes and same attribute values'
                     });
