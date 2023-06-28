@@ -1004,7 +1004,7 @@ QUnit.module('m3u8s', function(hooks) {
     ].join('\n'));
     this.parser.end();
 
-    assert.deepEqual(this.parser.manifest.dateRange[0].endDate, new Date('2023-04-13T15:16:29.840000Z'));
+    assert.deepEqual(this.parser.manifest.dateRanges[0].endDate, new Date('2023-04-13T15:16:29.840000Z'));
   });
 
   QUnit.test('warns when playlist contains #EXT-X-DATERANGE tag but no #EXT-X-PROGRAM-DATE-TIME', function(assert) {
@@ -1053,7 +1053,7 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXT-X-ENDLIST'
     ].join('\n'));
     this.parser.end();
-    assert.equal(this.parser.manifest.dateRange.length, 3);
+    assert.equal(this.parser.manifest.dateRanges.length, 3);
   });
 
   QUnit.test('parses #EXT-X-INDEPENDENT-SEGMENTS', function(assert) {

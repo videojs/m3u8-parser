@@ -634,16 +634,16 @@ export default class Parser extends Stream {
               setHoldBack.call(this, this.manifest);
             },
             'daterange'() {
-              this.manifest.dateRange = this.manifest.dateRange || [];
-              this.manifest.dateRange.push(camelCaseKeys(entry.attributes));
-              const index = this.manifest.dateRange.length - 1;
+              this.manifest.dateRanges = this.manifest.dateRanges || [];
+              this.manifest.dateRanges.push(camelCaseKeys(entry.attributes));
+              const index = this.manifest.dateRanges.length - 1;
 
               this.warnOnMissingAttributes_(
                 `#EXT-X-DATERANGE #${index}`,
                 entry.attributes,
                 ['ID', 'START-DATE']
               );
-              const dateRange = this.manifest.dateRange[index];
+              const dateRange = this.manifest.dateRanges[index];
 
               if (dateRange.endDate && dateRange.startDate && new Date(dateRange.endDate) < new Date(dateRange.startDate)) {
                 this.trigger('warn', {
@@ -676,7 +676,7 @@ export default class Parser extends Stream {
                 const startDate = dateRange.startDate;
                 const newDateInSeconds = startDate.setSeconds(startDate.getSeconds() + dateRange.duration);
 
-                this.manifest.dateRange[index].endDate = new Date(newDateInSeconds);
+                this.manifest.dateRanges[index].endDate = new Date(newDateInSeconds);
               }
               if (dateRange && !this.manifest.dateTimeString) {
                 this.trigger('warn', {
