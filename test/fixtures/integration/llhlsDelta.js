@@ -52,6 +52,7 @@ module.exports = {
     },
     {
       duration: 4.00008,
+      programDateTime: 1550110444106.08,
       timeline: 0,
       uri: 'fileSequence271.mp4',
       parts: [
@@ -110,6 +111,7 @@ module.exports = {
     {
       dateTimeObject: new Date('2019-02-14T02:14:00.106Z'),
       dateTimeString: '2019-02-14T02:14:00.106Z',
+      programDateTime: 1550110440106,
       duration: 4.00008,
       timeline: 0,
       uri: 'fileSequence272.mp4',
