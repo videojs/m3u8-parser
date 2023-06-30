@@ -845,6 +845,71 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
+  QUnit.test('PDT value is assigned to segments with explicit #EXT-X-PROGRAM-DATE-TIME tags', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-VERSION:6',
+      '#EXT-X-TARGETDURATION:8',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXTINF:8.0',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      'https://example.com/playlist1.m3u8',
+      '#EXTINF:8.0,',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T22:14:10.053+00:00',
+      'https://example.com/playlist2.m3u8',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+    assert.equal(this.parser.manifest.segments[0].programDateTime, new Date('2017-07-31T20:35:35.053+00:00').getTime());
+    assert.equal(this.parser.manifest.segments[1].programDateTime, new Date('2017-07-31T22:14:10.053+00:00').getTime());
+  });
+
+  QUnit.test('backfill PDT values when the first EXT-X-PROGRAM-DATE-TIME tag appears after one or more Media Segment URIs', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-VERSION:6',
+      '#EXT-X-TARGETDURATION:8',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXTINF:8.0',
+      'https://example.com/playlist1.m3u8',
+      '#EXTINF:8.0,',
+      'https://example.com/playlist2.m3u8',
+      '#EXTINF:8.0',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      'https://example.com/playlist3.m3u8',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+    const segments = this.parser.manifest.segments;
+
+    assert.equal(segments[2].programDateTime, new Date('2017-07-31T20:35:35.053+00:00').getTime());
+    assert.equal(segments[1].programDateTime, segments[2].programDateTime - (segments[1].duration * 1000));
+    assert.equal(segments[0].programDateTime, segments[1].programDateTime - (segments[0].duration * 1000));
+  });
+
+  QUnit.test('extrapolates forward when subsequent fragments do not have explicit PDT tags', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-VERSION:6',
+      '#EXT-X-TARGETDURATION:8',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXTINF:8.0',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      'https://example.com/playlist1.m3u8',
+      '#EXTINF:8.0,',
+      'https://example.com/playlist2.m3u8',
+      '#EXTINF:8.0',
+      'https://example.com/playlist3.m3u8',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+    const segments = this.parser.manifest.segments;
+
+    assert.equal(segments[0].programDateTime, new Date('2017-07-31T20:35:35.053+00:00').getTime());
+    assert.equal(segments[1].programDateTime, segments[0].programDateTime + segments[1].duration * 1000);
+    assert.equal(segments[2].programDateTime, segments[1].programDateTime + segments[2].duration * 1000);
+  });
+
   QUnit.test('warns when #EXT-X-DATERANGE missing attribute', function(assert) {
     this.parser.push([
       '#EXT-X-VERSION:3',

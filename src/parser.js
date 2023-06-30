@@ -132,6 +132,7 @@ export default class Parser extends Stream {
     let lastByterangeEnd = 0;
     // keep track of the last seen part's byte range end.
     let lastPartByterangeEnd = 0;
+    let firstPdtIndex = -1;
     const dateRangeTags = {};
 
     this.on('end', () => {
@@ -462,6 +463,14 @@ export default class Parser extends Stream {
 
               currentUri.dateTimeString = entry.dateTimeString;
               currentUri.dateTimeObject = entry.dateTimeObject;
+
+              currentUri.programDateTime = new Date(entry.dateTimeObject).getTime();
+              this.lastProgramDateTime = currentUri.programDateTime;
+
+              if (firstPdtIndex === -1) {
+                firstPdtIndex = this.manifest.segments.length;
+                this.backfillPDT_(firstPdtIndex);
+              }
             },
             targetduration() {
               if (!isFinite(entry.duration) || entry.duration < 0) {
@@ -700,6 +709,7 @@ export default class Parser extends Stream {
               this.manifest.independentSegments = true;
             }
           })[entry.tagType] || noop).call(self);
+          this.addPDTToSegment_();
         },
         uri() {
           currentUri.uri = entry.uri;
@@ -801,5 +811,40 @@ export default class Parser extends Stream {
    */
   addTagMapper(options) {
     this.parseStream.addTagMapper(options);
+  }
+  /**
+   * Backfills missing PDT values when the first EXT-X-PROGRAM-DATE-TIME tag in
+   * the Playlist appears after one or more segments
+   */
+  backfillPDT_(firstPdtIndex) {
+    if (!firstPdtIndex > 0) {
+      return;
+    }
+    let segmentWithPdt = this.manifest.segments[firstPdtIndex - 1];
+
+    segmentWithPdt.programDateTime = segmentWithPdt.programDateTime || this.lastProgramDateTime;
+    for (let index = firstPdtIndex - 1; index > -1; index--) {
+      const segment = this.manifest.segments[index];
+
+      segment.programDateTime = segmentWithPdt.programDateTime - segment.duration * 1000;
+      segmentWithPdt = segment;
+    }
+  }
+  /**
+   * Adds PDT to values to segments that do not contain explicit PDT tags
+   *
+  */
+  addPDTToSegment_() {
+    if (!this.lastProgramDateTime || !this.manifest.segments.length > 1) {
+      return;
+    }
+
+    const segments = this.manifest.segments;
+    const currentSegment = segments[this.manifest.segments.length - 1];
+    const prevSegment = segments[this.manifest.segments.length - 2];
+
+    if (segments.length > 0 && !currentSegment.dateTimeString && !currentSegment.programDateTime) {
+      currentSegment.programDateTime = prevSegment.programDateTime + (currentSegment.duration * 1000);
+    }
   }
 }
