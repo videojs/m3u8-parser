@@ -709,7 +709,6 @@ export default class Parser extends Stream {
               this.manifest.independentSegments = true;
             }
           })[entry.tagType] || noop).call(self);
-          this.addPDTToSegment_();
         },
         uri() {
           currentUri.uri = entry.uri;
@@ -737,6 +736,7 @@ export default class Parser extends Stream {
 
           // prepare for the next URI
           currentUri = {};
+          this.addPDTToSegment_();
         },
         comment() {
           // comments are not important for playback
