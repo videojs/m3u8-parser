@@ -466,6 +466,7 @@ export default class Parser extends Stream {
               currentUri.dateTimeObject = entry.dateTimeObject;
 
               const { lastProgramDateTime } = this;
+
               // Explicitly set program date time:
               currentUri.programDateTime = new Date(entry.dateTimeObject).getTime();
               this.lastProgramDateTime = currentUri.programDateTime;
