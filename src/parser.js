@@ -97,6 +97,8 @@ export default class Parser extends Stream {
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
 
+    this.lastProgramDateTime = null;
+
     /* eslint-disable consistent-this */
     const self = this;
     /* eslint-enable consistent-this */
@@ -132,7 +134,6 @@ export default class Parser extends Stream {
     let lastByterangeEnd = 0;
     // keep track of the last seen part's byte range end.
     let lastPartByterangeEnd = 0;
-    let firstPdtIndex = -1;
     const dateRangeTags = {};
 
     this.on('end', () => {
@@ -464,12 +465,21 @@ export default class Parser extends Stream {
               currentUri.dateTimeString = entry.dateTimeString;
               currentUri.dateTimeObject = entry.dateTimeObject;
 
+              const { lastProgramDateTime } = this;
+              // Explicitly set program date time:
               currentUri.programDateTime = new Date(entry.dateTimeObject).getTime();
               this.lastProgramDateTime = currentUri.programDateTime;
 
-              if (firstPdtIndex === -1) {
-                firstPdtIndex = this.manifest.segments.length;
-                this.backfillPDT_(firstPdtIndex);
+              // we should extrapolate Program Date Time backward only during firs program date time occurrence.
+              // Once we have at least one program date time point, we can always extrapolate it forward using lastProgramDateTime reference.
+              if (lastProgramDateTime === null) {
+                // Extrapolate Program Date Time backward
+                // Since it is first program date time occurrence we're assuming that
+                // all this.manifest.segments have no program date time info
+                this.manifest.segments.reduceRight((programDateTime, segment) => {
+                  segment.programDateTime = programDateTime - (segment.duration * 1000);
+                  return segment.programDateTime;
+                }, this.lastProgramDateTime);
               }
             },
             targetduration() {
@@ -734,9 +744,14 @@ export default class Parser extends Stream {
           // reset the last byterange end as it needs to be 0 between parts
           lastPartByterangeEnd = 0;
 
+          // Once we have at least one program date time, and it wasn't set explicitly we can always extrapolate it forward:
+          if (this.lastProgramDateTime !== null && currentUri.programDateTime === undefined) {
+            currentUri.programDateTime = this.lastProgramDateTime + (currentUri.duration * 1000);
+            this.lastProgramDateTime = currentUri.programDateTime;
+          }
+
           // prepare for the next URI
           currentUri = {};
-          this.addPDTToSegment_();
         },
         comment() {
           // comments are not important for playback
@@ -788,6 +803,7 @@ export default class Parser extends Stream {
     // flush any buffered input
     this.lineStream.push('\n');
 
+    this.lastProgramDateTime = null;
     this.trigger('end');
   }
   /**
@@ -811,40 +827,5 @@ export default class Parser extends Stream {
    */
   addTagMapper(options) {
     this.parseStream.addTagMapper(options);
-  }
-  /**
-   * Backfills missing PDT values when the first EXT-X-PROGRAM-DATE-TIME tag in
-   * the Playlist appears after one or more segments
-   */
-  backfillPDT_(firstPdtIndex) {
-    if (!firstPdtIndex > 0) {
-      return;
-    }
-    let segmentWithPdt = this.manifest.segments[firstPdtIndex - 1];
-
-    segmentWithPdt.programDateTime = segmentWithPdt.programDateTime || this.lastProgramDateTime;
-    for (let index = firstPdtIndex - 1; index > -1; index--) {
-      const segment = this.manifest.segments[index];
-
-      segment.programDateTime = segmentWithPdt.programDateTime - segment.duration * 1000;
-      segmentWithPdt = segment;
-    }
-  }
-  /**
-   * Adds PDT to values to segments that do not contain explicit PDT tags
-   *
-  */
-  addPDTToSegment_() {
-    if (!this.lastProgramDateTime || !this.manifest.segments.length > 1) {
-      return;
-    }
-
-    const segments = this.manifest.segments;
-    const currentSegment = segments[this.manifest.segments.length - 1];
-    const prevSegment = segments[this.manifest.segments.length - 2];
-
-    if (segments.length > 0 && !currentSegment.dateTimeString && !currentSegment.programDateTime) {
-      currentSegment.programDateTime = prevSegment.programDateTime + (currentSegment.duration * 1000);
-    }
   }
 }
