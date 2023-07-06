@@ -467,9 +467,7 @@ export default class Parser extends Stream {
 
               const { lastProgramDateTime } = this;
 
-              // Explicitly set program date time:
-              currentUri.programDateTime = new Date(entry.dateTimeObject).getTime();
-              this.lastProgramDateTime = currentUri.programDateTime;
+              this.lastProgramDateTime = new Date(entry.dateTimeObject).getTime();
 
               // we should extrapolate Program Date Time backward only during firs program date time occurrence.
               // Once we have at least one program date time point, we can always extrapolate it forward using lastProgramDateTime reference.
@@ -745,10 +743,10 @@ export default class Parser extends Stream {
           // reset the last byterange end as it needs to be 0 between parts
           lastPartByterangeEnd = 0;
 
-          // Once we have at least one program date time, and it wasn't set explicitly we can always extrapolate it forward:
-          if (this.lastProgramDateTime !== null && currentUri.programDateTime === undefined) {
-            currentUri.programDateTime = this.lastProgramDateTime + (currentUri.duration * 1000);
-            this.lastProgramDateTime = currentUri.programDateTime;
+          // Once we have at least one program date time we can always extrapolate it forward
+          if (this.lastProgramDateTime !== null) {
+            currentUri.programDateTime = this.lastProgramDateTime;
+            this.lastProgramDateTime += currentUri.duration * 1000;
           }
 
           // prepare for the next URI
