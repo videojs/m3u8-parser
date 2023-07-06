@@ -1,6 +1,7 @@
 module.exports = {
   allowCache: false,
   mediaSequence: 0,
+  dateRanges: [],
   playlistType: 'VOD',
   segments: [
     {
