@@ -126,6 +126,7 @@ export default class Parser extends Stream {
     this.manifest = {
       allowCache: true,
       discontinuityStarts: [],
+      dateRanges: [],
       segments: []
     };
     // keep track of the last seen segment's byte range end, as segments are not required
@@ -640,7 +641,6 @@ export default class Parser extends Stream {
               setHoldBack.call(this, this.manifest);
             },
             'daterange'() {
-              this.manifest.dateRanges = this.manifest.dateRanges || [];
               this.manifest.dateRanges.push(camelCaseKeys(entry.attributes));
               const index = this.manifest.dateRanges.length - 1;
 
@@ -784,7 +784,7 @@ export default class Parser extends Stream {
   end() {
     // flush any buffered input
     this.lineStream.push('\n');
-    if (this.manifest.dateRanges && this.lastProgramDateTime === null) {
+    if (this.manifest.dateRanges.length && this.lastProgramDateTime === null) {
       this.trigger('warn', {
         message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
       });
