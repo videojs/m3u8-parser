@@ -109,7 +109,6 @@ module.exports = {
       ]
     },
     {
-      programDateTimeString: '2019-02-14T02:14:00.106Z',
       duration: 4.00008,
       programDateTime: 1550110440106,
       timeline: 0,

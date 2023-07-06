@@ -453,8 +453,6 @@ export default class Parser extends Stream {
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
-              currentUri.programDateTimeString = entry.dateTimeString;
-
               const { lastProgramDateTime } = this;
 
               this.lastProgramDateTime = new Date(entry.dateTimeString).getTime();
@@ -686,11 +684,6 @@ export default class Parser extends Stream {
 
                 this.manifest.dateRanges[index].endDate = new Date(newDateInSeconds);
               }
-              if (dateRange && !('programDateTimeString' in currentUri)) {
-                this.trigger('warn', {
-                  message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
-                });
-              }
               if (!dateRangeTags[dateRange.id]) {
                 dateRangeTags[dateRange.id] = dateRange;
               } else {
@@ -791,6 +784,11 @@ export default class Parser extends Stream {
   end() {
     // flush any buffered input
     this.lineStream.push('\n');
+    if (this.manifest.dateRanges && this.lastProgramDateTime === null) {
+      this.trigger('warn', {
+        message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
+      });
+    }
 
     this.lastProgramDateTime = null;
     this.trigger('end');
