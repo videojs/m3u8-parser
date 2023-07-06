@@ -22,8 +22,6 @@ module.exports = {
   ],
   targetDuration: 10,
   endList: true,
-  dateTimeString: '2016-06-22T09:20:16.166-04:00',
-  dateTimeObject: new Date('2016-06-22T09:20:16.166-04:00'),
   discontinuitySequence: 0,
   discontinuityStarts: []
 };
