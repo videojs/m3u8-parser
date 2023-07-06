@@ -635,10 +635,6 @@ QUnit.test(
       element.dateTimeString, '2016-06-22T09:20:16.166-04:00',
       'dateTimeString is parsed'
     );
-    assert.deepEqual(
-      element.dateTimeObject, new Date('2016-06-22T09:20:16.166-04:00'),
-      'dateTimeObject is parsed'
-    );
 
     manifest = '#EXT-X-PROGRAM-DATE-TIME:2016-06-22T09:20:16.16389Z\n';
     this.lineStream.push(manifest);
@@ -649,10 +645,6 @@ QUnit.test(
     assert.strictEqual(
       element.dateTimeString, '2016-06-22T09:20:16.16389Z',
       'dateTimeString is parsed'
-    );
-    assert.deepEqual(
-      element.dateTimeObject, new Date('2016-06-22T09:20:16.16389Z'),
-      'dateTimeObject is parsed'
     );
   }
 );

@@ -36,8 +36,7 @@ module.exports = {
   partTargetDuration: 0.33334,
   segments: [
     {
-      dateTimeObject: new Date('2019-02-14T02:13:36.106Z'),
-      dateTimeString: '2019-02-14T02:13:36.106Z',
+      programDateTimeString: '2019-02-14T02:13:36.106Z',
       programDateTime: 1550110416106,
       duration: 4.00008,
       map: {
@@ -144,8 +143,7 @@ module.exports = {
       ]
     },
     {
-      dateTimeObject: new Date('2019-02-14T02:14:00.106Z'),
-      dateTimeString: '2019-02-14T02:14:00.106Z',
+      programDateTimeString: '2019-02-14T02:14:00.106Z',
       duration: 4.00008,
       map: {
         uri: 'init.mp4'

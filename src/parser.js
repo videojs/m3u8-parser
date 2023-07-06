@@ -453,12 +453,11 @@ export default class Parser extends Stream {
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
-              currentUri.dateTimeString = entry.dateTimeString;
-              currentUri.dateTimeObject = entry.dateTimeObject;
+              currentUri.programDateTimeString = entry.dateTimeString;
 
               const { lastProgramDateTime } = this;
 
-              this.lastProgramDateTime = new Date(entry.dateTimeObject).getTime();
+              this.lastProgramDateTime = new Date(entry.dateTimeString).getTime();
 
               // we should extrapolate Program Date Time backward only during firs program date time occurrence.
               // Once we have at least one program date time point, we can always extrapolate it forward using lastProgramDateTime reference.
@@ -687,7 +686,7 @@ export default class Parser extends Stream {
 
                 this.manifest.dateRanges[index].endDate = new Date(newDateInSeconds);
               }
-              if (dateRange && !('dateTimeString' in currentUri)) {
+              if (dateRange && !('programDateTimeString' in currentUri)) {
                 this.trigger('warn', {
                   message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
                 });
