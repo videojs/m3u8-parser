@@ -57,6 +57,7 @@ var manifest = [
   '0.ts',
   '#EXTINF:6,',
   '1.ts',
+  '#EXT-X-PROGRAM-DATE-TIME:2019-02-14T02:14:00.106Z'
   '#EXTINF:6,',
   '2.ts',
   '#EXT-X-ENDLIST'
@@ -79,6 +80,7 @@ Manifest {
   allowCache: boolean,
   endList: boolean,
   mediaSequence: number,
+  dateRanges: [],
   discontinuitySequence: number,
   playlistType: string,
   custom: {},
@@ -106,8 +108,6 @@ Manifest {
     'CLOSED-CAPTIONS': {},
     SUBTITLES: {}
   },
-  dateTimeString: string,
-  dateTimeObject: Date,
   targetDuration: number,
   totalDuration: number,
   discontinuityStarts: [number],
@@ -118,6 +118,7 @@ Manifest {
         offset: number
       },
       duration: number,
+      programDateTime:  number,
       attributes: {},
       discontinuity: number,
       uri: string,
