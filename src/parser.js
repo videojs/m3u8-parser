@@ -97,6 +97,8 @@ export default class Parser extends Stream {
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
 
+    this.lastProgramDateTime = null;
+
     /* eslint-disable consistent-this */
     const self = this;
     /* eslint-enable consistent-this */
@@ -124,6 +126,7 @@ export default class Parser extends Stream {
     this.manifest = {
       allowCache: true,
       discontinuityStarts: [],
+      dateRanges: [],
       segments: []
     };
     // keep track of the last seen segment's byte range end, as segments are not required
@@ -456,17 +459,21 @@ export default class Parser extends Stream {
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
-              if (typeof this.manifest.dateTimeString === 'undefined') {
-                // PROGRAM-DATE-TIME is a media-segment tag, but for backwards
-                // compatibility, we add the first occurence of the PROGRAM-DATE-TIME tag
-                // to the manifest object
-                // TODO: Consider removing this in future major version
-                this.manifest.dateTimeString = entry.dateTimeString;
-                this.manifest.dateTimeObject = entry.dateTimeObject;
-              }
+              const { lastProgramDateTime } = this;
 
-              currentUri.dateTimeString = entry.dateTimeString;
-              currentUri.dateTimeObject = entry.dateTimeObject;
+              this.lastProgramDateTime = new Date(entry.dateTimeString).getTime();
+
+              // We should extrapolate Program Date Time backward only during first program date time occurrence.
+              // Once we have at least one program date time point, we can always extrapolate it forward using lastProgramDateTime reference.
+              if (lastProgramDateTime === null) {
+                // Extrapolate Program Date Time backward
+                // Since it is first program date time occurrence we're assuming that
+                // all this.manifest.segments have no program date time info
+                this.manifest.segments.reduceRight((programDateTime, segment) => {
+                  segment.programDateTime = programDateTime - (segment.duration * 1000);
+                  return segment.programDateTime;
+                }, this.lastProgramDateTime);
+              }
             },
             targetduration() {
               if (!isFinite(entry.duration) || entry.duration < 0) {
@@ -639,7 +646,6 @@ export default class Parser extends Stream {
               setHoldBack.call(this, this.manifest);
             },
             'daterange'() {
-              this.manifest.dateRanges = this.manifest.dateRanges || [];
               this.manifest.dateRanges.push(camelCaseKeys(entry.attributes));
               const index = this.manifest.dateRanges.length - 1;
 
@@ -683,11 +689,6 @@ export default class Parser extends Stream {
 
                 this.manifest.dateRanges[index].endDate = new Date(newDateInSeconds);
               }
-              if (dateRange && !this.manifest.dateTimeString) {
-                this.trigger('warn', {
-                  message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
-                });
-              }
               if (!dateRangeTags[dateRange.id]) {
                 dateRangeTags[dateRange.id] = dateRange;
               } else {
@@ -729,6 +730,12 @@ export default class Parser extends Stream {
 
           // reset the last byterange end as it needs to be 0 between parts
           lastPartByterangeEnd = 0;
+
+          // Once we have at least one program date time we can always extrapolate it forward
+          if (this.lastProgramDateTime !== null) {
+            currentUri.programDateTime = this.lastProgramDateTime;
+            this.lastProgramDateTime += currentUri.duration * 1000;
+          }
 
           // prepare for the next URI
           currentUri = {};
@@ -782,7 +789,13 @@ export default class Parser extends Stream {
   end() {
     // flush any buffered input
     this.lineStream.push('\n');
+    if (this.manifest.dateRanges.length && this.lastProgramDateTime === null) {
+      this.trigger('warn', {
+        message: 'A playlist with EXT-X-DATERANGE tag must contain atleast one EXT-X-PROGRAM-DATE-TIME tag'
+      });
+    }
 
+    this.lastProgramDateTime = null;
     this.trigger('end');
   }
   /**
