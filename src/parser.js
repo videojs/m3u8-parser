@@ -458,7 +458,7 @@ export default class Parser extends Stream {
 
               this.lastProgramDateTime = new Date(entry.dateTimeString).getTime();
 
-              // we should extrapolate Program Date Time backward only during firs program date time occurrence.
+              // We should extrapolate Program Date Time backward only during first program date time occurrence.
               // Once we have at least one program date time point, we can always extrapolate it forward using lastProgramDateTime reference.
               if (lastProgramDateTime === null) {
                 // Extrapolate Program Date Time backward
