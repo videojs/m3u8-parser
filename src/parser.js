@@ -803,7 +803,7 @@ export default class Parser extends Stream {
    *
    * @param {Object}   options              a map of options for the added parser
    * @param {RegExp}   options.expression   a regular expression to match the custom header
-   * @param {string}   options.type         the type to register to the output
+   * @param {string}   options.customType   the custom type to register to the output
    * @param {Function} [options.dataParser] function to parse the line into an object
    * @param {boolean}  [options.segment]    should tag data be attached to the segment object
    */
