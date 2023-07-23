@@ -72,6 +72,29 @@ const parseAttributes = function(attributes) {
 };
 
 /**
+ * Converts a string into a resolution object
+ *
+ * @param {string} resolution a string such as 3840x2160
+ *
+ * @return {Object} An object representing the resolution
+ *
+ */
+const parseResolution = (resolution) => {
+  const split = resolution.split('x');
+  const result = {};
+
+  if (split[0]) {
+    result.width = parseInt(split[0], 10);
+  }
+
+  if (split[1]) {
+    result.height = parseInt(split[1], 10);
+  }
+
+  return result;
+};
+
+/**
  * A line-level M3U8 parser event stream. It expects to receive input one
  * line at a time and performs a context-free parse of its contents. A stream
  * interpretation of a manifest can be useful if the manifest is expected to
@@ -632,6 +655,40 @@ export default class ParseStream extends Stream {
         };
         event.attributes = parseAttributes(match[1]);
         this.trigger('data', event);
+        return;
+      }
+
+      match = (/^#EXT-X-I-FRAME-STREAM-INF:(.*)$/).exec(newLine);
+      if (match) {
+        event = {
+          type: 'tag',
+          tagType: 'i-frame-playlist'
+        };
+
+        event.attributes = parseAttributes(match[1]);
+
+        if (event.attributes.URI) {
+          event.uri = event.attributes.URI;
+        }
+
+        if (event.attributes.BANDWIDTH) {
+          event.attributes.BANDWIDTH = parseInt(event.attributes.BANDWIDTH, 10);
+        }
+
+        if (event.attributes.RESOLUTION) {
+          event.attributes.RESOLUTION = parseResolution(event.attributes.RESOLUTION);
+        }
+
+        if (event.attributes['AVERAGE-BANDWIDTH']) {
+          event.attributes['AVERAGE-BANDWIDTH'] = parseInt(event.attributes['AVERAGE-BANDWIDTH'], 10);
+        }
+
+        if (event.attributes['FRAME-RATE']) {
+          event.attributes['FRAME-RATE'] = parseFloat(event.attributes['FRAME-RATE']);
+        }
+
+        this.trigger('data', event);
+
         return;
       }
 
