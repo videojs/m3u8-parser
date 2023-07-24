@@ -6,13 +6,14 @@
 * Add PDT to each segment ([#168](https://github.com/videojs/m3u8-parser/issues/168)) ([e7c683f](https://github.com/videojs/m3u8-parser/commit/e7c683f))
 * output segment title from EXTINF ([#158](https://github.com/videojs/m3u8-parser/issues/158)) ([4adaa2c](https://github.com/videojs/m3u8-parser/commit/4adaa2c))
 
-### Bug Fixes
-
-* rename daterange to dateRanges ([#166](https://github.com/videojs/m3u8-parser/issues/166)) ([516ab67](https://github.com/videojs/m3u8-parser/commit/516ab67))
-
 ### Documentation
 
 * correct `customType` option name ([#147](https://github.com/videojs/m3u8-parser/issues/147)) ([4d3e6ce](https://github.com/videojs/m3u8-parser/commit/4d3e6ce))
+
+### BREAKING CHANGES
+
+* rename `daterange` to `dateRanges`
+* remove `dateTimeObject` and `dateTimeString` from parsed segment and replaces it with `programDateTime` which represents the timestamp in milliseconds 
 
 <a name="6.2.0"></a>
 # [6.2.0](https://github.com/videojs/m3u8-parser/compare/v6.1.0...v6.2.0) (2023-05-25)
