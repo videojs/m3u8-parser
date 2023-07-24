@@ -13,7 +13,7 @@
 ### BREAKING CHANGES
 
 * rename `daterange` to `dateRanges`
-* remove dateTimeObject and dateTimeString from parsed segment and replaces it with programDateTime which represents the timestamp in milliseconds 
+* remove `dateTimeObject` and `dateTimeString` from parsed segment and replaces it with `programDateTime` which represents the timestamp in milliseconds 
 
 <a name="6.2.0"></a>
 # [6.2.0](https://github.com/videojs/m3u8-parser/compare/v6.1.0...v6.2.0) (2023-05-25)
