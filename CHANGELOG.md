@@ -12,7 +12,7 @@
 
 ### BREAKING CHANGES
 
-* rename daterange to dateRanges
+* rename `daterange` to `dateRanges`
 * remove dateTimeObject and dateTimeString from parsed segment and replaces it with programDateTime which represents the timestamp in milliseconds 
 
 <a name="6.2.0"></a>
