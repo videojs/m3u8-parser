@@ -1132,6 +1132,75 @@ QUnit.module('m3u8s', function(hooks) {
     assert.equal(this.parser.manifest.independentSegments, true);
   });
 
+  QUnit.test('warns when #EXT-X-I-FRAMES-ONLY the minimum version required is not supported', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-VERSION:3',
+      '#EXT-X-PLAYLIST-TYPE:VOD',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:3',
+      '#EXT-X-I-FRAMES-ONLY',
+      '#EXTINF:2.002,',
+      '001.ts',
+      '#EXTINF:2.002,',
+      '002.ts',
+      '#EXTINF:2.002,',
+      '003.ts',
+      '#EXTINF:2.002,',
+      '004.ts',
+      '#EXTINF:2.002,',
+      '005.ts',
+      '#EXTINF:2.002,',
+      '006.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'manifest must be at least version 4'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-I-FRAMES-ONLY does not contain a version number', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-PLAYLIST-TYPE:VOD',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:3',
+      '#EXT-X-I-FRAMES-ONLY',
+      '#EXTINF:2.002,',
+      '001.ts',
+      '#EXTINF:2.002,',
+      '002.ts',
+      '#EXTINF:2.002,',
+      '003.ts',
+      '#EXTINF:2.002,',
+      '004.ts',
+      '#EXTINF:2.002,',
+      '005.ts',
+      '#EXTINF:2.002,',
+      '006.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'manifest must be at least version 4'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {

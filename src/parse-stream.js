@@ -623,6 +623,14 @@ export default class ParseStream extends Stream {
         });
         return;
       }
+      match = (/^#EXT-X-I-FRAMES-ONLY/).exec(newLine);
+      if (match) {
+        this.trigger('data', {
+          type: 'tag',
+          tagType: 'i-frames-only'
+        });
+        return;
+      }
 
       // unknown tag type
       this.trigger('data', {
