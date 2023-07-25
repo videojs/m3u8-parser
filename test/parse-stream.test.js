@@ -981,3 +981,17 @@ QUnit.test('ignores empty lines', function(assert) {
 
   assert.ok(!event, 'no event is triggered');
 });
+
+QUnit.test('parses #EXT-X-I-FRAMES-ONLY', function(assert) {
+  const manifest = '#EXT-X-I-FRAMES-ONLY\n';
+  let element;
+
+  this.parseStream.on('data', function(elem) {
+    element = elem;
+  });
+  this.lineStream.push(manifest);
+
+  assert.ok(element, 'an event was triggered');
+  assert.strictEqual(element.type, 'tag', 'the line type is tag');
+  assert.strictEqual(element.tagType, 'i-frames-only', 'the tag type is i-frames-only');
+});
