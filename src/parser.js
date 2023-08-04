@@ -701,9 +701,9 @@ export default class Parser extends Stream {
                   }
                 }
                 // if tags with the same ID do not have conflicting attributes, merge them
-                const dateRangeIndex = this.manifest.dateRanges.findIndex((dateRangeToFind) => dateRangeToFind.id === dateRange.id);
+                const dateRangeWithSameId = this.manifest.dateRanges.findIndex((dateRangeToFind) => dateRangeToFind.id === dateRange.id);
 
-                this.manifest.dateRanges[dateRangeIndex] = Object.assign(this.manifest.dateRanges[dateRangeIndex], dateRange);
+                this.manifest.dateRanges[dateRangeWithSameId] = Object.assign(this.manifest.dateRanges[dateRangeWithSameId], dateRange);
                 dateRangeTags[dateRange.id] = Object.assign(dateRangeTags[dateRange.id], dateRange);
                 // after merging, delete the duplicate dateRange that was added last
                 this.manifest.dateRanges.pop();
