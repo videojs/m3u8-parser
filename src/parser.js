@@ -685,7 +685,7 @@ export default class Parser extends Stream {
               }
               if (dateRange.duration && dateRange.endDate) {
                 const startDate = dateRange.startDate;
-                const newDateInSeconds = startDate.getSeconds(startDate.getSeconds() + dateRange.duration);
+                const newDateInSeconds = startDate.getTime() + (dateRange.duration * 1000);
 
                 this.manifest.dateRanges[index].endDate = new Date(newDateInSeconds);
               }
