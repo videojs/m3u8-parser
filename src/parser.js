@@ -693,13 +693,20 @@ export default class Parser extends Stream {
                 dateRangeTags[dateRange.id] = dateRange;
               } else {
                 for (const attribute in dateRangeTags[dateRange.id]) {
-                  if (dateRangeTags[dateRange.id][attribute] !== dateRange[attribute]) {
+                  if (!!dateRange[attribute] && JSON.stringify(dateRangeTags[dateRange.id][attribute]) !== JSON.stringify(dateRange[attribute])) {
                     this.trigger('warn', {
-                      message: 'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes and same attribute values'
+                      message: 'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes values'
                     });
                     break;
                   }
                 }
+                // if tags with the same ID do not have conflicting attributes, merge them
+                const dateRangeIndex = this.manifest.dateRanges.findIndex((dateRangeToFind) => dateRangeToFind.id === dateRange.id);
+
+                this.manifest.dateRanges[dateRangeIndex] = Object.assign(this.manifest.dateRanges[dateRangeIndex], dateRange);
+                dateRangeTags[dateRange.id] = Object.assign(dateRangeTags[dateRange.id], dateRange);
+                // after merging, delete the duplicate dateRange that was added last
+                this.manifest.dateRanges.pop();
               }
             },
             'independent-segments'() {
