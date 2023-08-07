@@ -722,6 +722,14 @@ export default class Parser extends Stream {
             },
             'independent-segments'() {
               this.manifest.independentSegments = true;
+            },
+            'content-steering'() {
+              this.manifest.contentSteering = camelCaseKeys(entry.attributes);
+              this.warnOnMissingAttributes_(
+                '#EXT-X-CONTENT-STEERING',
+                entry.attributes,
+                ['SERVER-URI']
+              );
             }
           })[entry.tagType] || noop).call(self);
         },
