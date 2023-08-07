@@ -1132,6 +1132,35 @@ QUnit.module('m3u8s', function(hooks) {
     assert.equal(this.parser.manifest.independentSegments, true);
   });
 
+  QUnit.test('parses #EXT-X-CONTENT-STEERING', function(assert) {
+    const expectedContentSteeringObject = {
+      serverUri: '/foo?bar=00012',
+      pathwayId: 'CDN-A'
+    };
+
+    this.parser.push('#EXT-X-CONTENT-STEERING:SERVER-URI="/foo?bar=00012",PATHWAY-ID="CDN-A"');
+    this.parser.end();
+    assert.deepEqual(this.parser.manifest.contentSteering, expectedContentSteeringObject);
+  });
+
+  QUnit.test('parses #EXT-X-CONTENT-STEERING without PATHWAY-ID', function(assert) {
+    const expectedContentSteeringObject = {
+      serverUri: '/bar?foo=00012'
+    };
+
+    this.parser.push('#EXT-X-CONTENT-STEERING:SERVER-URI="/bar?foo=00012"');
+    this.parser.end();
+    assert.deepEqual(this.parser.manifest.contentSteering, expectedContentSteeringObject);
+  });
+
+  QUnit.test('warns on #EXT-X-CONTENT-STEERING missing SERVER-URI', function(assert) {
+    const warning = ['#EXT-X-CONTENT-STEERING lacks required attribute(s): SERVER-URI'];
+
+    this.parser.push('#EXT-X-CONTENT-STEERING:PATHWAY-ID="CDN-A"');
+    this.parser.end();
+    assert.deepEqual(this.warnings, warning, 'warnings as expected');
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {
