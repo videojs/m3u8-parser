@@ -108,6 +108,8 @@ Manifest {
     'CLOSED-CAPTIONS': {},
     SUBTITLES: {}
   },
+  dateTimeString: string,
+  dateTimeObject: Date,
   targetDuration: number,
   totalDuration: number,
   discontinuityStarts: [number],

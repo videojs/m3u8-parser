@@ -459,6 +459,17 @@ export default class Parser extends Stream {
               this.manifest.discontinuityStarts.push(uris.length);
             },
             'program-date-time'() {
+              if (typeof this.manifest.dateTimeString === 'undefined') {
+                // PROGRAM-DATE-TIME is a media-segment tag, but for backwards
+                // compatibility, we add the first occurence of the PROGRAM-DATE-TIME tag
+                // to the manifest object
+                // TODO: Consider removing this in future major version
+                this.manifest.dateTimeString = entry.dateTimeString;
+                this.manifest.dateTimeObject = entry.dateTimeObject;
+              }
+              currentUri.dateTimeString = entry.dateTimeString;
+              currentUri.dateTimeObject = entry.dateTimeObject;
+
               const { lastProgramDateTime } = this;
 
               this.lastProgramDateTime = new Date(entry.dateTimeString).getTime();

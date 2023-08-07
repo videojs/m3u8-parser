@@ -1,5 +1,7 @@
 module.exports = {
   allowCache: true,
+  dateTimeObject: new Date('2019-02-14T02:14:00.106Z'),
+  dateTimeString: '2019-02-14T02:14:00.106Z',
   dateRanges: [],
   discontinuitySequence: 0,
   discontinuityStarts: [],
@@ -110,6 +112,8 @@ module.exports = {
       ]
     },
     {
+      dateTimeObject: new Date('2019-02-14T02:14:00.106Z'),
+      dateTimeString: '2019-02-14T02:14:00.106Z',
       duration: 4.00008,
       programDateTime: 1550110440106,
       timeline: 0,
