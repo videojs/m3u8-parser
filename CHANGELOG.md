@@ -1,3 +1,19 @@
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/videojs/m3u8-parser/compare/v7.0.0...v7.1.0) (2023-08-07)
+
+### Features
+
+* parse content steering tags and attributes ([#176](https://github.com/videojs/m3u8-parser/issues/176)) ([42472c5](https://github.com/videojs/m3u8-parser/commit/42472c5))
+
+### Bug Fixes
+
+* add dateTimeObject and dateTimeString for backward compatibility ([#174](https://github.com/videojs/m3u8-parser/issues/174)) ([6944bb1](https://github.com/videojs/m3u8-parser/commit/6944bb1))
+* merge dateRange tags with same IDs and no conflicting attributes ([#175](https://github.com/videojs/m3u8-parser/issues/175)) ([73d934c](https://github.com/videojs/m3u8-parser/commit/73d934c))
+
+### Chores
+
+* update v7.0.0 documentation ([#172](https://github.com/videojs/m3u8-parser/issues/172)) ([72da994](https://github.com/videojs/m3u8-parser/commit/72da994))
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/videojs/m3u8-parser/compare/v6.2.0...v7.0.0) (2023-07-10)
 
