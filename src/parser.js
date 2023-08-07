@@ -696,7 +696,7 @@ export default class Parser extends Stream {
               }
               if (dateRange.duration && dateRange.endDate) {
                 const startDate = dateRange.startDate;
-                const newDateInSeconds = startDate.setSeconds(startDate.getSeconds() + dateRange.duration);
+                const newDateInSeconds = startDate.getTime() + (dateRange.duration * 1000);
 
                 this.manifest.dateRanges[index].endDate = new Date(newDateInSeconds);
               }
@@ -704,13 +704,20 @@ export default class Parser extends Stream {
                 dateRangeTags[dateRange.id] = dateRange;
               } else {
                 for (const attribute in dateRangeTags[dateRange.id]) {
-                  if (dateRangeTags[dateRange.id][attribute] !== dateRange[attribute]) {
+                  if (!!dateRange[attribute] && JSON.stringify(dateRangeTags[dateRange.id][attribute]) !== JSON.stringify(dateRange[attribute])) {
                     this.trigger('warn', {
-                      message: 'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes and same attribute values'
+                      message: 'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes values'
                     });
                     break;
                   }
                 }
+                // if tags with the same ID do not have conflicting attributes, merge them
+                const dateRangeWithSameId = this.manifest.dateRanges.findIndex((dateRangeToFind) => dateRangeToFind.id === dateRange.id);
+
+                this.manifest.dateRanges[dateRangeWithSameId] = Object.assign(this.manifest.dateRanges[dateRangeWithSameId], dateRange);
+                dateRangeTags[dateRange.id] = Object.assign(dateRangeTags[dateRange.id], dateRange);
+                // after merging, delete the duplicate dateRange that was added last
+                this.manifest.dateRanges.pop();
               }
             },
             'independent-segments'() {
