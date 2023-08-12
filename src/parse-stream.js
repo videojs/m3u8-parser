@@ -319,16 +319,7 @@ export default class ParseStream extends Stream {
           event.attributes = parseAttributes(match[1]);
 
           if (event.attributes.RESOLUTION) {
-            const split = event.attributes.RESOLUTION.split('x');
-            const resolution = {};
-
-            if (split[0]) {
-              resolution.width = parseInt(split[0], 10);
-            }
-            if (split[1]) {
-              resolution.height = parseInt(split[1], 10);
-            }
-            event.attributes.RESOLUTION = resolution;
+            event.attributes.RESOLUTION = parseResolution(event.attributes.RESOLUTION);
           }
           if (event.attributes.BANDWIDTH) {
             event.attributes.BANDWIDTH = parseInt(event.attributes.BANDWIDTH, 10);
