@@ -178,6 +178,7 @@ Manifest {
 
 * [EXT-X-MEDIA](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.1)
 * [EXT-X-STREAM-INF](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.2)
+* [EXT-X-I-FRAME-STREAM-INF](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.3)
 
 ### Experimental Tags
 
@@ -243,7 +244,6 @@ Example media playlist using `EXT-X-CUE-` tags.
 ### Not Yet Supported
 
 * [EXT-X-I-FRAMES-ONLY](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.3.6)
-* [EXT-X-I-FRAME-STREAM-INF](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.3)
 * [EXT-X-SESSION-DATA](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.4)
 * [EXT-X-SESSION-KEY](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.4.5)
 
