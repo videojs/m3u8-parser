@@ -4,6 +4,7 @@
   "description": "m3u8 parser",
   "main": "dist/m3u8-parser.cjs.js",
   "module": "dist/m3u8-parser.es.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:videojs/m3u8-parser.git"
@@ -27,6 +28,7 @@
     "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
     "build": "npm-run-all -s clean -p build:*",
     "build:js": "rollup -c scripts/rollup.config.js",
+    "build:types": "tsc",
     "clean": "shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist",
     "lint": "vjsstandard",
     "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose --skip-es-check",
@@ -75,6 +77,7 @@
     "rollup": "^2.38.0",
     "rollup-plugin-data-files": "^0.1.0",
     "sinon": "^9.2.3",
+    "typescript": "^5.2.2",
     "videojs-generate-karma-config": "^8.0.1",
     "videojs-generate-rollup-config": "~7.0.0",
     "videojs-generator-verify": "~3.0.1",

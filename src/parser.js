@@ -6,6 +6,92 @@ import decodeB64ToUint8Array from '@videojs/vhs-utils/es/decode-b64-to-uint8-arr
 import LineStream from './line-stream';
 import ParseStream from './parse-stream';
 
+/**
+ * @typedef {Object} DateRange
+ * @property {string} [id] - A quoted-string that uniquely identifies a Date Range in the Playlist.
+ * @property {string} [class] - A client-defined quoted-string that specifies some set of attributes and their associated value semantics.
+ * @property {Date} [startDate] - date/time at which the Date Range begins.
+ * @property {Date} [endDate] - date/time at which the Date Range ends.
+ * @property {number} [duration] - The duration of the Date Range.
+ * @property {number} [plannedDuration] - The expected duration of the Date Range.
+ * @property {boolean} [endOnNext] - This attribute indicates that the end of the range containing it is equal to the START-DATE of its Following Range.
+ * @property {string} [scte35Cmd] - SCTE-35 splice_info_section()
+ * @property {string} [scte35Out] - SCTE-35 splice-in
+ * @property {string} [scte35In] - SCTE-35 splice-out
+ */
+
+/**
+ * @typedef {Object} Playlist
+ */
+
+/**
+ * @typedef {Object} ByteRange
+ * @property {number} [length] - byte range length
+ * @property {number} [offset] - byte range offset
+ */
+
+/**
+ * @typdef {Object} Segment
+ * @property {number} [programDateTime] - associated program date time.
+ * @property {ByteRange} [byterange] - associated byte range
+ */
+
+/**
+ *
+ *
+ *
+ *
+ * @typedef {{
+ *   allowCache: boolean;
+ *   discontinuityStarts: Array<number>;
+ *   dateRanges: Array<DateRange>;
+ *   segments: Array<Segment>;
+ *   playlists?: Array<Playlist>;
+ *   mediaGroups?: {
+ *     AUDIO?: Record<string, unknown>;
+ *     VIDEO?: Record<string, unknown>;
+ *     'CLOSED-CAPTIONS'?: Record<string, unknown>;
+ *     SUBTITLES?: Record<string, unknown>;
+ *   };
+ *   preloadSegment?: string;
+ *   version?: string;
+ *   endList?: boolean;
+ *   mediaSequence?: number;
+ *   discontinuitySequence?: number;
+ *   contentProtection?: {
+ *     'com.apple.fps.1_0'?: {
+ *       attributes: Record<string, unknown>
+ *     },
+ *     'com.microsoft.playready'?: {
+ *       uri: string
+ *     },
+ *     'com.widevine.alpha'?: {
+ *       attributes: {
+ *         schemeIdUri: string;
+ *         keyId: string;
+ *       },
+ *       pssh: Uint8Array
+ *     }
+ *   },
+ *   playlistType?: 'VOD' | 'EVENT';
+ *   dateTimeString?: string;
+ *   dateTimeObject?: Date;
+ *   targetDuration?: number;
+ *   start?: {
+ *     timeOffset: number;
+ *     precise: boolean;
+ *   };
+ *   skip: Record<string, unknown>;
+ *   renditionReports?: Array<RenditionReport>;
+ *   serverControl?: Record<string, unknown>;
+ *   partInf?: Record<string, unknown>;
+ *   partTargetDuration?: number;
+ *   independentSegments?: boolean;
+ *   contentSteering?: Record<string, unknown>;
+ *   custom?: Record<string, unknown>;
+ * }} Manifest
+ */
+
 const camelCase = (str) => str
   .toLowerCase()
   .replace(/-(\w)/g, (a) => a[1].toUpperCase());
