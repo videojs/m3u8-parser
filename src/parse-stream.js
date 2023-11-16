@@ -429,7 +429,7 @@ export default class ParseStream extends Stream {
         this.trigger('data', event);
         return;
       }
-      match = (/^#EXT-X-CUE-IN:(.*)?$/).exec(newLine);
+      match = (/^#EXT-X-CUE-IN:?(.*)?$/).exec(newLine);
       if (match) {
         event = {
           type: 'tag',
