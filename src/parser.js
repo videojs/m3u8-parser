@@ -88,15 +88,19 @@ const setHoldBack = function(manifest) {
  * requires some property of the manifest object to be defaulted.
  *
  * @class Parser
+ * @param {Object} [params] Options for the constructor, needed for substitutions
+ * @param {string} [params.uri] URL to check for query params
+ * @param {Object} [params.mainDefinitions] Definitions on main playlist that can be imported
  * @extends Stream
  */
 export default class Parser extends Stream {
-  constructor() {
+  constructor(opts = {}) {
     super();
     this.lineStream = new LineStream();
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
-
+    this.mainDefinitions = opts.mainDefinitions || {};
+    this.params = new URL(opts.uri).searchParams;
     this.lastProgramDateTime = null;
 
     /* eslint-disable consistent-this */
@@ -730,7 +734,69 @@ export default class Parser extends Stream {
                 entry.attributes,
                 ['SERVER-URI']
               );
+            },
+            define() {
+              const throwInvalid = (type) => {
+                // https://datatracker.ietf.org/doc/html/draft-pantos-hls-rfc8216bis#page-17
+                const messages = {
+                  exactlyOne: 'An EXT-X-DEFINE tag MUST contain either a NAME, an IMPORT, or a QUERYPARAM attribute, but only one of the three.  Otherwise, the client MUST fail to parse the Playlist.',
+                  nameNeedsValue: 'This attribute is REQUIRED if the EXT-X-DEFINE tag has a NAME attribute.  The quoted-string MAY be empty.',
+                  noRedefine: 'An EXT-X-DEFINE tag MUST NOT specify the same Variable Name as any other EXT-X-DEFINE tag in the same Playlist.  Parsers that encounter duplicate Variable Name declarations MUST fail to parse the Playlist.',
+                  noImportOnMain: 'EXT-X-DEFINE tags containing the IMPORT attribute MUST NOT occur in Multivariant Playlists; they are only allowed in Media Playlists.',
+                  importWithoutMatch: 'If the IMPORT attribute value does not match any Variable Name in the Multivariant Playlist, or if the Media Playlist loaded from a Multivariant Playlist, the parser MUST fail the Playlist.',
+                  noQueryParam: 'If the QUERYPARAM attribute value does not match any query parameter in the URI or the matching parameter has no associated value, the parser MUST fail to parse the Playlist.  If more than one parameter matches, any of the associated values MAY be used.'
+                };
+
+                throw (new Error(messages[type]));
+              };
+
+              this.manifest.definitions = this.manifest.definitions || { };
+
+              const addDef = (n, v) => {
+                if (n in this.manifest.definitions) {
+                  throwInvalid('noRedefine');
+                }
+                this.manifest.definitions[n] = v;
+              };
+
+              if ('QUERYPARAM' in entry.attributes) {
+                if ('NAME' in entry.attributes || 'IMPORT' in entry.attributes) {
+                  throwInvalid('exactlyOne');
+                }
+                const val = this.params.get(entry.attributes.QUERYPARAM);
+
+                if (!val) {
+                  throwInvalid('noQueryParam');
+                }
+                addDef(entry.attributes.QUERYPARAM, val);
+                return;
+              }
+
+              if ('NAME' in entry.attributes) {
+                if ('IMPORT' in entry.attributes) {
+                  throwInvalid('exactlyOne');
+                }
+                if (!('VALUE' in entry.attributes) || typeof entry.attributes.VALUE !== 'string') {
+                  throwInvalid('nameNeedsValue');
+                }
+                addDef(entry.attributes.NAME, entry.attributes.VALUE);
+                return;
+              }
+
+              if ('IMPORT' in entry.attributes) {
+                if (!('playlistType' in this.manifest)) {
+                  throwInvalid('noImportOnMain');
+                }
+                if (!(entry.attributes.IMPORT in this.mainDefinitions)) {
+                  throwInvalid('importWithoutMatch');
+                }
+                return;
+
+              }
+
+              throwInvalid('exactlyOne');
             }
+
           })[entry.tagType] || noop).call(self);
         },
         uri() {
