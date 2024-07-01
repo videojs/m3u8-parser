@@ -770,9 +770,9 @@ export default class Parser extends Stream {
 
               if ('QUERYPARAM' in entry.attributes) {
                 if ('NAME' in entry.attributes || 'IMPORT' in entry.attributes) {
-                  // An EXT-X-DEFINE tag MUST contain either a NAME, an IMPORT, or a QUERYPARAM
-                  // attribute, but only one of the three.  Otherwise, the client MUST fail to
-                  // parse the Playlist.
+                  // An EXT-X-DEFINE tag MUST contain either a NAME, an IMPORT, or a
+                  // QUERYPARAM attribute, but only one of the three.  Otherwise, the
+                  // client MUST fail to parse the Playlist.
                   this.trigger('error', {
                     message: 'EXT-X-DEFINE: Invalid attriibutes'
                   });
@@ -781,10 +781,10 @@ export default class Parser extends Stream {
                 const val = this.params.get(entry.attributes.QUERYPARAM);
 
                 if (!val) {
-                  // If the QUERYPARAM attribute value does not match any query parameter in the
-                  // URI or the matching parameter has no associated value, the parser MUST fail
-                  // to parse the Playlist.  If more than one parameter matches, any of the
-                  // associated values MAY be used.
+                  // If the QUERYPARAM attribute value does not match any query parameter in
+                  // the URI or the matching parameter has no associated value, the parser
+                  // MUST fail to parse the Playlist.  If more than one parameter matches,
+                  // any of the associated values MAY be used.
                   this.trigger('error', {
                     message: `EXT-X-DEFINE: No query param ${entry.attributes.QUERYPARAM}`
                   });
@@ -796,9 +796,9 @@ export default class Parser extends Stream {
 
               if ('NAME' in entry.attributes) {
                 if ('IMPORT' in entry.attributes) {
-                  // An EXT-X-DEFINE tag MUST contain either a NAME, an IMPORT, or a QUERYPARAM
-                  // attribute, but only one of the three.  Otherwise, the client MUST fail to
-                  // parse the Playlist.
+                  // An EXT-X-DEFINE tag MUST contain either a NAME, an IMPORT, or a
+                  // QUERYPARAM attribute, but only one of the three.  Otherwise, the
+                  // client MUST fail to parse the Playlist.
                   this.trigger('error', {
                     message: 'EXT-X-DEFINE: Invalid attriibutes'
                   });
@@ -824,8 +824,8 @@ export default class Parser extends Stream {
                   // Multivariant Playlists; they are only allowed in Media Playlists.
                   //
                   // If the IMPORT attribute value does not match any Variable Name in the
-                  // Multivariant Playlist, or if the Media Playlist loaded from a Multivariant
-                  // Playlist, the parser MUST fail the Playlist.
+                  // Multivariant Playlist, or if the Media Playlist loaded from a
+                  // Multivariant Playlist, the parser MUST fail the Playlist.
                   this.trigger('error', {
                     message: `EXT-X-DEFINE: No value ${entry.attributes.IMPORT} to import, or IMPORT used on main playlist`
                   });
@@ -847,11 +847,6 @@ export default class Parser extends Stream {
         },
         uri() {
           currentUri.uri = entry.uri;
-          // if (this.manifest.definitions) {
-          //   for (const def in this.manifest.definitions) {
-          //     currentUri.uri = currentUri.uri.replace(`{$${def}}`, this.manifest.definitions[def]);
-          //   }
-          // }
           uris.push(currentUri);
 
           // if no explicit duration was declared, use the target duration
