@@ -259,8 +259,6 @@ Example media playlist using `EXT-X-CUE-` tags.
 #EXT-X-ENDLIST
 ```
 
-Todo, docs
-
 ### Not Yet Supported
 
 * [EXT-X-I-FRAMES-ONLY](http://tools.ietf.org/html/draft-pantos-http-live-streaming#section-4.3.3.6)
