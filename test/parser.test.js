@@ -1187,6 +1187,139 @@ QUnit.module('m3u8s', function(hooks) {
     assert.deepEqual(this.warnings, warning, 'warnings as expected');
   });
 
+  QUnit.module('define', {
+    // https://datatracker.ietf.org/doc/html/draft-pantos-hls-rfc8216bis#section-4.4.2.3
+    beforeEach() {
+      this.errors = [];
+
+      this.parser.on('error', (err) => this.errors.push(err.message));
+    }
+  });
+
+  QUnit.test('fails on missing attributes', function(assert) {
+    const err = ['EXT-X-DEFINE: No attribute'];
+
+    this.parser.push('#EXT-X-DEFINE:');
+    this.parser.end();
+    assert.deepEqual(this.errors, err, 'errors as expected');
+  });
+
+  QUnit.test('fails on disallowed combinatons', function(assert) {
+    const permutations = [
+      '#EXT-X-DEFINE:NAME="a",QUERYPARAM="b"',
+      '#EXT-X-DEFINE:NAME="a",IMPORT="b"',
+      '#EXT-X-DEFINE:QUERYPARAM="a",IMPORT="b"',
+      '#EXT-X-DEFINE:NAME="a",QUERYPARAM="b",IMPORT="c"'
+    ];
+
+    assert.expect(permutations.length);
+
+    permutations.forEach((p) => {
+      this.parser = new Parser();
+      this.parser.on('error', (e) => {
+        assert.equal(e.message, 'EXT-X-DEFINE: Invalid attriibutes', `${p} errors as expected`);
+      });
+      this.parser.push(p);
+      this.parser.end();
+    });
+  });
+
+  QUnit.test('query params substituted', function(assert) {
+    this.parser = new Parser({
+      uri: 'https://example.com?aParam=aValue'
+    });
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-DEFINE:QUERYPARAM="aParam"',
+      '#EXTINF:10',
+      'segment.ts?replaced_param={$aParam}'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.equal('aValue', this.parser.manifest.definitions.aParam, 'value of param stored');
+    assert.equal('segment.ts?replaced_param=aValue', this.parser.manifest.segments[0].uri, 'substituted in url');
+  });
+
+  QUnit.test('fails with missing query params', function(assert) {
+    assert.expect(1);
+    this.parser = new Parser({
+      uri: 'https://example.com?bParam=bValue'
+    });
+    this.parser.on('error', (e) => {
+      assert.equal(e.message, 'EXT-X-DEFINE: No query param aParam');
+    });
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-DEFINE:QUERYPARAM="aParam"',
+      '#EXTINF:10',
+      'segment.ts?replacedparam={$aParam}'
+    ].join('\n'));
+    this.parser.end();
+  });
+
+  QUnit.test('fails on redefinition', function(assert) {
+    const permutations = [
+      ['#EXT-X-DEFINE:NAME="a",VALUE="b"', '#EXT-X-DEFINE:NAME="a",VALUE="c"'],
+      ['#EXT-X-DEFINE:NAME="a",VALUE="b"', '#EXT-X-DEFINE:IMPORT="a"'],
+      ['#EXT-X-DEFINE:NAME="a",VALUE="b"', '#EXT-X-DEFINE:QUERYPARAM="a"'],
+      ['#EXT-X-DEFINE:IMPORT="a"', '#EXT-X-DEFINE:IMPORT="a"'],
+      ['#EXT-X-DEFINE:IMPORT="a"', '#EXT-X-DEFINE:QUERYPARAM="a"'],
+      ['#EXT-X-DEFINE:IMPORT="a"', '#EXT-X-DEFINE:NAME="a",VALUE="c"'],
+      ['#EXT-X-DEFINE:QUERYPARAM="a"', '#EXT-X-DEFINE:IMPORT="a"'],
+      ['#EXT-X-DEFINE:QUERYPARAM="a"', '#EXT-X-DEFINE:QUERYPARAM="a"'],
+      ['#EXT-X-DEFINE:QUERYPARAM="a"', '#EXT-X-DEFINE:NAME="a",VALUE="c"']
+    ];
+
+    assert.expect(permutations.length);
+
+    permutations.forEach((p) => {
+      this.parser = new Parser({
+        uri: 'https:example.com?a=1',
+        mainDefinitions: {
+          a: 2
+        }
+      });
+      this.parser.on('error', (e) => {
+        assert.equal(e.message, 'EXT-X-DEFINE: Duplicate name a', 'errosr on combination');
+      });
+      this.parser.push(p.join('\n'));
+      this.parser.end();
+    });
+  });
+
+  QUnit.test('fails with IMPORT on main playlist', function(assert) {
+    this.parser.on('error', function(e) {
+      assert.equal(e.message, 'EXT-X-DEFINE: No value imported_param to import, or IMPORT used on main playlist', 'fails when missing');
+    });
+    this.parser.push('#EXT-X-DEFINE:IMPORT="imported_param"');
+    this.parser.end();
+  });
+
+  QUnit.test('named and imported substiutions work', function(assert) {
+    this.parser = new Parser({
+      mainDefinitions: {
+        aParam: 'aValue',
+        engLabel: 'Anglais'
+      }
+    });
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-DEFINE:IMPORT="aParam"',
+      '#EXT-X-DEFINE:NAME="bParam",VALUE="bValue"',
+      '#EXT-X-DEFINE:IMPORT="engLabel"',
+      '#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="aac",LANGUAGE="eng",NAME="{$engLabel}",AUTOSELECT=YES,DEFAULT=YES,URI="eng/prog_index.m3u8?bParam={$bParam}"',
+      '#EXTINF:10',
+      'segment.ts?aParam={$aParam}&bParam={$bParam}'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.equal('aValue', this.parser.manifest.definitions.aParam, 'value of param from import stored');
+    assert.equal('bValue', this.parser.manifest.definitions.bParam, 'value of param from name stored');
+    assert.equal('segment.ts?aParam=aValue&bParam=bValue', this.parser.manifest.segments[0].uri, 'substituted in uri');
+    assert.ok(this.parser.manifest.mediaGroups.AUDIO.aac.hasOwnProperty('Anglais'), 'replacement in attribute');
+    assert.equal('eng/prog_index.m3u8?bParam=bValue', this.parser.manifest.mediaGroups.AUDIO.aac.Anglais.uri, 'replacement in uri in attribute');
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {
