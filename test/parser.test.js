@@ -1031,7 +1031,7 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
-  QUnit.test('warns when playlist has multiple #EXT-X-DATERANGE tag same ID but different attribute names and values', function(assert) {
+  QUnit.test('warns when playlist has multiple #EXT-X-DATERANGE tag same ID but different attribute values', function(assert) {
     this.parser.push([
       '#EXT-X-VERSION:3',
       '#EXT-X-MEDIA-SEQUENCE:0',
@@ -1041,12 +1041,12 @@ QUnit.module('m3u8s', function(hooks) {
       '#EXT-X-ENDLIST',
       '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
       '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",END-ON-NEXT=YES,CLASS="CLASSATTRIBUTE"',
-      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:20.840000Z"'
+      '#EXT-X-DATERANGE:ID="12345",START-DATE="2023-04-13T18:16:15.840000Z",CLASS="CLASSATTRIBUTE1"'
     ].join('\n'));
     this.parser.end();
 
     const warnings = [
-      'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes and same attribute values'
+      'EXT-X-DATERANGE tags with the same ID in a playlist must have the same attributes values'
     ];
 
     assert.deepEqual(
@@ -1095,7 +1095,33 @@ QUnit.module('m3u8s', function(hooks) {
     );
   });
 
-  QUnit.test(' playlist with multiple ext-x-daterange ', function(assert) {
+  QUnit.test('playlist with multiple ext-x-daterange with same ID but no conflicting attributes', function(assert) {
+    const expectedDateRange = {
+      id: '12345',
+      scte35In: '0xFC30200FFF2',
+      scte35Out: '0xFC30200FFF2',
+      startDate: new Date('2023-04-13T18:16:15.840000Z'),
+      class: 'CLASSATTRIBUTE'
+    };
+
+    this.parser.push([
+      '#EXT-X-VERSION:3',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-DISCONTINUITY-SEQUENCE:0',
+      '#EXTINF:10,',
+      'media-00001.ts',
+      '#EXT-X-ENDLIST',
+      '#EXT-X-PROGRAM-DATE-TIME:2017-07-31T20:35:35.053+00:00',
+      '#EXT-X-DATERANGE:ID="12345",SCTE35-IN=0xFC30200FFF2,START-DATE="2023-04-13T18:16:15.840000Z",CLASS="CLASSATTRIBUTE"',
+      '#EXT-X-DATERANGE:ID="12345",SCTE35-OUT=0xFC30200FFF2,START-DATE="2023-04-13T18:16:15.840000Z"'
+    ].join('\n'));
+    this.parser.end();
+    assert.equal(this.parser.manifest.dateRanges.length, 1, 'two dateranges with same ID are merged');
+    assert.deepEqual(this.parser.manifest.dateRanges[0], expectedDateRange);
+
+  });
+
+  QUnit.test('playlist with multiple ext-x-daterange ', function(assert) {
     this.parser.push([
       ' #EXTM3U',
       '#EXT-X-VERSION:6',
@@ -1199,6 +1225,35 @@ QUnit.module('m3u8s', function(hooks) {
       warnings,
       'warnings as expected'
     );
+  });
+
+  QUnit.test('parses #EXT-X-CONTENT-STEERING', function(assert) {
+    const expectedContentSteeringObject = {
+      serverUri: '/foo?bar=00012',
+      pathwayId: 'CDN-A'
+    };
+
+    this.parser.push('#EXT-X-CONTENT-STEERING:SERVER-URI="/foo?bar=00012",PATHWAY-ID="CDN-A"');
+    this.parser.end();
+    assert.deepEqual(this.parser.manifest.contentSteering, expectedContentSteeringObject);
+  });
+
+  QUnit.test('parses #EXT-X-CONTENT-STEERING without PATHWAY-ID', function(assert) {
+    const expectedContentSteeringObject = {
+      serverUri: '/bar?foo=00012'
+    };
+
+    this.parser.push('#EXT-X-CONTENT-STEERING:SERVER-URI="/bar?foo=00012"');
+    this.parser.end();
+    assert.deepEqual(this.parser.manifest.contentSteering, expectedContentSteeringObject);
+  });
+
+  QUnit.test('warns on #EXT-X-CONTENT-STEERING missing SERVER-URI', function(assert) {
+    const warning = ['#EXT-X-CONTENT-STEERING lacks required attribute(s): SERVER-URI'];
+
+    this.parser.push('#EXT-X-CONTENT-STEERING:PATHWAY-ID="CDN-A"');
+    this.parser.end();
+    assert.deepEqual(this.warnings, warning, 'warnings as expected');
   });
 
   QUnit.module('integration');

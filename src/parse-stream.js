@@ -356,6 +356,7 @@ export default class ParseStream extends Stream {
         };
         if (match[1]) {
           event.dateTimeString = match[1];
+          event.dateTimeObject = new Date(match[1]);
         }
         this.trigger('data', event);
         return;
@@ -623,12 +624,23 @@ export default class ParseStream extends Stream {
         });
         return;
       }
+
       match = (/^#EXT-X-I-FRAMES-ONLY/).exec(newLine);
       if (match) {
         this.trigger('data', {
           type: 'tag',
           tagType: 'i-frames-only'
         });
+
+      match = (/^#EXT-X-CONTENT-STEERING:(.*)$/).exec(newLine);
+      if (match) {
+        event = {
+          type: 'tag',
+          tagType: 'content-steering'
+        };
+        event.attributes = parseAttributes(match[1]);
+        this.trigger('data', event);
+
         return;
       }
 
