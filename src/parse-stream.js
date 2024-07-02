@@ -631,6 +631,8 @@ export default class ParseStream extends Stream {
           type: 'tag',
           tagType: 'i-frames-only'
         });
+        return;
+      }
 
       match = (/^#EXT-X-CONTENT-STEERING:(.*)$/).exec(newLine);
       if (match) {
