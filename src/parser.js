@@ -829,6 +829,7 @@ export default class Parser extends Stream {
                   this.trigger('error', {
                     message: `EXT-X-DEFINE: No value ${entry.attributes.IMPORT} to import, or IMPORT used on main playlist`
                   });
+                  return;
                 }
                 addDef(entry.attributes.IMPORT, this.mainDefinitions[entry.attributes.IMPORT]);
                 return;
