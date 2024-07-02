@@ -1240,6 +1240,22 @@ QUnit.module('m3u8s', function(hooks) {
     assert.equal('segment.ts?replaced_param=aValue', this.parser.manifest.segments[0].uri, 'substituted in url');
   });
 
+  QUnit.test('query params substituted with relative URL', function(assert) {
+    this.parser = new Parser({
+      uri: 'playlist.m3u8?aParam=aValue'
+    });
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-DEFINE:QUERYPARAM="aParam"',
+      '#EXTINF:10',
+      'segment.ts?replaced_param={$aParam}'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.equal('aValue', this.parser.manifest.definitions.aParam, 'value of param stored');
+    assert.equal('segment.ts?replaced_param=aValue', this.parser.manifest.segments[0].uri, 'substituted in url');
+  });
+
   QUnit.test('fails with missing query params', function(assert) {
     assert.expect(1);
     this.parser = new Parser({

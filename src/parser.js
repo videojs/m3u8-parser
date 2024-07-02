@@ -100,7 +100,7 @@ export default class Parser extends Stream {
     this.parseStream = new ParseStream();
     this.lineStream.pipe(this.parseStream);
     this.mainDefinitions = opts.mainDefinitions || {};
-    this.params = new URL(opts.uri || 'https://a.com').searchParams;
+    this.params = new URL(opts.uri, 'https://a.com').searchParams;
     this.lastProgramDateTime = null;
 
     /* eslint-disable consistent-this */
