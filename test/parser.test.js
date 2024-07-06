@@ -1256,6 +1256,57 @@ QUnit.module('m3u8s', function(hooks) {
     assert.deepEqual(this.warnings, warning, 'warnings as expected');
   });
 
+  QUnit.test('parses #EXT-X-I-FRAME-STREAM-INF', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=86000,URI="low/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=150000,URI="mid/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=550000,URI="hi/iframe.m3u8"',
+      '#EXT-X-STREAM-INF:BANDWIDTH=1280000',
+      'low/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=2560000',
+      'mid/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=7680000',
+      'hi/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS="mp4a.40.5"',
+      'audio-only.m3u8'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.equal(this.parser.manifest.iFramePlaylists.length, 3);
+    assert.equal(this.parser.manifest.iFramePlaylists[0].uri, 'low/iframe.m3u8');
+    assert.strictEqual(this.parser.manifest.iFramePlaylists[0].attributes.BANDWIDTH, 86000);
+  });
+
+  QUnit.test('warns when #EXT-X-I-FRAME-STREAM-INF missing BANDWIDTH/URI attributes', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-I-FRAME-STREAM-INF:URI="low/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=150000,URI="mid/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:',
+      '#EXT-X-STREAM-INF:BANDWIDTH=1280000',
+      'low/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=2560000',
+      'mid/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=7680000',
+      'hi/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS="mp4a.40.5"',
+      'audio-only.m3u8'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-I-FRAME-STREAM-INF lacks required attribute(s): BANDWIDTH',
+      '#EXT-X-I-FRAME-STREAM-INF lacks required attribute(s): BANDWIDTH, URI'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
   QUnit.module('integration');
 
   for (const key in testDataExpected) {
