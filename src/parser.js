@@ -724,6 +724,11 @@ export default class Parser extends Stream {
             'independent-segments'() {
               this.manifest.independentSegments = true;
             },
+            'i-frames-only'() {
+              this.manifest.iFramesOnly = true;
+
+              this.requiredCompatibilityversion(this.manifest.version, 4);
+            },
             'content-steering'() {
               this.manifest.contentSteering = camelCaseKeys(entry.attributes);
               this.warnOnMissingAttributes_(
@@ -796,6 +801,14 @@ export default class Parser extends Stream {
         }
       })[entry.type].call(self);
     });
+  }
+
+  requiredCompatibilityversion(currentVersion, targetVersion) {
+    if (currentVersion < targetVersion || !currentVersion) {
+      this.trigger('warn', {
+        message: `manifest must be at least version ${targetVersion}`
+      });
+    }
   }
 
   warnOnMissingAttributes_(identifier, attributes, required) {
