@@ -638,6 +638,16 @@ export default class ParseStream extends Stream {
         });
         return;
       }
+
+      match = (/^#EXT-X-I-FRAMES-ONLY/).exec(newLine);
+      if (match) {
+        this.trigger('data', {
+          type: 'tag',
+          tagType: 'i-frames-only'
+        });
+        return;
+      }
+
       match = (/^#EXT-X-CONTENT-STEERING:(.*)$/).exec(newLine);
       if (match) {
         event = {
@@ -646,6 +656,7 @@ export default class ParseStream extends Stream {
         };
         event.attributes = parseAttributes(match[1]);
         this.trigger('data', event);
+
         return;
       }
 
