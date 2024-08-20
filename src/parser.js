@@ -849,7 +849,7 @@ export default class Parser extends Stream {
               this.trigger('error', {
                 message: 'EXT-X-DEFINE: No attribute'
               });
-          },
+            },
 
             'i-frame-playlist'() {
               this.manifest.iFramePlaylists.push({
