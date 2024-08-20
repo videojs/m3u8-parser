@@ -1158,6 +1158,75 @@ QUnit.module('m3u8s', function(hooks) {
     assert.equal(this.parser.manifest.independentSegments, true);
   });
 
+  QUnit.test('warns when #EXT-X-I-FRAMES-ONLY the minimum version required is not supported', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-VERSION:3',
+      '#EXT-X-PLAYLIST-TYPE:VOD',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:3',
+      '#EXT-X-I-FRAMES-ONLY',
+      '#EXTINF:2.002,',
+      '001.ts',
+      '#EXTINF:2.002,',
+      '002.ts',
+      '#EXTINF:2.002,',
+      '003.ts',
+      '#EXTINF:2.002,',
+      '004.ts',
+      '#EXTINF:2.002,',
+      '005.ts',
+      '#EXTINF:2.002,',
+      '006.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'manifest must be at least version 4'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
+  QUnit.test('warns when #EXT-X-I-FRAMES-ONLY does not contain a version number', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-PLAYLIST-TYPE:VOD',
+      '#EXT-X-MEDIA-SEQUENCE:0',
+      '#EXT-X-TARGETDURATION:3',
+      '#EXT-X-I-FRAMES-ONLY',
+      '#EXTINF:2.002,',
+      '001.ts',
+      '#EXTINF:2.002,',
+      '002.ts',
+      '#EXTINF:2.002,',
+      '003.ts',
+      '#EXTINF:2.002,',
+      '004.ts',
+      '#EXTINF:2.002,',
+      '005.ts',
+      '#EXTINF:2.002,',
+      '006.ts',
+      '#EXT-X-ENDLIST'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      'manifest must be at least version 4'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
+  });
+
   QUnit.test('parses #EXT-X-CONTENT-STEERING', function(assert) {
     const expectedContentSteeringObject = {
       serverUri: '/foo?bar=00012',
@@ -1334,6 +1403,57 @@ QUnit.module('m3u8s', function(hooks) {
     assert.equal('segment.ts?aParam=aValue&bParam=bValue', this.parser.manifest.segments[0].uri, 'substituted in uri');
     assert.ok(this.parser.manifest.mediaGroups.AUDIO.aac.hasOwnProperty('Anglais'), 'replacement in attribute');
     assert.equal('eng/prog_index.m3u8?bParam=bValue', this.parser.manifest.mediaGroups.AUDIO.aac.Anglais.uri, 'replacement in uri in attribute');
+  });
+
+  QUnit.test('parses #EXT-X-I-FRAME-STREAM-INF', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=86000,URI="low/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=150000,URI="mid/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=550000,URI="hi/iframe.m3u8"',
+      '#EXT-X-STREAM-INF:BANDWIDTH=1280000',
+      'low/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=2560000',
+      'mid/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=7680000',
+      'hi/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS="mp4a.40.5"',
+      'audio-only.m3u8'
+    ].join('\n'));
+    this.parser.end();
+
+    assert.equal(this.parser.manifest.iFramePlaylists.length, 3);
+    assert.equal(this.parser.manifest.iFramePlaylists[0].uri, 'low/iframe.m3u8');
+    assert.strictEqual(this.parser.manifest.iFramePlaylists[0].attributes.BANDWIDTH, 86000);
+  });
+
+  QUnit.test('warns when #EXT-X-I-FRAME-STREAM-INF missing BANDWIDTH/URI attributes', function(assert) {
+    this.parser.push([
+      '#EXTM3U',
+      '#EXT-X-I-FRAME-STREAM-INF:URI="low/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=150000,URI="mid/iframe.m3u8"',
+      '#EXT-X-I-FRAME-STREAM-INF:',
+      '#EXT-X-STREAM-INF:BANDWIDTH=1280000',
+      'low/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=2560000',
+      'mid/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=7680000',
+      'hi/audio-video.m3u8',
+      '#EXT-X-STREAM-INF:BANDWIDTH=65000,CODECS="mp4a.40.5"',
+      'audio-only.m3u8'
+    ].join('\n'));
+    this.parser.end();
+
+    const warnings = [
+      '#EXT-X-I-FRAME-STREAM-INF lacks required attribute(s): BANDWIDTH',
+      '#EXT-X-I-FRAME-STREAM-INF lacks required attribute(s): BANDWIDTH, URI'
+    ];
+
+    assert.deepEqual(
+      this.warnings,
+      warnings,
+      'warnings as expected'
+    );
   });
 
   QUnit.module('integration');
