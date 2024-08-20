@@ -781,7 +781,7 @@ export default class Parser extends Stream {
                   // QUERYPARAM attribute, but only one of the three.  Otherwise, the
                   // client MUST fail to parse the Playlist.
                   this.trigger('error', {
-                    message: 'EXT-X-DEFINE: Invalid attriibutes'
+                    message: 'EXT-X-DEFINE: Invalid attributes'
                   });
                   return;
                 }
