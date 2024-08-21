@@ -127,6 +127,7 @@ export default class Parser extends Stream {
       allowCache: true,
       discontinuityStarts: [],
       dateRanges: [],
+      iFramePlaylists: [],
       segments: []
     };
     // keep track of the last seen segment's byte range end, as segments are not required
@@ -723,12 +724,30 @@ export default class Parser extends Stream {
             'independent-segments'() {
               this.manifest.independentSegments = true;
             },
+            'i-frames-only'() {
+              this.manifest.iFramesOnly = true;
+
+              this.requiredCompatibilityversion(this.manifest.version, 4);
+            },
             'content-steering'() {
               this.manifest.contentSteering = camelCaseKeys(entry.attributes);
               this.warnOnMissingAttributes_(
                 '#EXT-X-CONTENT-STEERING',
                 entry.attributes,
                 ['SERVER-URI']
+              );
+            },
+            'i-frame-playlist'() {
+              this.manifest.iFramePlaylists.push({
+                attributes: entry.attributes,
+                uri: entry.uri,
+                timeline: currentTimeline
+              });
+
+              this.warnOnMissingAttributes_(
+                '#EXT-X-I-FRAME-STREAM-INF',
+                entry.attributes,
+                ['BANDWIDTH', 'URI']
               );
             }
           })[entry.tagType] || noop).call(self);
@@ -782,6 +801,14 @@ export default class Parser extends Stream {
         }
       })[entry.type].call(self);
     });
+  }
+
+  requiredCompatibilityversion(currentVersion, targetVersion) {
+    if (currentVersion < targetVersion || !currentVersion) {
+      this.trigger('warn', {
+        message: `manifest must be at least version ${targetVersion}`
+      });
+    }
   }
 
   warnOnMissingAttributes_(identifier, attributes, required) {
