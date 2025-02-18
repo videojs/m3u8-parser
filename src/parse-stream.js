@@ -369,7 +369,7 @@ export default class ParseStream extends Stream {
           tagType: 'program-date-time'
         };
         if (match[1]) {
-          event.dateTimeString = match[1];
+          event.dateTimeString = (" " + match[1]).substring(1);
           event.dateTimeObject = new Date(match[1]);
         }
         this.trigger('data', event);
