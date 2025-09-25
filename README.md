@@ -77,14 +77,14 @@ The constructor optinally takes an options object with two properties. These are
 
 ```js
 var parser = new m3u8Parser.Parser({
-  url: 'https://exmaple.com/video.m3u8?param_a=34&param_b=abc',
+  uri: 'https://exmaple.com/video.m3u8?param_a=34&param_b=abc',
   mainDefinitions: {
     param_c: 'def'
   }
 });
 ```
 
-* `options.url` _string_ The URL from which the playlist was fetched. If the request was redirected this should be the final URL. This is required if using `QUERYSTRING` rules with `#EXT-X-DEFINE`.
+* `options.uri` _string_ The URL from which the playlist was fetched. If the request was redirected this should be the final URL. This is required if using `QUERYSTRING` rules with `#EXT-X-DEFINE`.
 * `options.mainDefinitions` _object_ An object of definitions from the main playlist. This is required if using `IMPORT` rules with `#EXT-X-DEFINE`.
 
 ### Parsed Output
