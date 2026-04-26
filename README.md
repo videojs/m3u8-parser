@@ -77,7 +77,7 @@ The constructor optinally takes an options object with two properties. These are
 
 ```js
 var parser = new m3u8Parser.Parser({
-  url: 'https://exmaple.com/video.m3u8?param_a=34&param_b=abc',
+  url: 'https://example.com/video.m3u8?param_a=34&param_b=abc',
   mainDefinitions: {
     param_c: 'def'
   }
