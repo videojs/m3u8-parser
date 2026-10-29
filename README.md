@@ -58,7 +58,7 @@ var manifest = [
   '0.ts',
   '#EXTINF:6,',
   '1.ts',
-  '#EXT-X-PROGRAM-DATE-TIME:2019-02-14T02:14:00.106Z'
+  '#EXT-X-PROGRAM-DATE-TIME:2019-02-14T02:14:00.106Z',
   '#EXTINF:6,',
   '2.ts',
   '#EXT-X-ENDLIST'
