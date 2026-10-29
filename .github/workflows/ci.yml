@@ -11,7 +11,7 @@ jobs:
       should-skip-job: ${{steps.skip-check.outputs.should_skip}}
     steps:
       - id: skip-check
-        uses: fkirc/skip-duplicate-actions@v2.1.0
+        uses: fkirc/skip-duplicate-actions@v5.3.2
         with:
           github_token: ${{github.token}}
 
@@ -22,27 +22,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-    env:
-      BROWSER_STACK_USERNAME: ${{secrets.BROWSER_STACK_USERNAME}}
-      BROWSER_STACK_ACCESS_KEY: ${{secrets.BROWSER_STACK_ACCESS_KEY}}
     runs-on: ${{matrix.os}}
     steps:
     - name: checkout code
-      uses: actions/checkout@v2
-
-    - name: Cache dependencies
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.npm
-          **/node_modules
-        key: ${{runner.os}}-npm-${{hashFiles('**/package-lock.json')}}
-        restore-keys: |
-          ${{runner.os}}-npm-
-          ${{runner.os}}-
+      uses: actions/checkout@v6
 
     - name: read node version from .nvmrc
-      run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+      run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
       shell: bash
       id: nvm
 
@@ -59,9 +45,10 @@ jobs:
       if: ${{startsWith(matrix.os, 'ubuntu') && !env.BROWSER_STACK_USERNAME}}
 
     - name: setup node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v6
       with:
         node-version: '${{steps.nvm.outputs.NVMRC}}'
+        cache: npm
 
     # turn off the default setup-node problem watchers...
     - run: echo "::remove-matcher owner=eslint-compact::"
@@ -72,6 +59,4 @@ jobs:
       run: npm i --prefer-offline --no-audit
 
     - name: run npm test
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        run: npm run test
+      run: npm run test
