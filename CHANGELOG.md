@@ -1,3 +1,16 @@
+<a name="7.2.1"></a>
+## [7.2.1](https://github.com/videojs/m3u8-parser/compare/v7.2.0...v7.2.1) (2026-10-29)
+
+### Bug Fixes
+
+* add missing comma in README.md code example ([#194](https://github.com/videojs/m3u8-parser/issues/194)) ([e6b72a8](https://github.com/videojs/m3u8-parser/commit/e6b72a8))
+* update node, regenerate the lockfile and run the audit pass ([#197](https://github.com/videojs/m3u8-parser/issues/197)) ([55987b7](https://github.com/videojs/m3u8-parser/commit/55987b7))
+
+### Documentation
+
+* correct the `options.uri` parameter's name ([#192](https://github.com/videojs/m3u8-parser/issues/192)) ([52ee833](https://github.com/videojs/m3u8-parser/commit/52ee833))
+* list the correct type for Segment.key.iv ([#191](https://github.com/videojs/m3u8-parser/issues/191)) ([be8897b](https://github.com/videojs/m3u8-parser/commit/be8897b))
+
 <a name="7.2.0"></a>
 # [7.2.0](https://github.com/videojs/m3u8-parser/compare/v7.1.0...v7.2.0) (2024-08-21)
 
